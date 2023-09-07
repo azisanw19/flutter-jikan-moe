@@ -1,4 +1,4 @@
-import 'package:anime_list/src/domain/models/response/PaginationResponse.dart';
+import 'package:anime_list/src/domain/models/response/pagination_response.dart';
 
 class AnimeResponse {
   AnimeResponse({

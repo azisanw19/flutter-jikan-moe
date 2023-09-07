@@ -1,4 +1,4 @@
-import 'package:anime_list/src/domain/models/response/ItemResponse.dart';
+import 'package:anime_list/src/domain/models/response/item_response.dart';
 
 /// last_visible_page : 1009
 /// has_next_page : true

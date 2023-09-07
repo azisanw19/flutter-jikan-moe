@@ -11,7 +11,7 @@ class AnimeListScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Anime List'),
       ),
-      body: Text('Hello world'),
+      body: Text('TEst'),
     );
   }
 
