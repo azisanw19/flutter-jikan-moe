@@ -1,6 +1,4 @@
 import 'package:anime_list/src/data/remote/anime_api_service.dart';
-import 'package:anime_list/src/data/repository/anime_repository_impl.dart';
-import 'package:anime_list/src/domain/repository/anime_repository.dart';
 import 'package:awesome_dio_interceptor/awesome_dio_interceptor.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
@@ -15,9 +13,5 @@ Future<void> initializeDependencies() async {
 
   locator.registerSingleton<AnimeApiService>(
     AnimeApiService(locator<Dio>())
-  );
-
-  locator.registerSingleton<AnimeRepository>(
-    AnimeRepositoryImpl(locator<AnimeApiService>())
   );
 }

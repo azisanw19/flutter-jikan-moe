@@ -1,6 +1,5 @@
-import 'package:anime_list/src/presentation/views/anime_list_widget.dart';
+import 'package:anime_list/src/presentation/home/views/home_screen.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/cupertino.dart';
 
 part 'app_router.gr.dart';
 
@@ -9,7 +8,7 @@ class AppRouter extends _$AppRouter {
 
   @override
   List<AutoRoute> get routes => [
-    AutoRoute(page: AnimeListRoute.page, initial: true)
+    AutoRoute(page: HomeRoute.page, initial: true)
   ];
 }
 

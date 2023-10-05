@@ -1,8 +1,11 @@
 import 'package:anime_list/src/config/router/app_router.dart';
 import 'package:anime_list/src/config/themes/app_themes.dart';
+import 'package:anime_list/src/domain/repository/anime_repository.dart';
 import 'package:anime_list/src/locator.dart';
+import 'package:anime_list/src/presentation/home/business/home_bloc.dart';
 import 'package:anime_list/src/utils/constants/strings.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oktoast/oktoast.dart';
 
 Future<void> main() async {
@@ -10,10 +13,9 @@ Future<void> main() async {
 
   await initializeDependencies();
 
-  runApp(MyApp()/*MultiProvider(
-    providers: [ChangeNotifierProvider(create: (context) => AnimeListProvider(),)],
-    child: const MyApp(),
-  )*/);
+  runApp(
+    const MyApp(),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -21,7 +23,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return OKToast(
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => HomeBloc(locator.get<AnimeRepository>()),
+        )
+      ],
+      child: OKToast(
         child: MaterialApp.router(
           debugShowCheckedModeBanner: false,
           title: appTitle,
@@ -37,8 +45,9 @@ class MyApp extends StatelessWidget {
            */
           theme: AppTheme.light,
           darkTheme: AppTheme.dark,
-          themeMode: ThemeMode.light,
-        )
+          themeMode: ThemeMode.dark,
+        ),
+      ),
     );
   }
 }

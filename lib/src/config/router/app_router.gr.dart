@@ -15,42 +15,25 @@ abstract class _$AppRouter extends RootStackRouter {
 
   @override
   final Map<String, PageFactory> pagesMap = {
-    AnimeListRoute.name: (routeData) {
-      final args = routeData.argsAs<AnimeListRouteArgs>(
-          orElse: () => const AnimeListRouteArgs());
+    HomeRoute.name: (routeData) {
       return AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: AnimeListScreen(key: args.key),
+        child: const HomeScreen(),
       );
     }
   };
 }
 
 /// generated route for
-/// [AnimeListScreen]
-class AnimeListRoute extends PageRouteInfo<AnimeListRouteArgs> {
-  AnimeListRoute({
-    Key? key,
-    List<PageRouteInfo>? children,
-  }) : super(
-          AnimeListRoute.name,
-          args: AnimeListRouteArgs(key: key),
+/// [HomeScreen]
+class HomeRoute extends PageRouteInfo<void> {
+  const HomeRoute({List<PageRouteInfo>? children})
+      : super(
+          HomeRoute.name,
           initialChildren: children,
         );
 
-  static const String name = 'AnimeListRoute';
+  static const String name = 'HomeRoute';
 
-  static const PageInfo<AnimeListRouteArgs> page =
-      PageInfo<AnimeListRouteArgs>(name);
-}
-
-class AnimeListRouteArgs {
-  const AnimeListRouteArgs({this.key});
-
-  final Key? key;
-
-  @override
-  String toString() {
-    return 'AnimeListRouteArgs{key: $key}';
-  }
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
