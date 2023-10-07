@@ -5,11 +5,16 @@ import 'package:anime_list/src/locator.dart';
 import 'package:anime_list/src/presentation/home/business/home_bloc.dart';
 import 'package:anime_list/src/utils/constants/strings.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oktoast/oktoast.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await SystemChrome.setPreferredOrientations(
+    [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]
+  );
 
   await initializeDependencies();
 

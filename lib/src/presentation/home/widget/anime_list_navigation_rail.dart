@@ -1,25 +1,26 @@
 import 'package:flutter/material.dart';
 
+/// currently not used
 class AnimeListNavigationRail extends StatefulWidget {
 
   final Function(int selectedIndex)? onDestinationSelected;
 
-  AnimeListNavigationRail({super.key, this.onDestinationSelected});
-
-  int _selectedIndex = 0;
+  const AnimeListNavigationRail({super.key, this.onDestinationSelected});
 
   @override
   State<StatefulWidget> createState() => _AnimeListNavigationRailState();
 }
 
 class _AnimeListNavigationRailState extends State<AnimeListNavigationRail> {
+  int _selectedIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return NavigationRail(
-      selectedIndex: widget._selectedIndex,
+      selectedIndex: _selectedIndex,
       onDestinationSelected: (int index) {
         setState(() {
-          widget._selectedIndex = index;
+          _selectedIndex = index;
         });
 
         if(widget.onDestinationSelected != null) {
