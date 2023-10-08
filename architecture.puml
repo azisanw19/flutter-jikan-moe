@@ -1,0 +1,19 @@
+@startuml
+
+actor "User" as user
+
+component "View Model" as viewModel
+component "Business" as business
+component "Use Case" as useCase
+component "Repository" as repository
+component "Local Data Source" as localDataSource
+component "Remote Data Source" as remoteDataSource
+
+user <--> viewModel
+viewModel <--> business
+business <--> useCase
+useCase <--> repository
+repository <--> localDataSource
+repository <-- remoteDataSource
+
+@enduml
