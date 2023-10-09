@@ -5,15 +5,17 @@ actor "User" as user
 component "View Model" as viewModel
 component "Business" as business
 component "Use Case" as useCase
-component "Repository" as repository
+component "Remote Repository" as remoteRepository
+component "Local Repository" as localRepository
 component "Local Data Source" as localDataSource
 component "Remote Data Source" as remoteDataSource
 
 user <--> viewModel
 viewModel <--> business
 business <--> useCase
-useCase <--> repository
-repository <--> localDataSource
-repository <-- remoteDataSource
+useCase <--> localRepository
+localRepository <--> localDataSource
+remoteRepository --> localRepository
+remoteRepository <-- remoteDataSource
 
 @enduml

@@ -1,4 +1,5 @@
-import 'package:anime_list/src/domain/models/response/item_response.dart';
+
+import 'item_response.dart';
 
 /// last_visible_page : 1009
 /// has_next_page : true
@@ -16,7 +17,7 @@ class PaginationResponse {
     lastVisiblePage = json['last_visible_page'];
     hasNextPage = json['has_next_page'];
     currentPage = json['current_page'];
-    items = json['items'];
+    items = ItemResponse.fromJson(json['items']);
   }
 
   int? lastVisiblePage;

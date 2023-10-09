@@ -1,8 +1,10 @@
+import 'package:anime_list/src/presentation/home/business/home_bloc.dart';
 import 'package:anime_list/src/presentation/home/widget/anime_list_bottom_navigation.dart';
 import 'package:anime_list/src/presentation/home/widget/anime_list_sliver_app_bar.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 @RoutePage()
 class HomeScreen extends StatelessWidget {
@@ -10,6 +12,10 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    HomeBloc homeBloc = context.read<HomeBloc>();
+    homeBloc.test();
+
     double phoneWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(

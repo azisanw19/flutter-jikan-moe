@@ -1,6 +1,6 @@
 import 'package:anime_list/src/config/router/app_router.dart';
 import 'package:anime_list/src/config/themes/app_themes.dart';
-import 'package:anime_list/src/domain/repository/anime_repository.dart';
+import 'package:anime_list/src/domain/repository/anime_repository_remote.dart';
 import 'package:anime_list/src/locator.dart';
 import 'package:anime_list/src/presentation/home/business/home_bloc.dart';
 import 'package:anime_list/src/utils/constants/strings.dart';
@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (_) => HomeBloc(locator.get<AnimeRepository>()),
+          create: (_) => HomeBloc(locator.get<AnimeRepositoryRemote>()),
         )
       ],
       child: OKToast(
