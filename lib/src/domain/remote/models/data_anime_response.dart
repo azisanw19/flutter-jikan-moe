@@ -1,7 +1,8 @@
-import 'package:anime_list/src/domain/models/remote/aired_responses.dart';
-import 'package:anime_list/src/domain/models/remote/broadcast_response.dart';
-import 'package:anime_list/src/domain/models/remote/image_response.dart';
-import 'package:anime_list/src/domain/models/remote/title_item_response.dart';
+import 'package:anime_list/src/domain/remote/models/title_item_response.dart';
+
+import 'aired_responses.dart';
+import 'broadcast_response.dart';
+import 'image_response.dart';
 
 class DataAnimeResponse {
   DataAnimeResponse({

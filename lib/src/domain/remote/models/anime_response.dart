@@ -1,4 +1,5 @@
-import 'pagination_response.dart';
+import 'package:anime_list/src/domain/remote/models/pagination_response.dart';
+
 import 'data_anime_response.dart';
 
 class AnimeResponse {

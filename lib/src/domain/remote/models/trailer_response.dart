@@ -1,4 +1,4 @@
-import 'package:anime_list/src/domain/models/remote/image_item_response.dart';
+import 'image_item_response.dart';
 
 class TrailerResponse {
   TrailerResponse({

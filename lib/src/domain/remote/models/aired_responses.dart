@@ -1,4 +1,4 @@
-import 'package:anime_list/src/domain/models/remote/property_time.dart';
+import 'package:anime_list/src/domain/remote/models/property_time.dart';
 
 class AiredResponse {
 

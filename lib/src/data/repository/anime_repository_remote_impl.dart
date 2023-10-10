@@ -1,4 +1,4 @@
-import '../../domain/models/remote/anime_response.dart';
+import '../../domain/remote/models/anime_response.dart';
 import '../remote/anime_api_service.dart';
 import 'base/base_api_repository.dart';
 import '../../domain/repository/anime_repository_remote.dart';

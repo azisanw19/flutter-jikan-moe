@@ -1,4 +1,4 @@
-import 'package:anime_list/src/domain/models/remote/property_item_time.dart';
+import 'package:anime_list/src/domain/remote/models/property_item_time.dart';
 
 class PropertyTime {
   PropertyTime({

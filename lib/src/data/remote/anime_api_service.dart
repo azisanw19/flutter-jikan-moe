@@ -2,7 +2,8 @@ import 'package:anime_list/src/utils/constants/strings.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
-import '../../domain/models/remote/anime_response.dart';
+import '../../domain/remote/models/anime_response.dart';
+
 
 part 'anime_api_service.g.dart';
 
