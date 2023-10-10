@@ -4,30 +4,30 @@ import 'data_anime_response.dart';
 class AnimeResponse {
   AnimeResponse({
     this.pagination,
-    this.dataAnimeResponse,
+    this.dataAnimeResponses,
   });
 
   AnimeResponse.fromJson(Map<String, dynamic> json) {
     pagination = PaginationResponse.fromJson(json['pagination']);
-    // dataAnimeResponse = json['data'] as DataAnimeResponse;
+    dataAnimeResponses = json['data'].cast<DataAnimeResponse>();
   }
 
   PaginationResponse? pagination;
-  DataAnimeResponse? dataAnimeResponse;
+  List<DataAnimeResponse?>? dataAnimeResponses;
 
   AnimeResponse copyWith({
     PaginationResponse? pagination,
-    DataAnimeResponse? dataAnimeResponse,
+    List<DataAnimeResponse?>? dataAnimeResponses,
   }) =>
       AnimeResponse(
         pagination: pagination ?? this.pagination,
-        dataAnimeResponse: dataAnimeResponse ?? this.dataAnimeResponse,
+        dataAnimeResponses: dataAnimeResponses ?? this.dataAnimeResponses,
       );
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['pagination'] = pagination;
-    map['data'] = dataAnimeResponse;
+    map['data'] = dataAnimeResponses?.map((element) => element?.toJson());
     return map;
   }
 }

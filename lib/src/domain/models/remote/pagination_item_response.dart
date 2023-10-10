@@ -1,15 +1,11 @@
-/// count : 25
-/// total : 25218
-/// per_page : 25
-
-class ItemResponse {
-  ItemResponse({
+class PaginationItemResponse {
+  PaginationItemResponse({
     this.count,
     this.total,
     this.perPage,
   });
 
-  ItemResponse.fromJson(dynamic json) {
+  PaginationItemResponse.fromJson(dynamic json) {
     count = json['count'];
     total = json['total'];
     perPage = json['per_page'];
@@ -19,12 +15,12 @@ class ItemResponse {
   int? total;
   int? perPage;
 
-  ItemResponse copyWith({
+  PaginationItemResponse copyWith({
     int? count,
     int? total,
     int? perPage,
   }) =>
-      ItemResponse(
+      PaginationItemResponse(
         count: count ?? this.count,
         total: total ?? this.total,
         perPage: perPage ?? this.perPage,

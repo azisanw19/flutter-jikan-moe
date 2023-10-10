@@ -1,5 +1,5 @@
 
-import 'item_response.dart';
+import 'pagination_item_response.dart';
 
 /// last_visible_page : 1009
 /// has_next_page : true
@@ -17,19 +17,19 @@ class PaginationResponse {
     lastVisiblePage = json['last_visible_page'];
     hasNextPage = json['has_next_page'];
     currentPage = json['current_page'];
-    items = ItemResponse.fromJson(json['items']);
+    items = PaginationItemResponse.fromJson(json['items']);
   }
 
   int? lastVisiblePage;
   bool? hasNextPage;
   int? currentPage;
-  ItemResponse? items;
+  PaginationItemResponse? items;
 
   PaginationResponse copyWith({
     int? lastVisiblePage,
     bool? hasNextPage,
     int? currentPage,
-    ItemResponse? items,
+    PaginationItemResponse? items,
   }) =>
       PaginationResponse(
         lastVisiblePage: lastVisiblePage ?? this.lastVisiblePage,

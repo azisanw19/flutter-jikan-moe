@@ -11,6 +11,7 @@ class HomeBloc extends Bloc<HomeState, dynamic> {
 
   void test() async {
     _animeRepository.getAnimeSearch();
+
   }
 
 }
