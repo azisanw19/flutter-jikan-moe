@@ -2,6 +2,8 @@
 import 'package:anime_list/src/utils/constants/table_database_anime.dart';
 import 'package:floor/floor.dart';
 
+import '../../../utils/constants/type_anime.dart';
+
 @Entity(tableName: tableAnime, primaryKeys: [malIdAnime])
 class AnimeEntity {
 
@@ -90,21 +92,4 @@ class AnimeEntity {
 
 
   AnimeEntity(this.malId, this.url, this.image, this.youtubeTrailerId, this.youtubeTrailerImage, this.titleDefault, this.titleEnglish, this.titleJapanese, this.type, this.source, this.episodes, this.status, this.airing, this.airedFrom, this.airedTo, this.duration, this.score, this.scoredBy, this.rank, this.popularity, this.favorite, this.synopsis, this.background, this.season, this.broadcastDay, this.broadcastTime, this.broadcastTimezone);
-
-
-}
-
-
-// "tv" "movie" "ova" "special" "ona" "music"
-enum TypeAnime{
-  tv('tv'),
-  movie('movie'),
-  ova('ova'),
-  special('special'),
-  ona('ona'),
-  music('music');
-
-  final String name;
-
-  const TypeAnime(this.name);
 }
