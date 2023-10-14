@@ -15,6 +15,7 @@ dependencies:
   retrofit: '>=4.0.0 <5.0.0'
   dio: ^5.3.2
   awesome_dio_interceptor: ^1.0.0
+  connectivity_plus: ^5.0.0
 
   # ui
   cupertino_icons: ^1.0.2
