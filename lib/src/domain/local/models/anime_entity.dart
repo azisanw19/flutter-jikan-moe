@@ -9,7 +9,7 @@ class AnimeEntity {
 
   @PrimaryKey(autoGenerate: false)
   @ColumnInfo(name: malIdAnime)
-  final String malId;
+  final int malId;
 
   @ColumnInfo(name: urlAnime)
   final String url;

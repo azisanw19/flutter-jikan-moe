@@ -4,5 +4,5 @@ import '../remote/models/anime_response.dart';
 abstract class AnimeRepositoryRemote {
   Future<DataState<AnimeResponse>> getAnimeSearch();
 
-  Future<dynamic> saveAnimeToLocalDatabase();
+
 }

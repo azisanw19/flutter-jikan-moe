@@ -5,7 +5,7 @@ import 'package:floor/floor.dart';
 class GenreEntity {
   @PrimaryKey(autoGenerate: false)
   @ColumnInfo(name: malIdGenre)
-  final String malId;
+  final int malId;
 
   @ColumnInfo(name: typeGenre)
   final String type;

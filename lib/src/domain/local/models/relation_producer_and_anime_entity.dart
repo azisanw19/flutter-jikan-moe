@@ -18,10 +18,10 @@ import 'package:floor/floor.dart';
 ])
 class RelationProducerAndAnimeEntity {
   @ColumnInfo(name: malIdAnimeRelationProducerAndAnime)
-  final String malIdAnime;
+  final int malIdAnime;
 
   @ColumnInfo(name: malIdStudioRelationProducerAndAnime)
-  final String malIdStudio;
+  final int malIdStudio;
 
   const RelationProducerAndAnimeEntity(this.malIdAnime, this.malIdStudio);
 }

@@ -1,5 +1,5 @@
 import '../../domain/remote/models/anime_response.dart';
-import '../remote/anime_api_service.dart';
+import '../data_source/remote/anime_api_service.dart';
 import 'base/base_api_repository.dart';
 import '../../domain/repository/anime_repository_remote.dart';
 import '../../utils/resources/data_state.dart';
@@ -22,16 +22,7 @@ class AnimeRepositoryRemoteImpl extends BaseApiRepository implements AnimeReposi
         request: () => _animeApiService.getAnimeSearch(),
     );
 
-    // futureDataStateAnimeResponse.whenComplete(() => saveAnimeToLocalDatabase());
     return futureDataStateAnimeResponse;
   }
-
-  @override
-  Future saveAnimeToLocalDatabase() {
-    // TODO: implement saveAnimeToLocalDatabase
-    throw UnimplementedError();
-  }
-
-
 
 }
