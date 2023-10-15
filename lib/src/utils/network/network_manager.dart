@@ -2,6 +2,8 @@ import 'dart:async';
 
 abstract class NetworkManager {
 
-  late Stream<bool> isOnline;
+  Stream<bool> get watchIsOnline;
+
+  Future<bool> get isOnline;
 
 }

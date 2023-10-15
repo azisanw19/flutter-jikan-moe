@@ -29,7 +29,6 @@ const String broadcastDayAnime = 'broadcast_day';
 const String broadcastTimeAnime = 'broadcast_time';
 const String broadcastTimezoneAnime = 'broadcast_timezone';
 
-
 // Table Studio
 const String tableStudio = 'table_studio';
 const String malIdStudio = 'mal_id';
@@ -45,22 +44,35 @@ const String nameGenre = 'name';
 const String urlGenre = 'url';
 
 
+// Table RelationTitleSynonymAndAnime
+const String tableRelationTitleSynonymAndAnime = 'table_relation_title_synonym_and_anime';
+const String malIdRelationTitleSynonymAndAnime = 'mal_id';
+const String malIdAnimeRelationTitleSynonymAndAnime = 'mal_id_anime';
+const String titleSynonymRelationTitleSynonymAndAnime = 'title_synonym';
+
+
 // Table RelationProducerAndAnime
 const String tableRelationProducerAndAnime = 'table_relation_producer_and_anime';
+const String malIdRelationProducerAndAnime = 'mal_id';
 const String malIdAnimeRelationProducerAndAnime = 'mal_id_anime';
 const String malIdStudioRelationProducerAndAnime = 'mal_id_studio';
-// Primary Key [malIdAnimeRelationProducerAndAnime, malIdStudioRelationProducerAndAnime]
 
 
 // Table RelationLicensorAndAnime
 const String tableRelationLicensorAndAnime = 'table_relation_licensor_and_anime';
+const String malIdRelationLicensorAndAnime = 'mal_id';
 const String malIdAnimeRelationLicensorAndAnime = 'mal_id_anime';
 const String malIdStudioRelationLicensorAndAnime = 'mal_id_studio';
-// Primary Key [malIdAnimeRelationLicensorAndAnime, malIdStudioRelationLicensorAndAnime]
+
+// Table RelationStudioAndAnime
+const String tableRelationStudioAndAnime = 'table_relation_studio_and_anime';
+const String malIdRelationStudioAndAnime = 'mal_id';
+const String malIdAnimeRelationStudioAndAnime = 'mal_id_anime';
+const String malIdStudioRelationStudioAndAnime = 'mal_id_studio';
 
 
 // Table RelationGenreAndAnime
 const String tableRelationGenreAndAnime = 'table_relation_genre_and_anime';
+const String malIdRelationGenreAndAnime = 'mal_id';
 const String malIdAnimeRelationGenreAndAnime = 'mal_id_anime';
 const String malIdGenreRelationGenreAndAnime = 'mal_id_genre';
-// Primary Key [malIdAnimeRelationLicensorAndAnime, malIdStudioRelationLicensorAndAnime]

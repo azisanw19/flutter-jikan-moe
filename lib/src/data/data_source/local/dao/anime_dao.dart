@@ -1,6 +1,6 @@
 import 'package:floor/floor.dart';
 
-import '../../../../domain/local/models/anime_entity.dart';
+import '../../../../domain/local/models/anime/anime_entity.dart';
 import '../../../../utils/constants/table_database_anime.dart';
 
 @dao // data access object
@@ -14,6 +14,9 @@ abstract class AnimeDao {
 
   @Query('DELETE FROM $tableAnime')
   Future<int> clearAnimeRows();
+
+  @Query('SELECT * FROM $tableAnime')
+  Stream<List<AnimeEntity>> getAnime();
 
 
 }

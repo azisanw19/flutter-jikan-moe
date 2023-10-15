@@ -5,7 +5,8 @@ enum TypeAnime{
   ova('ova'),
   special('special'),
   ona('ona'),
-  music('music');
+  music('music'),
+  other('other');
 
   final String name;
 

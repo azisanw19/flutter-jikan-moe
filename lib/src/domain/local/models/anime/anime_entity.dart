@@ -2,7 +2,7 @@
 import 'package:anime_list/src/utils/constants/table_database_anime.dart';
 import 'package:floor/floor.dart';
 
-import '../../../utils/constants/type_anime.dart';
+import '../../../../utils/constants/type_anime.dart';
 
 @Entity(tableName: tableAnime, primaryKeys: [malIdAnime])
 class AnimeEntity {
@@ -57,6 +57,9 @@ class AnimeEntity {
   @ColumnInfo(name: durationAnime)
   final String duration;
 
+  @ColumnInfo(name: ratingAnime)
+  final String rating;
+
   @ColumnInfo(name: scoreAnime)
   final double score;
 
@@ -91,5 +94,5 @@ class AnimeEntity {
   final String broadcastTimezone;
 
 
-  AnimeEntity(this.malId, this.url, this.image, this.youtubeTrailerId, this.youtubeTrailerImage, this.titleDefault, this.titleEnglish, this.titleJapanese, this.type, this.source, this.episodes, this.status, this.airing, this.airedFrom, this.airedTo, this.duration, this.score, this.scoredBy, this.rank, this.popularity, this.favorite, this.synopsis, this.background, this.season, this.broadcastDay, this.broadcastTime, this.broadcastTimezone);
+  AnimeEntity(this.malId, this.url, this.image, this.youtubeTrailerId, this.youtubeTrailerImage, this.titleDefault, this.titleEnglish, this.titleJapanese, this.type, this.source, this.episodes, this.status, this.airing, this.airedFrom, this.airedTo, this.duration, this.rating, this.score, this.scoredBy, this.rank, this.popularity, this.favorite, this.synopsis, this.background, this.season, this.broadcastDay, this.broadcastTime, this.broadcastTimezone);
 }

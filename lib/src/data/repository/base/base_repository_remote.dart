@@ -6,7 +6,7 @@ import 'package:retrofit/retrofit.dart';
 
 import '../../../utils/resources/data_state.dart';
 
-abstract class BaseApiRepository {
+abstract class BaseRepositoryRemote {
   /// This method is responsible of handling the given `request`, in which
   /// it returns generic based `DataState`.
   ///
@@ -22,7 +22,7 @@ abstract class BaseApiRepository {
     try {
       final httpResponse = await request();
       if (httpResponse.response.statusCode == HttpStatus.ok) {
-        return Success(httpResponse.data);
+        return DataStateSuccess(httpResponse.data);
       }
       else {
         throw DioException(
@@ -32,7 +32,7 @@ abstract class BaseApiRepository {
       }
     }
     on DioException catch(error) {
-      return Error(error);
+      return DataStateError(error);
     }
   }
 }

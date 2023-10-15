@@ -14,11 +14,11 @@ class AnimeResponse {
   }
 
   PaginationResponse? pagination;
-  List<DataAnimeResponse?>? dataAnimeResponses;
+  List<DataAnimeResponse>? dataAnimeResponses;
 
   AnimeResponse copyWith({
     PaginationResponse? pagination,
-    List<DataAnimeResponse?>? dataAnimeResponses,
+    List<DataAnimeResponse>? dataAnimeResponses,
   }) =>
       AnimeResponse(
         pagination: pagination ?? this.pagination,
@@ -28,7 +28,7 @@ class AnimeResponse {
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['pagination'] = pagination;
-    map['data'] = dataAnimeResponses?.map((element) => element?.toJson());
+    map['data'] = dataAnimeResponses?.map((element) => element.toJson());
     return map;
   }
 }

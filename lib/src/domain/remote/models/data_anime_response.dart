@@ -1,4 +1,6 @@
+import 'package:anime_list/src/domain/remote/models/other_item_response.dart';
 import 'package:anime_list/src/domain/remote/models/title_item_response.dart';
+import 'package:anime_list/src/domain/remote/models/trailer_response.dart';
 
 import 'aired_responses.dart';
 import 'broadcast_response.dart';
@@ -9,6 +11,7 @@ class DataAnimeResponse {
     this.malId,
     this.url,
     this.images,
+    this.trailer,
     this.approved,
     this.titles,
     this.title,
@@ -34,6 +37,12 @@ class DataAnimeResponse {
     this.season,
     this.year,
     this.broadcast,
+    this.producers,
+    this.licensors,
+    this.studios,
+    this.genres,
+    this.themes,
+    this.demographics,
   });
 
   DataAnimeResponse.fromJson
@@ -41,9 +50,9 @@ class DataAnimeResponse {
     malId = json['mal_id'];
     url = json['url'];
     images = ImageResponse.fromJson(json['images']);
+    trailer = TrailerResponse.fromJson(json['trailer']);
     approved = json['approved'];
-    titles =
-        json['titles'].map((element) => TitleItemResponse.fromJson(element));
+    titles = json['titles'].map((element) => TitleItemResponse.fromJson(element));
     title = json['title'];
     titleEnglish = json['title_english'];
     titleJapanese = json['title_japanese'];
@@ -67,17 +76,24 @@ class DataAnimeResponse {
     season = json['season'];
     year = json['year'];
     broadcast = BroadcastResponse.fromJson(json['broadcast']);
+    producers = json['producers'].map((producer) => OtherItemResponse.fromJson(producer)).toList();
+    licensors = json['licensors'].map((licensor) => OtherItemResponse.fromJson(licensor)).toList();
+    studios = json['studios'].map((studio) => OtherItemResponse.fromJson(studio));
+    genres = json['genres'].map((genre) => OtherItemResponse.fromJson(genre));
+    themes = json['themes'].map((theme) => OtherItemResponse.fromJson(theme));
+    demographics = json['demographics'].map((demographic) => OtherItemResponse.fromJson(demographic));
   }
 
   int? malId;
   String? url;
   ImageResponse? images;
+  TrailerResponse? trailer;
   bool? approved;
-  List<TitleItemResponse?>? titles;
+  List<TitleItemResponse>? titles;
   String? title;
   String? titleEnglish;
   String? titleJapanese;
-  dynamic? titleSynonyms;
+  List<String>? titleSynonyms;
   String? type;
   String? source;
   int? episodes;
@@ -97,17 +113,25 @@ class DataAnimeResponse {
   String? season;
   int? year;
   BroadcastResponse? broadcast;
+  List<OtherItemResponse>? producers;
+  List<OtherItemResponse>? licensors;
+  List<OtherItemResponse>? studios;
+  List<OtherItemResponse>? genres;
+  List<OtherItemResponse>? themes;
+  List<OtherItemResponse>? demographics;
+
 
   DataAnimeResponse copyWith({
     int? malId,
     String? url,
     ImageResponse? images,
+    TrailerResponse? trailer,
     bool? approved,
-    List<TitleItemResponse?>? titles,
+    List<TitleItemResponse>? titles,
     String? title,
     String? titleEnglish,
     String? titleJapanese,
-    dynamic? titleSynonyms,
+    List<String>? titleSynonyms,
     String? type,
     String? source,
     int? episodes,
@@ -127,11 +151,18 @@ class DataAnimeResponse {
     String? season,
     int? year,
     BroadcastResponse? broadcast,
+    List<OtherItemResponse>? producers,
+    List<OtherItemResponse>? licensors,
+    List<OtherItemResponse>? studios,
+    List<OtherItemResponse>? genres,
+    List<OtherItemResponse>? themes,
+    List<OtherItemResponse>? demographics,
   }) =>
       DataAnimeResponse(
         malId: malId ?? this.malId,
         url: url ?? this.url,
         images: images ?? this.images,
+        trailer: trailer ?? this.trailer,
         approved: approved ?? this.approved,
         titles: titles ?? this.titles,
         title: title ?? this.title,
@@ -157,6 +188,12 @@ class DataAnimeResponse {
         season: season ?? this.season,
         year: year ?? this.year,
         broadcast: broadcast ?? this.broadcast,
+        producers: producers ?? this.producers,
+        licensors: licensors ?? this.licensors,
+        studios: studios ?? this.studios,
+        genres: genres ?? this.genres,
+        themes: themes ?? this.themes,
+        demographics: demographics ?? this.demographics,
       );
 
   Map<String, dynamic> toJson() {
@@ -164,6 +201,7 @@ class DataAnimeResponse {
     map['mal_id'] = malId;
     map['url'] = url;
     map['images'] = images;
+    map['trailer'] = trailer;
     map['approved'] = approved;
     map['titles'] = titles;
     map['title'] = title;
@@ -189,6 +227,12 @@ class DataAnimeResponse {
     map['season'] = season;
     map['year'] = year;
     map['broadcast'] = broadcast;
+    map['producers'] = producers;
+    map['licensors'] = licensors;
+    map['studios'] = studios;
+    map['genres'] = genres;
+    map['themes'] = themes;
+    map['demographics'] = demographics;
     return map;
   }
 }
