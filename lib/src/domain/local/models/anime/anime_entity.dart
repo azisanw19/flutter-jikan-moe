@@ -12,86 +12,86 @@ class AnimeEntity {
   final int malId;
 
   @ColumnInfo(name: urlAnime)
-  final String url;
+  final String? url;
 
   @ColumnInfo(name: jpgImageUrlAnime)
-  final String image;
+  final String? image;
 
   @ColumnInfo(name: trailerYoutubeIdAnime)
-  final String youtubeTrailerId;
+  final String? youtubeTrailerId;
 
   @ColumnInfo(name: trailerImageMediumImageUrlAnime)
-  final String youtubeTrailerImage;
+  final String? youtubeTrailerImage;
 
   @ColumnInfo(name: titleAnime)
-  final String titleDefault;
+  final String? titleDefault;
 
   @ColumnInfo(name: titleEnglishAnime)
-  final String titleEnglish;
+  final String? titleEnglish;
 
   @ColumnInfo(name: titleJapaneseAnime)
-  final String titleJapanese;
+  final String? titleJapanese;
 
   @ColumnInfo(name: typeAnime)
-  final TypeAnime type;
+  final TypeAnime? type;
 
   @ColumnInfo(name: sourceAnime)
-  final String source;
+  final String? source;
 
 
   @ColumnInfo(name: episodesAnime)
-  final int episodes;
+  final int? episodes;
 
   @ColumnInfo(name: statusAnime)
-  final String status;
+  final String? status;
 
   @ColumnInfo(name: airingAnime)
-  final bool airing;
+  final bool? airing;
 
   @ColumnInfo(name: airedFromAnime)
-  final String airedFrom;
+  final String? airedFrom;
 
   @ColumnInfo(name: airedToAnime)
-  final String airedTo;
+  final String? airedTo;
 
   @ColumnInfo(name: durationAnime)
-  final String duration;
+  final String? duration;
 
   @ColumnInfo(name: ratingAnime)
-  final String rating;
+  final String? rating;
 
   @ColumnInfo(name: scoreAnime)
-  final double score;
+  final double? score;
 
   @ColumnInfo(name: scoredByAnime)
-  final int scoredBy;
+  final int? scoredBy;
 
   @ColumnInfo(name: rankAnime)
-  final int rank;
+  final int? rank;
 
   @ColumnInfo(name: popularityAnime)
-  final int popularity;
+  final int? popularity;
 
   @ColumnInfo(name: favoritesAnime)
-  final int favorite;
+  final int? favorite;
 
   @ColumnInfo(name: synopsisAnime)
-  final String synopsis;
+  final String? synopsis;
 
   @ColumnInfo(name: backgroundAnime)
-  final String background;
+  final String? background;
 
   @ColumnInfo(name: seasonAnime)
-  final String season;
+  final String? season;
 
   @ColumnInfo(name: broadcastDayAnime)
-  final String broadcastDay;
+  final String? broadcastDay;
 
   @ColumnInfo(name: broadcastTimeAnime)
-  final String broadcastTime;
+  final String? broadcastTime;
 
   @ColumnInfo(name: broadcastTimezoneAnime)
-  final String broadcastTimezone;
+  final String? broadcastTimezone;
 
 
   AnimeEntity(this.malId, this.url, this.image, this.youtubeTrailerId, this.youtubeTrailerImage, this.titleDefault, this.titleEnglish, this.titleJapanese, this.type, this.source, this.episodes, this.status, this.airing, this.airedFrom, this.airedTo, this.duration, this.rating, this.score, this.scoredBy, this.rank, this.popularity, this.favorite, this.synopsis, this.background, this.season, this.broadcastDay, this.broadcastTime, this.broadcastTimezone);

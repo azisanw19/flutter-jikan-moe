@@ -1,10 +1,11 @@
+import 'package:anime_list/src/domain/data_transfer_object/anime_data.dart';
 import 'package:anime_list/src/utils/resources/data_state.dart';
 
-import '../local/models/anime/anime_entity.dart';
 
 abstract class AnimeRepositoryLocal {
 
-  Future<DataState<int>> insertAnime(List<AnimeEntity> animeEntities);
+  Future<DataState<void>> saveAnime(List<AnimeData> listAnimeData);
   Future<DataState<int>> clearAnimeRows();
+  Stream<List<AnimeData>> getListAnime();
 
 }
