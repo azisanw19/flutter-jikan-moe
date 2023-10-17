@@ -20,20 +20,20 @@ class AnimeSearchUseCase {
   const AnimeSearchUseCase(this._networkManager, this._animeRepositoryRemote,
       this._animeRepositoryLocal);
 
+  // wrong stream data data state
   Future<DataState<Stream<List<AnimeData>>>> getAnimeSearch() async {
     bool isOnline = await _networkManager.isOnline;
 
     if (isOnline) {
       return _getDataFromRepositoryRemote();
     } else {
-      return _getDataFromLocalRepository();
+      throw UnimplementedError();
+
+      // return _getDataFromLocalRepository();
     }
   }
 
-  Future<DataStatePagination<List<AnimeData>, PaginationData>>
-      _getAnimeSearchRemoteRepository() =>
-          _animeRepositoryRemote.getAnimeSearch();
-
+  // wrong stream data state
   Future<DataState<Stream<List<AnimeData>>>>
       _getDataFromRepositoryRemote() async {
     DataStatePagination<List<AnimeData>, PaginationData>
@@ -42,7 +42,8 @@ class AnimeSearchUseCase {
 
     if (dataStatePaginationAnimeDataPaginationData
         is DataStatePaginationSuccess) {
-      // save to Database
+      // save to database
+      await _saveAnimeToDb(dataStatePaginationAnimeDataPaginationData.data!);
       return DataStateError(UseCaseException('exception'));
     } else if (dataStatePaginationAnimeDataPaginationData
         is DataStatePaginationError) {
@@ -55,6 +56,15 @@ class AnimeSearchUseCase {
     }
   }
 
+  // wrong stream data state
+  Future<DataState<List<AnimeData>>>
+      _getDataFromLocalRepository() async {
+    // TODO get data from db
+    throw UnimplementedError();
+  }
+
+  Future<DataState<void>> _saveAnimeToDb(List<AnimeData> listAnimeData) => _animeRepositoryLocal.saveAnime(listAnimeData);
+
   String _exceptionNotification(Exception exception) {
     if (exception is DioException) {
       return 'An error occurred while retrieving data';
@@ -65,8 +75,7 @@ class AnimeSearchUseCase {
     }
   }
 
-  Future<DataState<Stream<List<AnimeData>>>>
-      _getDataFromLocalRepository() async {
-    throw UnimplementedError();
-  }
+  Future<DataStatePagination<List<AnimeData>, PaginationData>>
+  _getAnimeSearchRemoteRepository() =>
+      _animeRepositoryRemote.getAnimeSearch();
 }

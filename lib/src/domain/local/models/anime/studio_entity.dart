@@ -7,16 +7,16 @@ class StudioEntity {
 
   @PrimaryKey(autoGenerate: false)
   @ColumnInfo(name: malIdStudio)
-  final String malId;
+  final int malId;
 
   @ColumnInfo(name: typeStudio)
-  final String type;
+  final String? type;
 
   @ColumnInfo(name: nameStudio)
-  final String name;
+  final String? name;
 
   @ColumnInfo(name: urlStudio)
-  final String url;
+  final String? url;
 
   const StudioEntity(this.malId, this.type, this.name, this.url);
 }

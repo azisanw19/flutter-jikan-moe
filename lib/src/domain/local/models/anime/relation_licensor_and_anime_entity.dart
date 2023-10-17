@@ -13,7 +13,7 @@ import 'package:floor/floor.dart';
       parentColumns: [malIdStudio],
       entity: StudioEntity)
 ])
-class RelationLicensorAndAnime {
+class RelationLicensorAndAnimeEntity {
 
   @PrimaryKey(autoGenerate: true)
   @ColumnInfo(name: malIdRelationLicensorAndAnime)
@@ -25,5 +25,5 @@ class RelationLicensorAndAnime {
   @ColumnInfo(name: malIdStudioRelationLicensorAndAnime)
   final int malIdStudio;
 
-  const RelationLicensorAndAnime(this.malIdAnime, this.malIdStudio, {this.malId});
+  const RelationLicensorAndAnimeEntity(this.malIdAnime, this.malIdStudio, {this.malId});
 }

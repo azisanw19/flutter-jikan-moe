@@ -18,7 +18,7 @@ class RelationTitleSynonymAndAnime {
   final int malIdAnime;
 
   @ColumnInfo(name: titleSynonymRelationTitleSynonymAndAnime)
-  final String malIdStudio;
+  final String titleSynonym;
 
-  const RelationTitleSynonymAndAnime(this.malIdAnime, this.malIdStudio, {this.malId});
+  const RelationTitleSynonymAndAnime(this.malIdAnime, this.titleSynonym, {this.malId});
 }

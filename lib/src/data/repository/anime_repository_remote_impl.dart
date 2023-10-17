@@ -20,12 +20,6 @@ class AnimeRepositoryRemoteImpl extends BaseRepositoryRemote
 
   AnimeRepositoryRemoteImpl(this._animeApiService);
 
-  /// data source remote kirim dan terima data ke remote repository,
-  /// data source local kirim dan terima data ke local repository,
-  /// remote repository kirim dan terima data ke use case,
-  /// local repository kirim dan terima data ke use case,
-  /// use case kirim data ke business,
-  /// business tampilin data ke ui
   @override
   Future<DataStatePagination<List<AnimeData>, PaginationData>>
       getAnimeSearch() async {

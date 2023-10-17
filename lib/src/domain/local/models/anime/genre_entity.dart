@@ -8,13 +8,13 @@ class GenreEntity {
   final int malId;
 
   @ColumnInfo(name: typeGenre)
-  final String type;
+  final String? type;
 
   @ColumnInfo(name: nameGenre)
-  final String name;
+  final String? name;
 
   @ColumnInfo(name: urlGenre)
-  final String url;
+  final String? url;
 
   const GenreEntity(this.malId, this.type, this.name, this.url);
 }

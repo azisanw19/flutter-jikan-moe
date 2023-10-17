@@ -23,7 +23,7 @@ part 'anime_database.g.dart';
   StudioEntity,
   RelationTitleSynonymAndAnime,
   RelationProducerAndAnimeEntity,
-  RelationLicensorAndAnime,
+  RelationLicensorAndAnimeEntity,
   RelationStudioAndAnimeEntity,
   RelationGenreAndAnimeEntity,
 ])
