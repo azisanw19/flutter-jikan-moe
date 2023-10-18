@@ -13,32 +13,32 @@ import '../../../../utils/constants/table_database_anime.dart';
 @dao // data access object
 abstract class AnimeDao {
   @Insert(onConflict: OnConflictStrategy.abort)
-  Future<int> insertAnime(List<AnimeEntity> listAnimeEntity); // return id
+  Future<List<int>> insertAnime(List<AnimeEntity> listAnimeEntity); // return id
 
   @Insert()
-  Future<int> insertStudio(List<StudioEntity> listStudioEntity);
+  Future<List<int>> insertStudio(List<StudioEntity> listStudioEntity);
 
   @Insert()
-  Future<int> insertGenre(List<GenreEntity> listGenreEntity);
+  Future<List<int>> insertGenre(List<GenreEntity> listGenreEntity);
 
   @Insert()
-  Future<int> insertRelationTitleSynonym(
+  Future<List<int>> insertRelationTitleSynonym(
       List<RelationTitleSynonymAndAnime> listRelationTitleSynonymAndAnime);
 
   @Insert()
-  Future<int> insertRelationProducerAndAnime(
+  Future<List<int>> insertRelationProducerAndAnime(
       List<RelationProducerAndAnimeEntity> listRelationProducerAndAnimeEntity);
 
   @Insert()
-  Future<int> insertRelationLicensorAndAnime(
+  Future<List<int>> insertRelationLicensorAndAnime(
       List<RelationLicensorAndAnimeEntity> listRelationLicensorAndAnimeEntity);
 
   @Insert()
-  Future<int> insertRelationStudioAndAnime(
+  Future<List<int>> insertRelationStudioAndAnime(
       List<RelationStudioAndAnimeEntity> listRelationStudioAndAnimeEntity);
 
   @Insert()
-  Future<int> insertRelationGenreAndAnime(
+  Future<List<int>> insertRelationGenreAndAnime(
       List<RelationGenreAndAnimeEntity> listRelationGenreAndAnimeEntity);
 
   @Query('SELECT * FROM $tableAnime')
@@ -73,8 +73,8 @@ abstract class AnimeDao {
       int malIdAnime);
 
   @Query('SELECT * FROM $tableGenre WHERE $malIdGenre = :malIdGenre')
-  Future<GenreEntity?> getGenreFromId(int malIdStudio);
+  Future<GenreEntity?> getGenreFromId(int malIdGenre);
 
   @Query('DELETE FROM $tableAnime')
-  Future<int> clearAnimeRows();
+  Future<int?> clearAnimeRows();
 }

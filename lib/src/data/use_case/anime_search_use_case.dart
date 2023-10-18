@@ -17,8 +17,7 @@ class AnimeSearchUseCase {
   const AnimeSearchUseCase(this._networkManager, this._animeRepositoryRemote,
       this._animeRepositoryLocal);
 
-  // wrong stream data data state
-  Future<Stream<List<Future<AnimeData>>>> getAnimeSearch() async {
+  Future<Stream<Future<List<AnimeData>>>> getAnimeSearch() async {
     bool isOnline = await _networkManager.isOnline;
 
     if (isOnline) {
@@ -28,8 +27,7 @@ class AnimeSearchUseCase {
     }
   }
 
-  // wrong stream data state
-  Future<Stream<List<Future<AnimeData>>>>
+  Future<Stream<Future<List<AnimeData>>>>
       _getDataFromRemote() async {
     DataStatePagination<List<AnimeData>, PaginationData>
         dataStatePaginationAnimeDataPaginationData =
@@ -38,6 +36,7 @@ class AnimeSearchUseCase {
     if (dataStatePaginationAnimeDataPaginationData
         is DataStatePaginationSuccess) {
       // save to database
+      print('data dataStatePaginationAnimeDataPaginationData.data! ${dataStatePaginationAnimeDataPaginationData.data!}');
       await _saveAnimeToDb(dataStatePaginationAnimeDataPaginationData.data!);
       return _getAnimeFromDb();
     } else {
@@ -46,7 +45,7 @@ class AnimeSearchUseCase {
   }
 
   Future<DataState<void>> _saveAnimeToDb(List<AnimeData> listAnimeData) => _animeRepositoryLocal.saveAnime(listAnimeData);
-  Stream<List<Future<AnimeData>>> _getAnimeFromDb() => _animeRepositoryLocal.getListAnime();
+  Stream<Future<List<AnimeData>>> _getAnimeFromDb() => _animeRepositoryLocal.getListAnime();
 
   Future<DataStatePagination<List<AnimeData>, PaginationData>>
   _getAnimeSearchRemoteRepository() =>

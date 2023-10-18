@@ -10,7 +10,8 @@ class AnimeResponse {
 
   AnimeResponse.fromJson(Map<String, dynamic> json) {
     pagination = PaginationResponse.fromJson(json['pagination']);
-    dataAnimeResponses = json['data'].cast<DataAnimeResponse>();
+    dataAnimeResponses = List<dynamic>.from(json['data']).map((animeResponse) => DataAnimeResponse.fromJson(animeResponse)).toList();
+    print(dataAnimeResponses);
   }
 
   PaginationResponse? pagination;

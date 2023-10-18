@@ -38,7 +38,6 @@ class AnimeEntity {
   @ColumnInfo(name: sourceAnime)
   final String? source;
 
-
   @ColumnInfo(name: episodesAnime)
   final int? episodes;
 

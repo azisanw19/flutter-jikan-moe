@@ -7,7 +7,7 @@ abstract class DataStatePagination<T, R> {
 }
 
 class DataStatePaginationSuccess<T, R> extends DataStatePagination<T, R> {
-  const DataStatePaginationSuccess(T data) : super(data: data);
+  const DataStatePaginationSuccess(T data, R pagination) : super(data: data, pagination: pagination);
 }
 
 class DataStatePaginationError<T, R> extends DataStatePagination<T, R> {

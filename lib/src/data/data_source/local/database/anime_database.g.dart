@@ -61,6 +61,8 @@ class _$AnimeDatabase extends AnimeDatabase {
     changeListener = listener ?? StreamController<String>.broadcast();
   }
 
+  AnimeDao? _animeDaoInstance;
+
   Future<sqflite.Database> open(
     String path,
     List<Migration> migrations, [
@@ -83,11 +85,11 @@ class _$AnimeDatabase extends AnimeDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `table_anime` (`mal_id` INTEGER NOT NULL, `url` TEXT NOT NULL, `jpg_image_url` TEXT NOT NULL, `trailer_youtube_id` TEXT NOT NULL, `trailer_image_medium_image_url` TEXT NOT NULL, `title` TEXT NOT NULL, `title_english` TEXT NOT NULL, `title_japanese` TEXT NOT NULL, `type` INTEGER NOT NULL, `source` TEXT NOT NULL, `episodes` INTEGER NOT NULL, `status` TEXT NOT NULL, `airing` INTEGER NOT NULL, `aired_form` TEXT NOT NULL, `aired_to` TEXT NOT NULL, `duration` TEXT NOT NULL, `rating` TEXT NOT NULL, `score` REAL NOT NULL, `scored_by` INTEGER NOT NULL, `rank` INTEGER NOT NULL, `popularity` INTEGER NOT NULL, `favorites` INTEGER NOT NULL, `synopsis` TEXT NOT NULL, `background` TEXT NOT NULL, `season` TEXT NOT NULL, `broadcast_day` TEXT NOT NULL, `broadcast_time` TEXT NOT NULL, `broadcast_timezone` TEXT NOT NULL, PRIMARY KEY (`mal_id`))');
+            'CREATE TABLE IF NOT EXISTS `table_anime` (`mal_id` INTEGER NOT NULL, `url` TEXT, `jpg_image_url` TEXT, `trailer_youtube_id` TEXT, `trailer_image_medium_image_url` TEXT, `title` TEXT, `title_english` TEXT, `title_japanese` TEXT, `type` INTEGER, `source` TEXT, `episodes` INTEGER, `status` TEXT, `airing` INTEGER, `aired_form` TEXT, `aired_to` TEXT, `duration` TEXT, `rating` TEXT, `score` REAL, `scored_by` INTEGER, `rank` INTEGER, `popularity` INTEGER, `favorites` INTEGER, `synopsis` TEXT, `background` TEXT, `season` TEXT, `broadcast_day` TEXT, `broadcast_time` TEXT, `broadcast_timezone` TEXT, PRIMARY KEY (`mal_id`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `table_genre` (`mal_id` INTEGER NOT NULL, `type` TEXT NOT NULL, `name` TEXT NOT NULL, `url` TEXT NOT NULL, PRIMARY KEY (`mal_id`))');
+            'CREATE TABLE IF NOT EXISTS `table_genre` (`mal_id` INTEGER NOT NULL, `type` TEXT, `name` TEXT, `url` TEXT, PRIMARY KEY (`mal_id`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `table_studio` (`mal_id` TEXT NOT NULL, `type` TEXT NOT NULL, `name` TEXT NOT NULL, `url` TEXT NOT NULL, PRIMARY KEY (`mal_id`))');
+            'CREATE TABLE IF NOT EXISTS `table_studio` (`mal_id` INTEGER NOT NULL, `type` TEXT, `name` TEXT, `url` TEXT, PRIMARY KEY (`mal_id`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `table_relation_title_synonym_and_anime` (`mal_id` INTEGER PRIMARY KEY AUTOINCREMENT, `mal_id_anime` INTEGER NOT NULL, `title_synonym` TEXT NOT NULL, FOREIGN KEY (`mal_id_anime`) REFERENCES `table_anime` (`mal_id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
         await database.execute(
@@ -103,5 +105,304 @@ class _$AnimeDatabase extends AnimeDatabase {
       },
     );
     return sqfliteDatabaseFactory.openDatabase(path, options: databaseOptions);
+  }
+
+  @override
+  AnimeDao get animeDao {
+    return _animeDaoInstance ??= _$AnimeDao(database, changeListener);
+  }
+}
+
+class _$AnimeDao extends AnimeDao {
+  _$AnimeDao(
+    this.database,
+    this.changeListener,
+  )   : _queryAdapter = QueryAdapter(database, changeListener),
+        _animeEntityInsertionAdapter = InsertionAdapter(
+            database,
+            'table_anime',
+            (AnimeEntity item) => <String, Object?>{
+                  'mal_id': item.malId,
+                  'url': item.url,
+                  'jpg_image_url': item.image,
+                  'trailer_youtube_id': item.youtubeTrailerId,
+                  'trailer_image_medium_image_url': item.youtubeTrailerImage,
+                  'title': item.titleDefault,
+                  'title_english': item.titleEnglish,
+                  'title_japanese': item.titleJapanese,
+                  'type': item.type?.index,
+                  'source': item.source,
+                  'episodes': item.episodes,
+                  'status': item.status,
+                  'airing': item.airing == null ? null : (item.airing! ? 1 : 0),
+                  'aired_form': item.airedFrom,
+                  'aired_to': item.airedTo,
+                  'duration': item.duration,
+                  'rating': item.rating,
+                  'score': item.score,
+                  'scored_by': item.scoredBy,
+                  'rank': item.rank,
+                  'popularity': item.popularity,
+                  'favorites': item.favorite,
+                  'synopsis': item.synopsis,
+                  'background': item.background,
+                  'season': item.season,
+                  'broadcast_day': item.broadcastDay,
+                  'broadcast_time': item.broadcastTime,
+                  'broadcast_timezone': item.broadcastTimezone
+                },
+            changeListener),
+        _studioEntityInsertionAdapter = InsertionAdapter(
+            database,
+            'table_studio',
+            (StudioEntity item) => <String, Object?>{
+                  'mal_id': item.malId,
+                  'type': item.type,
+                  'name': item.name,
+                  'url': item.url
+                }),
+        _genreEntityInsertionAdapter = InsertionAdapter(
+            database,
+            'table_genre',
+            (GenreEntity item) => <String, Object?>{
+                  'mal_id': item.malId,
+                  'type': item.type,
+                  'name': item.name,
+                  'url': item.url
+                }),
+        _relationTitleSynonymAndAnimeInsertionAdapter = InsertionAdapter(
+            database,
+            'table_relation_title_synonym_and_anime',
+            (RelationTitleSynonymAndAnime item) => <String, Object?>{
+                  'mal_id': item.malId,
+                  'mal_id_anime': item.malIdAnime,
+                  'title_synonym': item.titleSynonym
+                }),
+        _relationProducerAndAnimeEntityInsertionAdapter = InsertionAdapter(
+            database,
+            'table_relation_producer_and_anime',
+            (RelationProducerAndAnimeEntity item) => <String, Object?>{
+                  'mal_id': item.malId,
+                  'mal_id_anime': item.malIdAnime,
+                  'mal_id_studio': item.malIdStudio
+                }),
+        _relationLicensorAndAnimeEntityInsertionAdapter = InsertionAdapter(
+            database,
+            'table_relation_licensor_and_anime',
+            (RelationLicensorAndAnimeEntity item) => <String, Object?>{
+                  'mal_id': item.malId,
+                  'mal_id_anime': item.malIdAnime,
+                  'mal_id_studio': item.malIdStudio
+                }),
+        _relationStudioAndAnimeEntityInsertionAdapter = InsertionAdapter(
+            database,
+            'table_relation_studio_and_anime',
+            (RelationStudioAndAnimeEntity item) => <String, Object?>{
+                  'mal_id': item.malId,
+                  'mal_id_anime': item.malIdAnime,
+                  'mal_id_studio': item.malIdStudio
+                }),
+        _relationGenreAndAnimeEntityInsertionAdapter = InsertionAdapter(
+            database,
+            'table_relation_genre_and_anime',
+            (RelationGenreAndAnimeEntity item) => <String, Object?>{
+                  'mal_id': item.malId,
+                  'mal_id_anime': item.malIdAnime,
+                  'mal_id_genre': item.malIdGenre
+                });
+
+  final sqflite.DatabaseExecutor database;
+
+  final StreamController<String> changeListener;
+
+  final QueryAdapter _queryAdapter;
+
+  final InsertionAdapter<AnimeEntity> _animeEntityInsertionAdapter;
+
+  final InsertionAdapter<StudioEntity> _studioEntityInsertionAdapter;
+
+  final InsertionAdapter<GenreEntity> _genreEntityInsertionAdapter;
+
+  final InsertionAdapter<RelationTitleSynonymAndAnime>
+      _relationTitleSynonymAndAnimeInsertionAdapter;
+
+  final InsertionAdapter<RelationProducerAndAnimeEntity>
+      _relationProducerAndAnimeEntityInsertionAdapter;
+
+  final InsertionAdapter<RelationLicensorAndAnimeEntity>
+      _relationLicensorAndAnimeEntityInsertionAdapter;
+
+  final InsertionAdapter<RelationStudioAndAnimeEntity>
+      _relationStudioAndAnimeEntityInsertionAdapter;
+
+  final InsertionAdapter<RelationGenreAndAnimeEntity>
+      _relationGenreAndAnimeEntityInsertionAdapter;
+
+  @override
+  Stream<List<AnimeEntity>?> getAnime() {
+    return _queryAdapter.queryListStream('SELECT * FROM table_anime',
+        mapper: (Map<String, Object?> row) => AnimeEntity(
+            row['mal_id'] as int,
+            row['url'] as String?,
+            row['jpg_image_url'] as String?,
+            row['trailer_youtube_id'] as String?,
+            row['trailer_image_medium_image_url'] as String?,
+            row['title'] as String?,
+            row['title_english'] as String?,
+            row['title_japanese'] as String?,
+            row['type'] == null ? null : TypeAnime.values[row['type'] as int],
+            row['source'] as String?,
+            row['episodes'] as int?,
+            row['status'] as String?,
+            row['airing'] == null ? null : (row['airing'] as int) != 0,
+            row['aired_form'] as String?,
+            row['aired_to'] as String?,
+            row['duration'] as String?,
+            row['rating'] as String?,
+            row['score'] as double?,
+            row['scored_by'] as int?,
+            row['rank'] as int?,
+            row['popularity'] as int?,
+            row['favorites'] as int?,
+            row['synopsis'] as String?,
+            row['background'] as String?,
+            row['season'] as String?,
+            row['broadcast_day'] as String?,
+            row['broadcast_time'] as String?,
+            row['broadcast_timezone'] as String?),
+        queryableName: 'table_anime',
+        isView: false);
+  }
+
+  @override
+  Future<List<RelationTitleSynonymAndAnime>?> getRelationTitleSynonymAndAnime(
+      int malIdAnime) async {
+    return _queryAdapter.queryList(
+        'SELECT * FROM table_relation_title_synonym_and_anime WHERE mal_id_anime = ?1',
+        mapper: (Map<String, Object?> row) => RelationTitleSynonymAndAnime(row['mal_id_anime'] as int, row['title_synonym'] as String, malId: row['mal_id'] as int?),
+        arguments: [malIdAnime]);
+  }
+
+  @override
+  Future<List<RelationProducerAndAnimeEntity>?> getRelationProducerAndAnime(
+      int malIdAnime) async {
+    return _queryAdapter.queryList(
+        'SELECT * FROM table_relation_producer_and_anime WHERE mal_id_anime = ?1',
+        mapper: (Map<String, Object?> row) => RelationProducerAndAnimeEntity(row['mal_id_anime'] as int, row['mal_id_studio'] as int, malId: row['mal_id'] as int?),
+        arguments: [malIdAnime]);
+  }
+
+  @override
+  Future<StudioEntity?> getStudioFromId(int malIdStudio) async {
+    return _queryAdapter.query('SELECT * FROM table_studio WHERE mal_id = ?1',
+        mapper: (Map<String, Object?> row) => StudioEntity(
+            row['mal_id'] as int,
+            row['type'] as String?,
+            row['name'] as String?,
+            row['url'] as String?),
+        arguments: [malIdStudio]);
+  }
+
+  @override
+  Future<List<RelationLicensorAndAnimeEntity>?> getRelationLicensorAndAnime(
+      int malIdAnime) async {
+    return _queryAdapter.queryList(
+        'SELECT * FROM table_relation_licensor_and_anime WHERE mal_id_anime = ?1',
+        mapper: (Map<String, Object?> row) => RelationLicensorAndAnimeEntity(row['mal_id_anime'] as int, row['mal_id_studio'] as int, malId: row['mal_id'] as int?),
+        arguments: [malIdAnime]);
+  }
+
+  @override
+  Future<List<RelationStudioAndAnimeEntity>?> getRelationStudioAndAnime(
+      int malIdAnime) async {
+    return _queryAdapter.queryList(
+        'SELECT * FROM table_relation_studio_and_anime WHERE mal_id_anime = ?1',
+        mapper: (Map<String, Object?> row) => RelationStudioAndAnimeEntity(
+            row['mal_id_anime'] as int, row['mal_id_studio'] as int,
+            malId: row['mal_id'] as int?),
+        arguments: [malIdAnime]);
+  }
+
+  @override
+  Future<List<RelationGenreAndAnimeEntity>?> getRelationGenreAndAnime(
+      int malIdAnime) async {
+    return _queryAdapter.queryList(
+        'SELECT * FROM table_relation_genre_and_anime WHERE mal_id_anime = ?1',
+        mapper: (Map<String, Object?> row) => RelationGenreAndAnimeEntity(
+            row['mal_id_anime'] as int, row['mal_id_genre'] as int,
+            malId: row['mal_id'] as int?),
+        arguments: [malIdAnime]);
+  }
+
+  @override
+  Future<GenreEntity?> getGenreFromId(int malIdGenre) async {
+    return _queryAdapter.query('SELECT * FROM table_genre WHERE mal_id = ?1',
+        mapper: (Map<String, Object?> row) => GenreEntity(
+            row['mal_id'] as int,
+            row['type'] as String?,
+            row['name'] as String?,
+            row['url'] as String?),
+        arguments: [malIdGenre]);
+  }
+
+  @override
+  Future<int?> clearAnimeRows() async {
+    return _queryAdapter.query('DELETE FROM table_anime',
+        mapper: (Map<String, Object?> row) => row.values.first as int);
+  }
+
+  @override
+  Future<List<int>> insertAnime(List<AnimeEntity> listAnimeEntity) {
+    return _animeEntityInsertionAdapter.insertListAndReturnIds(
+        listAnimeEntity, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<List<int>> insertStudio(List<StudioEntity> listStudioEntity) {
+    return _studioEntityInsertionAdapter.insertListAndReturnIds(
+        listStudioEntity, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<List<int>> insertGenre(List<GenreEntity> listGenreEntity) {
+    return _genreEntityInsertionAdapter.insertListAndReturnIds(
+        listGenreEntity, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<List<int>> insertRelationTitleSynonym(
+      List<RelationTitleSynonymAndAnime> listRelationTitleSynonymAndAnime) {
+    return _relationTitleSynonymAndAnimeInsertionAdapter.insertListAndReturnIds(
+        listRelationTitleSynonymAndAnime, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<List<int>> insertRelationProducerAndAnime(
+      List<RelationProducerAndAnimeEntity> listRelationProducerAndAnimeEntity) {
+    return _relationProducerAndAnimeEntityInsertionAdapter
+        .insertListAndReturnIds(
+            listRelationProducerAndAnimeEntity, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<List<int>> insertRelationLicensorAndAnime(
+      List<RelationLicensorAndAnimeEntity> listRelationLicensorAndAnimeEntity) {
+    return _relationLicensorAndAnimeEntityInsertionAdapter
+        .insertListAndReturnIds(
+            listRelationLicensorAndAnimeEntity, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<List<int>> insertRelationStudioAndAnime(
+      List<RelationStudioAndAnimeEntity> listRelationStudioAndAnimeEntity) {
+    return _relationStudioAndAnimeEntityInsertionAdapter.insertListAndReturnIds(
+        listRelationStudioAndAnimeEntity, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<List<int>> insertRelationGenreAndAnime(
+      List<RelationGenreAndAnimeEntity> listRelationGenreAndAnimeEntity) {
+    return _relationGenreAndAnimeEntityInsertionAdapter.insertListAndReturnIds(
+        listRelationGenreAndAnimeEntity, OnConflictStrategy.abort);
   }
 }

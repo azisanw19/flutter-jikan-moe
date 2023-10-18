@@ -2,6 +2,7 @@ import 'package:anime_list/src/domain/data_transfer_object/genre_data.dart';
 import 'package:anime_list/src/domain/data_transfer_object/studio_data.dart';
 import 'package:anime_list/src/domain/remote/models/data_anime_response.dart';
 import 'package:anime_list/src/domain/remote/models/other_item_response.dart';
+import 'package:anime_list/src/domain/remote/models/pagination_response.dart';
 import 'package:anime_list/src/utils/converter/type_anime_converter.dart';
 import 'package:anime_list/src/utils/resources/data_state_pagination.dart';
 
@@ -28,13 +29,14 @@ class AnimeRepositoryRemoteImpl extends BaseRepositoryRemote
       request: () => _animeApiService.getAnimeSearch(),
     );
 
-    if (dataStatePaginationAnimeResponse is DataStatePaginationSuccess) {
+    if (dataStatePaginationAnimeResponse is DataStateSuccess) {
+      // dataStatePaginationAnimeResponse.data?.dataAnimeResponses!.map(_dataAnimeResponseToAnimeData).toList();
+
       return DataStatePaginationSuccess(dataStatePaginationAnimeResponse
-              .data?.dataAnimeResponses!
+              .data!.dataAnimeResponses!
               .map(_dataAnimeResponseToAnimeData)
-              .toList() ??
-          <AnimeData>[]);
-    } else if (dataStatePaginationAnimeResponse is Error) {
+              .toList(), _paginationResponseToPaginationData(dataStatePaginationAnimeResponse.data!.pagination!));
+    } else if (dataStatePaginationAnimeResponse is DataStateError) {
       return DataStatePaginationError(
           dataStatePaginationAnimeResponse.exception!);
     } else {
@@ -114,4 +116,15 @@ class AnimeRepositoryRemoteImpl extends BaseRepositoryRemote
           OtherItemResponse otherItemResponse) =>
       GenreData(otherItemResponse.malId, otherItemResponse.type,
           otherItemResponse.name, otherItemResponse.url);
+
+  PaginationData _paginationResponseToPaginationData(
+          PaginationResponse paginationResponse) =>
+      PaginationData(
+        paginationResponse.lastVisiblePage,
+        paginationResponse.hasNextPage,
+        paginationResponse.currentPage,
+        paginationResponse.items?.count,
+        paginationResponse.items?.total,
+        paginationResponse.items?.perPage,
+      );
 }

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:anime_list/src/data/data_source/local/dao/anime_dao.dart';
 import 'package:anime_list/src/domain/local/models/anime/anime_entity.dart';
 import 'package:anime_list/src/domain/local/models/anime/genre_entity.dart';
 import 'package:anime_list/src/domain/local/models/anime/relation_licensor_and_anime_entity.dart';
@@ -13,6 +14,7 @@ import 'package:sqflite/sqflite.dart' as sqflite;
 import '../../../../domain/local/models/anime/relation_genre_and_anime_entity.dart';
 import '../../../../domain/local/models/anime/relation_producer_and_anime_entity.dart';
 import '../../../../domain/local/models/anime/studio_entity.dart';
+import '../../../../utils/constants/type_anime.dart';
 
 part 'anime_database.g.dart';
 
@@ -29,6 +31,6 @@ part 'anime_database.g.dart';
 ])
 abstract class AnimeDatabase extends FloorDatabase {
 
-
+  AnimeDao get animeDao;
 
 }

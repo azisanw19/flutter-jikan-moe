@@ -52,11 +52,11 @@ class DataAnimeResponse {
     images = ImageResponse.fromJson(json['images']);
     trailer = TrailerResponse.fromJson(json['trailer']);
     approved = json['approved'];
-    titles = json['titles'].map((element) => TitleItemResponse.fromJson(element));
+    titles = List<dynamic>.from(json['titles']).map((titleItemResponse) => TitleItemResponse.fromJson(titleItemResponse)).toList();
     title = json['title'];
     titleEnglish = json['title_english'];
     titleJapanese = json['title_japanese'];
-    titleSynonyms = json['title_synonyms'];
+    titleSynonyms = List<dynamic>.from(json['title_synonyms']).map((titleSynonym) => titleSynonym.toString()).toList();
     type = json['type'];
     source = json['source'];
     episodes = json['episodes'];
@@ -65,7 +65,7 @@ class DataAnimeResponse {
     aired = AiredResponse.fromJson(json['aired']);
     duration = json['duration'];
     rating = json['rating'];
-    score = json['score'];
+    score = json['score'].toDouble();
     scoredBy = json['scored_by'];
     rank = json['rank'];
     popularity = json['popularity'];
@@ -76,12 +76,12 @@ class DataAnimeResponse {
     season = json['season'];
     year = json['year'];
     broadcast = BroadcastResponse.fromJson(json['broadcast']);
-    producers = json['producers'].map((producer) => OtherItemResponse.fromJson(producer)).toList();
-    licensors = json['licensors'].map((licensor) => OtherItemResponse.fromJson(licensor)).toList();
-    studios = json['studios'].map((studio) => OtherItemResponse.fromJson(studio));
-    genres = json['genres'].map((genre) => OtherItemResponse.fromJson(genre));
-    themes = json['themes'].map((theme) => OtherItemResponse.fromJson(theme));
-    demographics = json['demographics'].map((demographic) => OtherItemResponse.fromJson(demographic));
+    producers = List<dynamic>.from(json['producers']).map((producer) => OtherItemResponse.fromJson(producer)).toList();
+    licensors = List<dynamic>.from(json['licensors']).map((licensor) => OtherItemResponse.fromJson(licensor)).toList();
+    studios = List<dynamic>.from(json['studios']).map((studio) => OtherItemResponse.fromJson(studio)).toList();
+    genres = List<dynamic>.from(json['genres']).map((genre) => OtherItemResponse.fromJson(genre)).toList();
+    themes = List<dynamic>.from(json['themes']).map((theme) => OtherItemResponse.fromJson(theme)).toList();
+    demographics = List<dynamic>.from(json['demographics']).map((demographic) => OtherItemResponse.fromJson(demographic)).toList();
   }
 
   int? malId;
