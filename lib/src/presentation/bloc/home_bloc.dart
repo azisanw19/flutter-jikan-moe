@@ -21,16 +21,14 @@ class HomeBloc extends Bloc<HomeState, List<AnimeData>> {
 
   void _subscribeStreamAnimeData() async {
 
-    Stream<Future<List<AnimeData>>> streamData = await _animeSearchUseCase.getAnimeSearch();
+    Stream<List<AnimeData>> streamData = await _animeSearchUseCase.getAnimeSearch();
 
-    StreamSubscription<Future<List<AnimeData>>> subscriptionData = streamData.listen(print);
+    StreamSubscription<List<AnimeData>> subscriptionData = streamData.listen(print);
 
     subscriptionData.onData((futureListAnimeData) {
-      futureListAnimeData.then((listAnimeData) {
-        this.listAnimeData = listAnimeData;
+      this.listAnimeData = futureListAnimeData;
 
-        add(GetAnimeState());
-      });
+      add(GetAnimeState());
     });
 
   }

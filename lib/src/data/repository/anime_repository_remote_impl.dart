@@ -10,14 +10,14 @@ import '../../domain/data_transfer_object/anime_data.dart';
 import '../../domain/data_transfer_object/pagination_data.dart';
 import '../../domain/remote/models/anime_response.dart';
 import '../../utils/error/repository_remote_exception.dart';
-import '../data_source/remote/anime_api_service.dart';
+import '../data_source/remote/jikan_moe_api_service.dart';
 import 'base/base_repository_remote.dart';
 import '../../domain/repository/anime_repository_remote.dart';
 import '../../utils/resources/data_state.dart';
 
 class AnimeRepositoryRemoteImpl extends BaseRepositoryRemote
     implements AnimeRepositoryRemote {
-  final AnimeApiService _animeApiService;
+  final JikanMoeApiService _animeApiService;
 
   AnimeRepositoryRemoteImpl(this._animeApiService);
 

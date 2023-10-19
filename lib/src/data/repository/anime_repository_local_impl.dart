@@ -176,7 +176,7 @@ class AnimeRepositoryLocalImpl extends BaseRepositoryLocal
   }
 
   @override
-  Stream<Future<List<AnimeData>>> getListAnime() {
+  Stream<List<AnimeData>> getListAnime() {
     Stream<List<AnimeEntity>?> listAnimeEntity = _getAnime();
 
     Stream<List<AnimeEntity>> listAnimeEntityNotNull = listAnimeEntity.where((
@@ -187,7 +187,7 @@ class AnimeRepositoryLocalImpl extends BaseRepositoryLocal
     return listAnimeEntityNotNull.map(_extractListAnimeEntityToListAnimeData);
   }
 
-  Future<List<AnimeData>> _extractListAnimeEntityToListAnimeData(List<AnimeEntity> listAnimeEntity) async {
+  List<AnimeData> _extractListAnimeEntityToListAnimeData(List<AnimeEntity> listAnimeEntity) {
     List<AnimeData> listAnimeData = <AnimeData>[];
 
     listAnimeEntity.forEach((animeEntity) async {

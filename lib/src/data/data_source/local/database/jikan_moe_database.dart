@@ -16,7 +16,7 @@ import '../../../../domain/local/models/anime/relation_producer_and_anime_entity
 import '../../../../domain/local/models/anime/studio_entity.dart';
 import '../../../../utils/constants/type_anime.dart';
 
-part 'anime_database.g.dart';
+part 'jikan_moe_database.g.dart';
 
 @Database(version: 1, entities: [
   // Anime Entity
@@ -29,7 +29,7 @@ part 'anime_database.g.dart';
   RelationStudioAndAnimeEntity,
   RelationGenreAndAnimeEntity,
 ])
-abstract class AnimeDatabase extends FloorDatabase {
+abstract class JikanMoeDatabase extends FloorDatabase {
 
   AnimeDao get animeDao;
 

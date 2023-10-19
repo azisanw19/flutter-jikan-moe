@@ -1,27 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'anime_database.dart';
+part of 'jikan_moe_database.dart';
 
 // **************************************************************************
 // FloorGenerator
 // **************************************************************************
 
 // ignore: avoid_classes_with_only_static_members
-class $FloorAnimeDatabase {
+class $FloorJikanMoeDatabase {
   /// Creates a database builder for a persistent database.
   /// Once a database is built, you should keep a reference to it and re-use it.
-  static _$AnimeDatabaseBuilder databaseBuilder(String name) =>
-      _$AnimeDatabaseBuilder(name);
+  static _$JikanMoeDatabaseBuilder databaseBuilder(String name) =>
+      _$JikanMoeDatabaseBuilder(name);
 
   /// Creates a database builder for an in memory database.
   /// Information stored in an in memory database disappears when the process is killed.
   /// Once a database is built, you should keep a reference to it and re-use it.
-  static _$AnimeDatabaseBuilder inMemoryDatabaseBuilder() =>
-      _$AnimeDatabaseBuilder(null);
+  static _$JikanMoeDatabaseBuilder inMemoryDatabaseBuilder() =>
+      _$JikanMoeDatabaseBuilder(null);
 }
 
-class _$AnimeDatabaseBuilder {
-  _$AnimeDatabaseBuilder(this.name);
+class _$JikanMoeDatabaseBuilder {
+  _$JikanMoeDatabaseBuilder(this.name);
 
   final String? name;
 
@@ -30,23 +30,23 @@ class _$AnimeDatabaseBuilder {
   Callback? _callback;
 
   /// Adds migrations to the builder.
-  _$AnimeDatabaseBuilder addMigrations(List<Migration> migrations) {
+  _$JikanMoeDatabaseBuilder addMigrations(List<Migration> migrations) {
     _migrations.addAll(migrations);
     return this;
   }
 
   /// Adds a database [Callback] to the builder.
-  _$AnimeDatabaseBuilder addCallback(Callback callback) {
+  _$JikanMoeDatabaseBuilder addCallback(Callback callback) {
     _callback = callback;
     return this;
   }
 
   /// Creates the database and initializes it.
-  Future<AnimeDatabase> build() async {
+  Future<JikanMoeDatabase> build() async {
     final path = name != null
         ? await sqfliteDatabaseFactory.getDatabasePath(name!)
         : ':memory:';
-    final database = _$AnimeDatabase();
+    final database = _$JikanMoeDatabase();
     database.database = await database.open(
       path,
       _migrations,
@@ -56,8 +56,8 @@ class _$AnimeDatabaseBuilder {
   }
 }
 
-class _$AnimeDatabase extends AnimeDatabase {
-  _$AnimeDatabase([StreamController<String>? listener]) {
+class _$JikanMoeDatabase extends JikanMoeDatabase {
+  _$JikanMoeDatabase([StreamController<String>? listener]) {
     changeListener = listener ?? StreamController<String>.broadcast();
   }
 
