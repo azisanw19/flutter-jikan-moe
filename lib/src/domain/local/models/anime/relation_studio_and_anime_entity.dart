@@ -3,7 +3,10 @@ import 'package:anime_list/src/domain/local/models/anime/studio_entity.dart';
 import 'package:anime_list/src/utils/constants/table_database_anime.dart';
 import 'package:floor/floor.dart';
 
-@Entity(tableName: tableRelationStudioAndAnime, foreignKeys: [
+@Entity(tableName: tableRelationStudioAndAnime, primaryKeys: [
+  malIdAnimeRelationStudioAndAnime,
+  malIdStudioRelationStudioAndAnime
+], foreignKeys: [
   ForeignKey(
       childColumns: [malIdAnimeRelationStudioAndAnime],
       parentColumns: [malIdAnime],
@@ -14,16 +17,11 @@ import 'package:floor/floor.dart';
       entity: StudioEntity)
 ])
 class RelationStudioAndAnimeEntity {
-
-  @PrimaryKey(autoGenerate: true)
-  @ColumnInfo(name: malIdRelationStudioAndAnime)
-  final int? malId;
-
   @ColumnInfo(name: malIdAnimeRelationStudioAndAnime)
   final int malIdAnime;
 
   @ColumnInfo(name: malIdStudioRelationStudioAndAnime)
   final int malIdStudio;
 
-  const RelationStudioAndAnimeEntity(this.malIdAnime, this.malIdStudio, {this.malId});
+  const RelationStudioAndAnimeEntity(this.malIdAnime, this.malIdStudio);
 }

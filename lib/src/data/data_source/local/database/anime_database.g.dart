@@ -91,15 +91,15 @@ class _$AnimeDatabase extends AnimeDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `table_studio` (`mal_id` INTEGER NOT NULL, `type` TEXT, `name` TEXT, `url` TEXT, PRIMARY KEY (`mal_id`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `table_relation_title_synonym_and_anime` (`mal_id` INTEGER PRIMARY KEY AUTOINCREMENT, `mal_id_anime` INTEGER NOT NULL, `title_synonym` TEXT NOT NULL, FOREIGN KEY (`mal_id_anime`) REFERENCES `table_anime` (`mal_id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
+            'CREATE TABLE IF NOT EXISTS `table_relation_title_synonym_and_anime` (`mal_id_anime` INTEGER NOT NULL, `title_synonym` TEXT NOT NULL, FOREIGN KEY (`mal_id_anime`) REFERENCES `table_anime` (`mal_id`) ON UPDATE NO ACTION ON DELETE NO ACTION, PRIMARY KEY (`mal_id_anime`, `title_synonym`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `table_relation_producer_and_anime` (`mal_id` INTEGER PRIMARY KEY AUTOINCREMENT, `mal_id_anime` INTEGER NOT NULL, `mal_id_studio` INTEGER NOT NULL, FOREIGN KEY (`mal_id_anime`) REFERENCES `table_anime` (`mal_id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`mal_id_studio`) REFERENCES `table_studio` (`mal_id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
+            'CREATE TABLE IF NOT EXISTS `table_relation_producer_and_anime` (`mal_id_anime` INTEGER NOT NULL, `mal_id_studio` INTEGER NOT NULL, FOREIGN KEY (`mal_id_anime`) REFERENCES `table_anime` (`mal_id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`mal_id_studio`) REFERENCES `table_studio` (`mal_id`) ON UPDATE NO ACTION ON DELETE NO ACTION, PRIMARY KEY (`mal_id_anime`, `mal_id_studio`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `table_relation_licensor_and_anime` (`mal_id` INTEGER PRIMARY KEY AUTOINCREMENT, `mal_id_anime` INTEGER NOT NULL, `mal_id_studio` INTEGER NOT NULL, FOREIGN KEY (`mal_id_anime`) REFERENCES `table_anime` (`mal_id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`mal_id_studio`) REFERENCES `table_studio` (`mal_id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
+            'CREATE TABLE IF NOT EXISTS `table_relation_licensor_and_anime` (`mal_id_anime` INTEGER NOT NULL, `mal_id_studio` INTEGER NOT NULL, FOREIGN KEY (`mal_id_anime`) REFERENCES `table_anime` (`mal_id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`mal_id_studio`) REFERENCES `table_studio` (`mal_id`) ON UPDATE NO ACTION ON DELETE NO ACTION, PRIMARY KEY (`mal_id_anime`, `mal_id_studio`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `table_relation_studio_and_anime` (`mal_id` INTEGER PRIMARY KEY AUTOINCREMENT, `mal_id_anime` INTEGER NOT NULL, `mal_id_studio` INTEGER NOT NULL, FOREIGN KEY (`mal_id_anime`) REFERENCES `table_anime` (`mal_id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`mal_id_studio`) REFERENCES `table_studio` (`mal_id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
+            'CREATE TABLE IF NOT EXISTS `table_relation_studio_and_anime` (`mal_id_anime` INTEGER NOT NULL, `mal_id_studio` INTEGER NOT NULL, FOREIGN KEY (`mal_id_anime`) REFERENCES `table_anime` (`mal_id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`mal_id_studio`) REFERENCES `table_studio` (`mal_id`) ON UPDATE NO ACTION ON DELETE NO ACTION, PRIMARY KEY (`mal_id_anime`, `mal_id_studio`))');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `table_relation_genre_and_anime` (`mal_id` INTEGER PRIMARY KEY AUTOINCREMENT, `mal_id_anime` INTEGER NOT NULL, `mal_id_genre` INTEGER NOT NULL, FOREIGN KEY (`mal_id_anime`) REFERENCES `table_anime` (`mal_id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`mal_id_anime`) REFERENCES `table_studio` (`mal_id`) ON UPDATE NO ACTION ON DELETE NO ACTION)');
+            'CREATE TABLE IF NOT EXISTS `table_relation_genre_and_anime` (`mal_id_anime` INTEGER NOT NULL, `mal_id_genre` INTEGER NOT NULL, FOREIGN KEY (`mal_id_anime`) REFERENCES `table_anime` (`mal_id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`mal_id_genre`) REFERENCES `table_genre` (`mal_id`) ON UPDATE NO ACTION ON DELETE NO ACTION, PRIMARY KEY (`mal_id_anime`, `mal_id_genre`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -174,7 +174,6 @@ class _$AnimeDao extends AnimeDao {
             database,
             'table_relation_title_synonym_and_anime',
             (RelationTitleSynonymAndAnime item) => <String, Object?>{
-                  'mal_id': item.malId,
                   'mal_id_anime': item.malIdAnime,
                   'title_synonym': item.titleSynonym
                 }),
@@ -182,7 +181,6 @@ class _$AnimeDao extends AnimeDao {
             database,
             'table_relation_producer_and_anime',
             (RelationProducerAndAnimeEntity item) => <String, Object?>{
-                  'mal_id': item.malId,
                   'mal_id_anime': item.malIdAnime,
                   'mal_id_studio': item.malIdStudio
                 }),
@@ -190,7 +188,6 @@ class _$AnimeDao extends AnimeDao {
             database,
             'table_relation_licensor_and_anime',
             (RelationLicensorAndAnimeEntity item) => <String, Object?>{
-                  'mal_id': item.malId,
                   'mal_id_anime': item.malIdAnime,
                   'mal_id_studio': item.malIdStudio
                 }),
@@ -198,7 +195,6 @@ class _$AnimeDao extends AnimeDao {
             database,
             'table_relation_studio_and_anime',
             (RelationStudioAndAnimeEntity item) => <String, Object?>{
-                  'mal_id': item.malId,
                   'mal_id_anime': item.malIdAnime,
                   'mal_id_studio': item.malIdStudio
                 }),
@@ -206,7 +202,6 @@ class _$AnimeDao extends AnimeDao {
             database,
             'table_relation_genre_and_anime',
             (RelationGenreAndAnimeEntity item) => <String, Object?>{
-                  'mal_id': item.malId,
                   'mal_id_anime': item.malIdAnime,
                   'mal_id_genre': item.malIdGenre
                 });
@@ -279,7 +274,7 @@ class _$AnimeDao extends AnimeDao {
       int malIdAnime) async {
     return _queryAdapter.queryList(
         'SELECT * FROM table_relation_title_synonym_and_anime WHERE mal_id_anime = ?1',
-        mapper: (Map<String, Object?> row) => RelationTitleSynonymAndAnime(row['mal_id_anime'] as int, row['title_synonym'] as String, malId: row['mal_id'] as int?),
+        mapper: (Map<String, Object?> row) => RelationTitleSynonymAndAnime(row['mal_id_anime'] as int, row['title_synonym'] as String),
         arguments: [malIdAnime]);
   }
 
@@ -288,7 +283,7 @@ class _$AnimeDao extends AnimeDao {
       int malIdAnime) async {
     return _queryAdapter.queryList(
         'SELECT * FROM table_relation_producer_and_anime WHERE mal_id_anime = ?1',
-        mapper: (Map<String, Object?> row) => RelationProducerAndAnimeEntity(row['mal_id_anime'] as int, row['mal_id_studio'] as int, malId: row['mal_id'] as int?),
+        mapper: (Map<String, Object?> row) => RelationProducerAndAnimeEntity(row['mal_id_anime'] as int, row['mal_id_studio'] as int),
         arguments: [malIdAnime]);
   }
 
@@ -308,7 +303,7 @@ class _$AnimeDao extends AnimeDao {
       int malIdAnime) async {
     return _queryAdapter.queryList(
         'SELECT * FROM table_relation_licensor_and_anime WHERE mal_id_anime = ?1',
-        mapper: (Map<String, Object?> row) => RelationLicensorAndAnimeEntity(row['mal_id_anime'] as int, row['mal_id_studio'] as int, malId: row['mal_id'] as int?),
+        mapper: (Map<String, Object?> row) => RelationLicensorAndAnimeEntity(row['mal_id_anime'] as int, row['mal_id_studio'] as int),
         arguments: [malIdAnime]);
   }
 
@@ -318,8 +313,7 @@ class _$AnimeDao extends AnimeDao {
     return _queryAdapter.queryList(
         'SELECT * FROM table_relation_studio_and_anime WHERE mal_id_anime = ?1',
         mapper: (Map<String, Object?> row) => RelationStudioAndAnimeEntity(
-            row['mal_id_anime'] as int, row['mal_id_studio'] as int,
-            malId: row['mal_id'] as int?),
+            row['mal_id_anime'] as int, row['mal_id_studio'] as int),
         arguments: [malIdAnime]);
   }
 
@@ -329,8 +323,7 @@ class _$AnimeDao extends AnimeDao {
     return _queryAdapter.queryList(
         'SELECT * FROM table_relation_genre_and_anime WHERE mal_id_anime = ?1',
         mapper: (Map<String, Object?> row) => RelationGenreAndAnimeEntity(
-            row['mal_id_anime'] as int, row['mal_id_genre'] as int,
-            malId: row['mal_id'] as int?),
+            row['mal_id_anime'] as int, row['mal_id_genre'] as int),
         arguments: [malIdAnime]);
   }
 
@@ -354,26 +347,26 @@ class _$AnimeDao extends AnimeDao {
   @override
   Future<List<int>> insertAnime(List<AnimeEntity> listAnimeEntity) {
     return _animeEntityInsertionAdapter.insertListAndReturnIds(
-        listAnimeEntity, OnConflictStrategy.abort);
+        listAnimeEntity, OnConflictStrategy.ignore);
   }
 
   @override
   Future<List<int>> insertStudio(List<StudioEntity> listStudioEntity) {
     return _studioEntityInsertionAdapter.insertListAndReturnIds(
-        listStudioEntity, OnConflictStrategy.abort);
+        listStudioEntity, OnConflictStrategy.ignore);
   }
 
   @override
   Future<List<int>> insertGenre(List<GenreEntity> listGenreEntity) {
     return _genreEntityInsertionAdapter.insertListAndReturnIds(
-        listGenreEntity, OnConflictStrategy.abort);
+        listGenreEntity, OnConflictStrategy.ignore);
   }
 
   @override
   Future<List<int>> insertRelationTitleSynonym(
       List<RelationTitleSynonymAndAnime> listRelationTitleSynonymAndAnime) {
     return _relationTitleSynonymAndAnimeInsertionAdapter.insertListAndReturnIds(
-        listRelationTitleSynonymAndAnime, OnConflictStrategy.abort);
+        listRelationTitleSynonymAndAnime, OnConflictStrategy.ignore);
   }
 
   @override
@@ -381,7 +374,7 @@ class _$AnimeDao extends AnimeDao {
       List<RelationProducerAndAnimeEntity> listRelationProducerAndAnimeEntity) {
     return _relationProducerAndAnimeEntityInsertionAdapter
         .insertListAndReturnIds(
-            listRelationProducerAndAnimeEntity, OnConflictStrategy.abort);
+            listRelationProducerAndAnimeEntity, OnConflictStrategy.ignore);
   }
 
   @override
@@ -389,20 +382,20 @@ class _$AnimeDao extends AnimeDao {
       List<RelationLicensorAndAnimeEntity> listRelationLicensorAndAnimeEntity) {
     return _relationLicensorAndAnimeEntityInsertionAdapter
         .insertListAndReturnIds(
-            listRelationLicensorAndAnimeEntity, OnConflictStrategy.abort);
+            listRelationLicensorAndAnimeEntity, OnConflictStrategy.ignore);
   }
 
   @override
   Future<List<int>> insertRelationStudioAndAnime(
       List<RelationStudioAndAnimeEntity> listRelationStudioAndAnimeEntity) {
     return _relationStudioAndAnimeEntityInsertionAdapter.insertListAndReturnIds(
-        listRelationStudioAndAnimeEntity, OnConflictStrategy.abort);
+        listRelationStudioAndAnimeEntity, OnConflictStrategy.ignore);
   }
 
   @override
   Future<List<int>> insertRelationGenreAndAnime(
       List<RelationGenreAndAnimeEntity> listRelationGenreAndAnimeEntity) {
     return _relationGenreAndAnimeEntityInsertionAdapter.insertListAndReturnIds(
-        listRelationGenreAndAnimeEntity, OnConflictStrategy.abort);
+        listRelationGenreAndAnimeEntity, OnConflictStrategy.ignore);
   }
 }

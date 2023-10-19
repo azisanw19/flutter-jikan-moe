@@ -25,9 +25,10 @@ class HomeBloc extends Bloc<HomeState, List<AnimeData>> {
 
     StreamSubscription<Future<List<AnimeData>>> subscriptionData = streamData.listen(print);
 
-    subscriptionData.onData((futureListAnimeData) async {
-      await futureListAnimeData.then((listAnimeData) {
+    subscriptionData.onData((futureListAnimeData) {
+      futureListAnimeData.then((listAnimeData) {
         this.listAnimeData = listAnimeData;
+
         add(GetAnimeState());
       });
     });
