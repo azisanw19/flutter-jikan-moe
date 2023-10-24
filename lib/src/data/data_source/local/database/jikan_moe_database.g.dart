@@ -398,4 +398,43 @@ class _$AnimeDao extends AnimeDao {
     return _relationGenreAndAnimeEntityInsertionAdapter.insertListAndReturnIds(
         listRelationGenreAndAnimeEntity, OnConflictStrategy.ignore);
   }
+
+  @override
+  Future<void> insertAnimeTransaction(
+    List<AnimeEntity> listAnimeEntity,
+    List<StudioEntity> listStudioEntity,
+    List<GenreEntity> listGenreEntity,
+    List<RelationTitleSynonymAndAnime> listRelationTitleSynonymAndAnime,
+    List<RelationProducerAndAnimeEntity> listRelationProducerAndAnimeEntity,
+    List<RelationLicensorAndAnimeEntity> listRelationLicensorAndAnimeEntity,
+    List<RelationStudioAndAnimeEntity> listRelationStudioAndAnimeEntity,
+    List<RelationGenreAndAnimeEntity> listRelationGenreAndAnimeEntity,
+  ) async {
+    if (database is sqflite.Transaction) {
+      await super.insertAnimeTransaction(
+          listAnimeEntity,
+          listStudioEntity,
+          listGenreEntity,
+          listRelationTitleSynonymAndAnime,
+          listRelationProducerAndAnimeEntity,
+          listRelationLicensorAndAnimeEntity,
+          listRelationStudioAndAnimeEntity,
+          listRelationGenreAndAnimeEntity);
+    } else {
+      await (database as sqflite.Database)
+          .transaction<void>((transaction) async {
+        final transactionDatabase = _$JikanMoeDatabase(changeListener)
+          ..database = transaction;
+        await transactionDatabase.animeDao.insertAnimeTransaction(
+            listAnimeEntity,
+            listStudioEntity,
+            listGenreEntity,
+            listRelationTitleSynonymAndAnime,
+            listRelationProducerAndAnimeEntity,
+            listRelationLicensorAndAnimeEntity,
+            listRelationStudioAndAnimeEntity,
+            listRelationGenreAndAnimeEntity);
+      });
+    }
+  }
 }

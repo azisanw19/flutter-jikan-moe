@@ -12,6 +12,8 @@ import '../../../../utils/constants/table_database_anime.dart';
 
 @dao // data access object
 abstract class AnimeDao {
+
+  // insert data
   @Insert(onConflict: OnConflictStrategy.ignore)
   Future<List<int>> insertAnime(List<AnimeEntity> listAnimeEntity); // return id
 
@@ -40,6 +42,24 @@ abstract class AnimeDao {
   @Insert(onConflict: OnConflictStrategy.ignore)
   Future<List<int>> insertRelationGenreAndAnime(
       List<RelationGenreAndAnimeEntity> listRelationGenreAndAnimeEntity);
+
+  @transaction
+  Future<void> insertAnimeTransaction(List<AnimeEntity> listAnimeEntity,
+      List<StudioEntity> listStudioEntity, List<GenreEntity> listGenreEntity,
+      List<RelationTitleSynonymAndAnime> listRelationTitleSynonymAndAnime,
+      List<RelationProducerAndAnimeEntity> listRelationProducerAndAnimeEntity,
+      List<RelationLicensorAndAnimeEntity> listRelationLicensorAndAnimeEntity,
+      List<RelationStudioAndAnimeEntity> listRelationStudioAndAnimeEntity,
+      List<RelationGenreAndAnimeEntity> listRelationGenreAndAnimeEntity) async {
+    await insertAnime(listAnimeEntity);
+    await insertStudio(listStudioEntity);
+    await insertGenre(listGenreEntity);
+    await insertRelationTitleSynonym(listRelationTitleSynonymAndAnime);
+    await insertRelationProducerAndAnime(listRelationProducerAndAnimeEntity);
+    await insertRelationLicensorAndAnime(listRelationLicensorAndAnimeEntity);
+    await insertRelationStudioAndAnime(listRelationStudioAndAnimeEntity);
+    await insertRelationGenreAndAnime(listRelationGenreAndAnimeEntity);
+  }
 
   @Query('SELECT * FROM $tableAnime')
   Stream<List<AnimeEntity>?> getAnime();

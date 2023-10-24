@@ -32,162 +32,92 @@ class AnimeRepositoryLocalImpl extends BaseRepositoryLocal
   @override
   Future<DataState<void>> saveAnime(List<AnimeData> listAnimeData) async {
     List<AnimeEntity> listAnimeEntity = <AnimeEntity>[];
-    late Iterable<RelationTitleSynonymAndAnime>
-    iterableRelationTitleSynonymAndAnime;
-    late Iterable<StudioEntity> iterableStudioEntityProducer;
-    late Iterable<StudioEntity> iterableStudioEntityLicensor;
-    late Iterable<StudioEntity> iterableStudioEntityStudio;
-    late Iterable<GenreEntity> iterableGenreEntity;
-    late Iterable<RelationProducerAndAnimeEntity>
-    iterableRelationProducerAndAnimeEntity;
-    late Iterable<RelationLicensorAndAnimeEntity>
-    iterableRelationLicensorAndAnimeEntity;
-    late Iterable<RelationStudioAndAnimeEntity>
-    iterableRelationStudioAndAnimeEntity;
-    late Iterable<RelationGenreAndAnimeEntity>
-    iterableRelationGenreAndAnimeEntity;
+    List<StudioEntity> listStudioEntity = <StudioEntity>[];
+    List<GenreEntity> listGenreEntity = <GenreEntity>[];
+    List<RelationTitleSynonymAndAnime> listRelationTitleSynonymAndAnime =
+    <RelationTitleSynonymAndAnime>[];
+    List<RelationProducerAndAnimeEntity> listRelationProducerAndAnimeEntity = <
+        RelationProducerAndAnimeEntity>[];
+    List<RelationLicensorAndAnimeEntity> listRelationLicensorAndAnimeEntity = <
+        RelationLicensorAndAnimeEntity>[];
+    List<RelationStudioAndAnimeEntity> listRelationStudioAndAnimeEntity = <
+        RelationStudioAndAnimeEntity>[];
+    List<RelationGenreAndAnimeEntity> listRelationGenreAndAnimeEntity = <
+        RelationGenreAndAnimeEntity>[];
 
     listAnimeData.forEach((animeData) {
       listAnimeEntity.add(_animeDataToAnimeEntity(animeData));
 
-      // data title synonym
+      if (animeData.producers != null)
+        listStudioEntity.addAll(
+            _extractStudioDataToStudioEntity(animeData.producers!));
+      if (animeData.licensors != null)
+        listStudioEntity.addAll(
+            _extractStudioDataToStudioEntity(animeData.licensors!));
+      if (animeData.studios != null)
+        listStudioEntity.addAll(
+            _extractStudioDataToStudioEntity(animeData.studios!));
+      if (animeData.genres != null)
+        listGenreEntity.addAll(
+            _extractGenreDataToGenreEntity(animeData.genres!));
+
       if (animeData.titleSynonyms != null)
-        iterableRelationTitleSynonymAndAnime = animeData.titleSynonyms!.map(
+        listRelationTitleSynonymAndAnime.addAll(animeData.titleSynonyms!.map(
                 (titleSynonym) =>
                 _titleSynonymAndMalIdAnimeToRelationTitleSynonymAndAnimeEntity(
-                    animeData.malId!, titleSynonym));
+                    animeData.malId!, titleSynonym)));
 
-      // data producer
-      if (animeData.producers != null) {
-        iterableStudioEntityProducer =
-            _extractStudioDataToStudioEntity(animeData.producers!);
+      if (animeData.producers != null)
+        listRelationProducerAndAnimeEntity.addAll(
+            animeData.producers!.map((studioData) =>
+                _malIdStudioEntityAndMalIdAnimeToRelationProducerAndAnimeEntity(
+                    studioData.malId!, animeData.malId!)));
 
-        iterableRelationProducerAndAnimeEntity =
-            iterableStudioEntityProducer.map((studioEntity) =>
-                _studioProducerAndAnimeToRelationProducerAndAnimeEntity(
-                    animeData.malId!, studioEntity.malId));
-      }
+      if (animeData.licensors != null)
+        listRelationLicensorAndAnimeEntity.addAll
+          (animeData.licensors!.map((studioData) =>
+            _malIdStudioAndMalIdAnimeToRelationLicensorAndAnime(
+                studioData.malId!, animeData.malId!)));
 
-      // data licensor
-      if (animeData.licensors != null) {
-        iterableStudioEntityLicensor =
-            _extractStudioDataToStudioEntity(animeData.licensors!);
-
-        iterableRelationLicensorAndAnimeEntity =
-            iterableStudioEntityLicensor.map((studioData) =>
-                _studioLicensorAndAnimeToRelationLicensorAndAnime(
-                    animeData.malId!, studioData.malId));
-      }
-
-      // data studio
-      if (animeData.studios != null) {
-        iterableStudioEntityStudio =
-            _extractStudioDataToStudioEntity(animeData.studios!);
-
-        iterableRelationStudioAndAnimeEntity = iterableStudioEntityStudio.map(
+      if (animeData.studios != null)
+        listRelationStudioAndAnimeEntity.addAll
+          (animeData.studios!.map(
                 (studioData) =>
-                _studioAndAnimeToRelationStudioAndAnimeEntity(
-                    animeData.malId!, studioData.malId));
-      }
+                _malIdStudioAndMalIdAnimeToRelationStudioAndAnimeEntity(
+                    studioData.malId!, animeData.malId!)));
 
-      if (animeData.genres != null) {
-        iterableGenreEntity = _extractGenreDataToGenreEntity(animeData.genres!);
-
-        iterableRelationGenreAndAnimeEntity = iterableGenreEntity.map(
-                (genreEntity) =>
-                _genreAndAnimeToRelationGenreAndAnimeEntity(
-                    animeData.malId!, genreEntity.malId));
-      }
+      if (animeData.genres != null)
+        listRelationGenreAndAnimeEntity.addAll
+          (animeData.genres!.map(
+                (genreData) =>
+                _malIdGenreAndMalIdAnimeToRelationGenreAndAnimeEntity(
+                    genreData.malId!, animeData.malId!)));
     });
 
-    // insert anime
-    DataState<List<int>> dataStateInsertAnime = await _insertAnime(listAnimeEntity);
-
-    if (dataStateInsertAnime is DataStateError) {
-      return DataStateError(dataStateInsertAnime.exception!);
-    }
-
-    // insert studio
-    List<StudioEntity> listStudioEntity = [
-      ...iterableStudioEntityProducer,
-      ...iterableStudioEntityLicensor,
-      ...iterableStudioEntityStudio
-    ];
-    DataState<List<int>> dataStateInsertStudio =
-    await _insertStudio(listStudioEntity);
-
-    if (dataStateInsertStudio is DataStateError) {
-      return DataStateError(dataStateInsertStudio.exception!);
-    }
-
-    // insert genre
-    DataState<List<int>> dataStateInsertGenre =
-    await _insertGenre(iterableGenreEntity.toList());
-
-    if (dataStateInsertGenre is DataStateError) {
-      return DataStateError(dataStateInsertGenre.exception!);
-    }
-
-    // insert relation title synonym and anime
-    DataState<List<int>> dataStateRelationTitleSynonym =
-    await _insertRelationTitleSynonym(
-        iterableRelationTitleSynonymAndAnime.toList());
-
-    if (dataStateRelationTitleSynonym is DataStateError) {
-      return DataStateError(dataStateRelationTitleSynonym.exception!);
-    }
-
-    // insert relation producer and anime
-    DataState<List<int>> dataStateRelationProducerAndAnime =
-    await _insertRelationProducerAndAnime(
-        iterableRelationProducerAndAnimeEntity.toList());
-
-    if (dataStateRelationProducerAndAnime is DataStateError) {
-      return DataStateError(dataStateRelationProducerAndAnime.exception!);
-    }
-
-    // insert relation licensor and anime
-    DataState<List<int>> dataStateRelationLicensorAndAnime =
-    await _insertRelationLicensorAndAnime(
-        iterableRelationLicensorAndAnimeEntity.toList());
-
-    if (dataStateRelationLicensorAndAnime is DataStateError) {
-      return DataStateError(dataStateRelationLicensorAndAnime.exception!);
-    }
-
-    // insert relation studio and anime
-    DataState<List<int>> dataStateStudioLicensorAndAnime =
-    await _insertRelationStudioAndAnime(
-        iterableRelationStudioAndAnimeEntity.toList());
-
-    if (dataStateStudioLicensorAndAnime is DataStateError) {
-      return DataStateError(dataStateStudioLicensorAndAnime.exception!);
-    }
-
-    // insert relation genre and anime
-    DataState<List<int>> dataStateGenreAndAnime = await _insertRelationGenreAndAnime(
-        iterableRelationGenreAndAnimeEntity.toList());
-
-    if (dataStateGenreAndAnime is DataStateError) {
-      return DataStateError(dataStateGenreAndAnime.exception!);
-    }
-
-    return DataStateSuccess(null);
+    return await _insertAnimeTransaction(
+        listAnimeEntity,
+        listStudioEntity,
+        listGenreEntity,
+        listRelationTitleSynonymAndAnime,
+        listRelationProducerAndAnimeEntity,
+        listRelationLicensorAndAnimeEntity,
+        listRelationStudioAndAnimeEntity,
+        listRelationGenreAndAnimeEntity);
   }
 
   @override
   Stream<List<AnimeData>> getListAnime() {
     Stream<List<AnimeEntity>?> listAnimeEntity = _getAnime();
 
-    Stream<List<AnimeEntity>> listAnimeEntityNotNull = listAnimeEntity.where((
-        listAnimeEntityNullable) => listAnimeEntityNullable != null)
+    Stream<List<AnimeEntity>> listAnimeEntityNotNull = listAnimeEntity
+        .where((listAnimeEntityNullable) => listAnimeEntityNullable != null)
         .map((animeEntityNotNull) => animeEntityNotNull!);
-
 
     return listAnimeEntityNotNull.map(_extractListAnimeEntityToListAnimeData);
   }
 
-  List<AnimeData> _extractListAnimeEntityToListAnimeData(List<AnimeEntity> listAnimeEntity) {
+  List<AnimeData> _extractListAnimeEntityToListAnimeData(
+      List<AnimeEntity> listAnimeEntity) {
     List<AnimeData> listAnimeData = <AnimeData>[];
 
     listAnimeEntity.forEach((animeEntity) async {
@@ -199,6 +129,7 @@ class AnimeRepositoryLocalImpl extends BaseRepositoryLocal
 
   Future<AnimeData> _extractAnimeEntityToAnimeData(
       AnimeEntity animeEntity) async {
+    print('Anime Entity id ${animeEntity.malId}');
     DataState<List<RelationTitleSynonymAndAnime>?>
     dataStateRelationTitleSynonymAndAnime =
     await _getRelationTitleSynonymAndAnime(animeEntity.malId);
@@ -214,6 +145,9 @@ class AnimeRepositoryLocalImpl extends BaseRepositoryLocal
     } else {
       listTitleSynonym = <String>[];
     }
+    print(
+        'anime id ${animeEntity
+            .malId} Relation Title Synonym and Anime $listTitleSynonym');
 
     // producer studio
     DataState<List<RelationProducerAndAnimeEntity>?>
@@ -232,6 +166,9 @@ class AnimeRepositoryLocalImpl extends BaseRepositoryLocal
         if (studioData != null) producerStudioData.add(studioData);
       });
     }
+    print(
+        'anime id ${animeEntity
+            .malId} Relation producer and Anime $producerStudioData');
 
     // licensor studio
     DataState<List<RelationLicensorAndAnimeEntity>?>
@@ -250,6 +187,9 @@ class AnimeRepositoryLocalImpl extends BaseRepositoryLocal
         if (studioData != null) licensorStudioData.add(studioData);
       });
     }
+    print(
+        'anime id ${animeEntity
+            .malId} Relation liceonsor and Anime $producerStudioData');
 
     // studio
     DataState<List<RelationStudioAndAnimeEntity>?>
@@ -268,6 +208,9 @@ class AnimeRepositoryLocalImpl extends BaseRepositoryLocal
         if (studioData != null) studioAnimeData.add(studioData);
       });
     }
+    print(
+        'anime id ${animeEntity
+            .malId} Relation studio and Anime $producerStudioData');
 
     // genre
     DataState<List<RelationGenreAndAnimeEntity>?>
@@ -286,6 +229,9 @@ class AnimeRepositoryLocalImpl extends BaseRepositoryLocal
         if (genreData != null) listGenreData.add(genreData);
       });
     }
+    print(
+        'anime id ${animeEntity
+            .malId} Relation genre and Anime $producerStudioData');
 
     return _animeEntityToAnimeData(animeEntity, listTitleSynonym,
         producerStudioData, licensorStudioData, studioAnimeData, listGenreData);
@@ -347,52 +293,25 @@ class AnimeRepositoryLocalImpl extends BaseRepositoryLocal
       List<GenreData> listGenreData) =>
       listGenreData.map(_genreDataToGenreEntity);
 
-  Future<DataState<List<int>>> _insertAnime(List<AnimeEntity> listAnimeEntity) =>
-      getStateOf(request: () => _animeDao.insertAnime(listAnimeEntity));
-
-  Future<DataState<List<int>>> _insertStudio(List<StudioEntity> listStudioEntity) =>
-      getStateOf(request: () => _animeDao.insertStudio(listStudioEntity));
-
-  Future<DataState<List<int>>> _insertGenre(List<GenreEntity> listGenreEntity) =>
-      getStateOf(request: () => _animeDao.insertGenre(listGenreEntity));
-
-  Future<DataState<List<int>>> _insertRelationTitleSynonym(
-      List<RelationTitleSynonymAndAnime>
-      listRelationTitleSynonymAndAnime) =>
-      getStateOf(
-          request: () =>
-              _animeDao
-                  .insertRelationTitleSynonym(
-                  listRelationTitleSynonymAndAnime));
-
-  Future<DataState<List<int>>> _insertRelationProducerAndAnime(
-      List<RelationProducerAndAnimeEntity>
-      listRelationProducerAndAnimeEntity) =>
-      getStateOf(
-          request: () =>
-              _animeDao.insertRelationProducerAndAnime(
-                  listRelationProducerAndAnimeEntity));
-
-  Future<DataState<List<int>>> _insertRelationLicensorAndAnime(
-      List<RelationLicensorAndAnimeEntity> listRelationLicensorAndAnime) =>
-      getStateOf(
-          request: () =>
-              _animeDao
-                  .insertRelationLicensorAndAnime(
-                  listRelationLicensorAndAnime));
-
-  Future<DataState<List<int>>> _insertRelationStudioAndAnime(
-      List<RelationStudioAndAnimeEntity> listRelationStudioAndAnime) =>
-      getStateOf(
-          request: () =>
-              _animeDao
-                  .insertRelationStudioAndAnime(listRelationStudioAndAnime));
-
-  Future<DataState<List<int>>> _insertRelationGenreAndAnime(
-      List<RelationGenreAndAnimeEntity> listRelationGenreAndAnime) =>
-      getStateOf(
-          request: () =>
-              _animeDao.insertRelationGenreAndAnime(listRelationGenreAndAnime));
+  Future<DataState<void>> _insertAnimeTransaction(
+      List<AnimeEntity> listAnimeEntity,
+      List<StudioEntity> listStudioEntity, List<GenreEntity> listGenreEntity,
+      List<RelationTitleSynonymAndAnime> listRelationTitleSynonymAndAnime,
+      List<RelationProducerAndAnimeEntity> listRelationProducerAndAnimeEntity,
+      List<RelationLicensorAndAnimeEntity> listRelationLicensorAndAnimeEntity,
+      List<RelationStudioAndAnimeEntity> listRelationStudioAndAnimeEntity,
+      List<RelationGenreAndAnimeEntity> listRelationGenreAndAnimeEntity) =>
+      getStateOf(request: () =>
+          _animeDao.insertAnimeTransaction(
+              listAnimeEntity,
+              listStudioEntity,
+              listGenreEntity,
+              listRelationTitleSynonymAndAnime,
+              listRelationProducerAndAnimeEntity,
+              listRelationLicensorAndAnimeEntity,
+              listRelationStudioAndAnimeEntity,
+              listRelationGenreAndAnimeEntity
+          ));
 
   Stream<List<AnimeEntity>?> _getAnime() => _animeDao.getAnime();
 
@@ -478,25 +397,26 @@ class AnimeRepositoryLocalImpl extends BaseRepositoryLocal
 
   // DTO relation producer and anime
   RelationProducerAndAnimeEntity
-  _studioProducerAndAnimeToRelationProducerAndAnimeEntity(int malIdAnime,
-      int malIdStudio) =>
+  _malIdStudioEntityAndMalIdAnimeToRelationProducerAndAnimeEntity(
+      int malIdStudio,
+      int malIdAnime) =>
       RelationProducerAndAnimeEntity(malIdAnime, malIdStudio);
 
   // DTO relation licensor and anime
   RelationLicensorAndAnimeEntity
-  _studioLicensorAndAnimeToRelationLicensorAndAnime(int malIdAnime,
-      int malIdStudio) =>
+  _malIdStudioAndMalIdAnimeToRelationLicensorAndAnime(int malIdStudio,
+      int malIdAnime) =>
       RelationLicensorAndAnimeEntity(malIdAnime, malIdStudio);
 
   // DTO relation studio and anime
-  RelationStudioAndAnimeEntity _studioAndAnimeToRelationStudioAndAnimeEntity(
-      int malIdAnime, int malIdStudio) =>
+  RelationStudioAndAnimeEntity _malIdStudioAndMalIdAnimeToRelationStudioAndAnimeEntity(
+      int malIdStudio, int malIdAnime) =>
       RelationStudioAndAnimeEntity(malIdAnime, malIdStudio);
 
   // DTO relation genre and anime
-  RelationGenreAndAnimeEntity _genreAndAnimeToRelationGenreAndAnimeEntity(
-      int malIdAnime, int malIdStudio) =>
-      RelationGenreAndAnimeEntity(malIdAnime, malIdStudio);
+  RelationGenreAndAnimeEntity _malIdGenreAndMalIdAnimeToRelationGenreAndAnimeEntity(
+      int malIdGenre, int malIdAnime) =>
+      RelationGenreAndAnimeEntity(malIdAnime, malIdGenre);
 
   // DTO anime entity to anime data
   AnimeData _animeEntityToAnimeData(AnimeEntity animeEntity,

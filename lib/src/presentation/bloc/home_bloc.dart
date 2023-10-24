@@ -28,6 +28,8 @@ class HomeBloc extends Bloc<HomeState, List<AnimeData>> {
     subscriptionData.onData((futureListAnimeData) {
       this.listAnimeData = futureListAnimeData;
 
+      print('list anime data $listAnimeData');
+
       add(GetAnimeState());
     });
 
