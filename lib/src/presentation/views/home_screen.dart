@@ -1,5 +1,6 @@
 import 'package:anime_list/src/domain/data_transfer_object/anime_data.dart';
 import 'package:anime_list/src/presentation/state/home_state.dart';
+import 'package:anime_list/src/utils/resources/data_state.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -54,8 +55,8 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _viewAnime(BuildContext context) {
-    return BlocBuilder<HomeBloc, List<AnimeData>>(
-      builder: (context, listAnimeData) => Text('empty')
+    return BlocBuilder<HomeBloc, DataState<List<AnimeData>>>(
+      builder: (context, dataStateListAnimeData) => Text(dataStateListAnimeData.toString())
     );
   }
 

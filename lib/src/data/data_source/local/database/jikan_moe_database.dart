@@ -11,6 +11,7 @@ import 'package:floor/floor.dart';
 // ignore_for_file: sqflite_depends_on_importing
 import 'package:sqflite/sqflite.dart' as sqflite;
 
+import '../../../../domain/local/models/anime/anime_table.dart';
 import '../../../../domain/local/models/anime/relation_genre_and_anime_entity.dart';
 import '../../../../domain/local/models/anime/relation_producer_and_anime_entity.dart';
 import '../../../../domain/local/models/anime/studio_entity.dart';

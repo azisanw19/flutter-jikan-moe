@@ -6,6 +6,6 @@ abstract class AnimeRepositoryLocal {
 
   Future<DataState<void>> saveAnime(List<AnimeData> listAnimeData);
   Future<DataState<int?>> clearAnimeRows();
-  Stream<List<AnimeData>> getListAnime();
+  Future<DataState<List<AnimeData>>> getListAnime();
 
 }

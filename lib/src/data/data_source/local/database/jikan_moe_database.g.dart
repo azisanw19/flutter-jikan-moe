@@ -117,7 +117,7 @@ class _$AnimeDao extends AnimeDao {
   _$AnimeDao(
     this.database,
     this.changeListener,
-  )   : _queryAdapter = QueryAdapter(database, changeListener),
+  )   : _queryAdapter = QueryAdapter(database),
         _animeEntityInsertionAdapter = InsertionAdapter(
             database,
             'table_anime',
@@ -150,8 +150,7 @@ class _$AnimeDao extends AnimeDao {
                   'broadcast_day': item.broadcastDay,
                   'broadcast_time': item.broadcastTime,
                   'broadcast_timezone': item.broadcastTimezone
-                },
-            changeListener),
+                }),
         _studioEntityInsertionAdapter = InsertionAdapter(
             database,
             'table_studio',
@@ -234,8 +233,8 @@ class _$AnimeDao extends AnimeDao {
       _relationGenreAndAnimeEntityInsertionAdapter;
 
   @override
-  Stream<List<AnimeEntity>?> getAnime() {
-    return _queryAdapter.queryListStream('SELECT * FROM table_anime',
+  Future<List<AnimeEntity>?> getAnime() async {
+    return _queryAdapter.queryList('SELECT * FROM table_anime',
         mapper: (Map<String, Object?> row) => AnimeEntity(
             row['mal_id'] as int,
             row['url'] as String?,
@@ -264,9 +263,7 @@ class _$AnimeDao extends AnimeDao {
             row['season'] as String?,
             row['broadcast_day'] as String?,
             row['broadcast_time'] as String?,
-            row['broadcast_timezone'] as String?),
-        queryableName: 'table_anime',
-        isView: false);
+            row['broadcast_timezone'] as String?));
   }
 
   @override
@@ -434,6 +431,20 @@ class _$AnimeDao extends AnimeDao {
             listRelationLicensorAndAnimeEntity,
             listRelationStudioAndAnimeEntity,
             listRelationGenreAndAnimeEntity);
+      });
+    }
+  }
+
+  @override
+  Future<List<AnimeTable>> getAnimeTable() async {
+    if (database is sqflite.Transaction) {
+      return super.getAnimeTable();
+    } else {
+      return (database as sqflite.Database)
+          .transaction<List<AnimeTable>>((transaction) async {
+        final transactionDatabase = _$JikanMoeDatabase(changeListener)
+          ..database = transaction;
+        return transactionDatabase.animeDao.getAnimeTable();
       });
     }
   }
