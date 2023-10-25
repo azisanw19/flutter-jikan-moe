@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class AnimeListSliverAppBar extends StatelessWidget {
+class JikanMoeSliverAppBar extends StatelessWidget {
 
   final Widget title;
 
-  const AnimeListSliverAppBar({super.key,
+  const JikanMoeSliverAppBar({super.key,
     required this.title,
   });
 

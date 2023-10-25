@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 
-class AnimeListBottomNavigation extends StatefulWidget {
+class JikanMoeBottomNavigation extends StatefulWidget {
   final Function(int currentPage)? onDestinationSelected;
 
-  const AnimeListBottomNavigation({
+  const JikanMoeBottomNavigation({
     super.key,
     this.onDestinationSelected,
   });
 
   @override
-  State<AnimeListBottomNavigation> createState() =>
-      _AnimeListBottomNavigationState();
+  State<JikanMoeBottomNavigation> createState() =>
+      _JikanMoeBottomNavigationState();
 }
 
-class _AnimeListBottomNavigationState extends State<AnimeListBottomNavigation> {
+class _JikanMoeBottomNavigationState extends State<JikanMoeBottomNavigation> {
   int _currentPageIndex = 0;
 
   @override
@@ -36,7 +36,8 @@ class _AnimeListBottomNavigationState extends State<AnimeListBottomNavigation> {
           label: 'My Feed',
         ),
         NavigationDestination(
-          icon: Icon(Icons.business),
+          icon: Icon(Icons.person_2_outlined),
+          selectedIcon: Icon(Icons.person_2),
           label: 'Business',
         ),
       ],

@@ -1,7 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
-class AnimeListRecommended extends StatelessWidget {
+class JikanMoeRecommended extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CarouselSlider.builder(

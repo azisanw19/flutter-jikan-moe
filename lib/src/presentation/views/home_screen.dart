@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../bloc/home_bloc.dart';
-import '../components/anime_list_bottom_navigation.dart';
-import '../components/anime_list_sliver_app_bar.dart';
+import '../components/jikan_moe_bottom_navigation.dart';
+import '../components/jikan_moe_sliver_app_bar.dart';
 
 @RoutePage()
 class HomeScreen extends StatelessWidget {
@@ -21,8 +21,7 @@ class HomeScreen extends StatelessWidget {
     double phoneWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      bottomNavigationBar:
-          phoneWidth < 600 ? AnimeListBottomNavigation() : null,
+      bottomNavigationBar: phoneWidth < 600 ? JikanMoeBottomNavigation() : null,
       body: _bodyCompactSize(context),
     );
   }
@@ -30,7 +29,7 @@ class HomeScreen extends StatelessWidget {
   Widget _bodyCompactSize(BuildContext context) {
     return CustomScrollView(
       slivers: [
-        AnimeListSliverAppBar(
+        JikanMoeSliverAppBar(
           title: _titleHome(context, data: 'My Feed'),
         ),
         SliverFillRemaining(
@@ -56,8 +55,30 @@ class HomeScreen extends StatelessWidget {
 
   Widget _viewAnime(BuildContext context) {
     return BlocBuilder<HomeBloc, DataState<List<AnimeData>>>(
-      builder: (context, dataStateListAnimeData) => Text(dataStateListAnimeData.toString())
-    );
+        builder: (context, dataStateListAnimeData) {
+      if (dataStateListAnimeData is DataStateLoading)
+        return LinearProgressIndicator();
+      else if (dataStateListAnimeData is DataStateSuccess)
+        return Expanded(
+          child: ListView.builder(
+            itemCount: dataStateListAnimeData.data!.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                leading: FlutterLogo(size: 56.0),
+                title: Text(
+                    dataStateListAnimeData.data![index].titleEnglish ?? ''),
+                subtitle: Text(dataStateListAnimeData.data![index].popularity
+                        ?.toString() ??
+                    ''),
+                trailing: Icon(Icons.more_vert),
+              );
+            },
+          ),
+        );
+      else
+        return Text(
+            dataStateListAnimeData.exception?.toString() ?? 'Something wrong');
+    });
   }
 
   Widget _itemAnimeData(BuildContext context) {
