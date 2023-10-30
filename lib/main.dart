@@ -40,24 +40,22 @@ class MyApp extends StatelessWidget {
           )),
         )
       ],
-      child: OKToast(
-        child: MaterialApp.router(
-          debugShowCheckedModeBanner: false,
-          title: appTitle,
+      child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
+        title: appTitle,
 
-          /**
-           * Settings Route
-           */
-          routerDelegate: appRouter.delegate(),
-          routeInformationParser: appRouter.defaultRouteParser(),
+        /**
+         * Settings Route
+         */
+        routerDelegate: appRouter.delegate(),
+        routeInformationParser: appRouter.defaultRouteParser(),
 
-          /**
-           * Settings Theme
-           */
-          theme: AppTheme.light,
-          darkTheme: AppTheme.dark,
-          themeMode: ThemeMode.dark,
-        ),
+        /**
+         * Settings Theme
+         */
+        theme: AppTheme.light,
+        darkTheme: AppTheme.dark,
+        themeMode: ThemeMode.system,
       ),
     );
   }
