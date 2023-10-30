@@ -64,12 +64,19 @@ class HomeScreen extends StatelessWidget {
             itemCount: dataStateListAnimeData.data!.length,
             itemBuilder: (context, index) {
               return ListTile(
-                leading: Image.network(dataStateListAnimeData.data![index].image ?? ''),
+                leading: Image.network(
+                  dataStateListAnimeData.data![index].image ?? '',
+                  errorBuilder: (context, error, stackTrace) => CircleAvatar(
+                    child: Text(
+                      dataStateListAnimeData.data?[index].titleEnglish?[0] ?? 'J',
+                    ),
+                  ),
+                ),
                 title: Text(
                     dataStateListAnimeData.data![index].titleEnglish ?? ''),
-                subtitle: Text(dataStateListAnimeData.data![index].rating
-                        ?.toString() ??
-                    ''),
+                subtitle: Text(
+                    dataStateListAnimeData.data![index].rating?.toString() ??
+                        ''),
                 trailing: Icon(Icons.more_vert),
               );
             },
