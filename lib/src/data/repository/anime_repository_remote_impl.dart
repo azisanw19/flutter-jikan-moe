@@ -51,9 +51,9 @@ class AnimeRepositoryRemoteImpl extends BaseRepositoryRemote
       AnimeData(
           dataAnimeResponse.malId,
           dataAnimeResponse.url,
-          dataAnimeResponse.images?.jpg?.mediumImageUrl,
+          dataAnimeResponse.images?.jpg?.imageUrl,
           dataAnimeResponse.trailer?.youtubeId,
-          dataAnimeResponse.trailer?.images?.mediumImageUrl,
+          dataAnimeResponse.trailer?.images?.imageUrl,
           dataAnimeResponse.title,
           dataAnimeResponse.titleEnglish,
           dataAnimeResponse.titleJapanese,

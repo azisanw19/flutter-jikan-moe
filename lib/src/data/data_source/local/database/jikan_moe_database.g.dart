@@ -344,26 +344,26 @@ class _$AnimeDao extends AnimeDao {
   @override
   Future<List<int>> insertAnime(List<AnimeEntity> listAnimeEntity) {
     return _animeEntityInsertionAdapter.insertListAndReturnIds(
-        listAnimeEntity, OnConflictStrategy.ignore);
+        listAnimeEntity, OnConflictStrategy.replace);
   }
 
   @override
   Future<List<int>> insertStudio(List<StudioEntity> listStudioEntity) {
     return _studioEntityInsertionAdapter.insertListAndReturnIds(
-        listStudioEntity, OnConflictStrategy.ignore);
+        listStudioEntity, OnConflictStrategy.replace);
   }
 
   @override
   Future<List<int>> insertGenre(List<GenreEntity> listGenreEntity) {
     return _genreEntityInsertionAdapter.insertListAndReturnIds(
-        listGenreEntity, OnConflictStrategy.ignore);
+        listGenreEntity, OnConflictStrategy.replace);
   }
 
   @override
   Future<List<int>> insertRelationTitleSynonym(
       List<RelationTitleSynonymAndAnime> listRelationTitleSynonymAndAnime) {
     return _relationTitleSynonymAndAnimeInsertionAdapter.insertListAndReturnIds(
-        listRelationTitleSynonymAndAnime, OnConflictStrategy.ignore);
+        listRelationTitleSynonymAndAnime, OnConflictStrategy.replace);
   }
 
   @override
@@ -371,7 +371,7 @@ class _$AnimeDao extends AnimeDao {
       List<RelationProducerAndAnimeEntity> listRelationProducerAndAnimeEntity) {
     return _relationProducerAndAnimeEntityInsertionAdapter
         .insertListAndReturnIds(
-            listRelationProducerAndAnimeEntity, OnConflictStrategy.ignore);
+            listRelationProducerAndAnimeEntity, OnConflictStrategy.replace);
   }
 
   @override
@@ -379,21 +379,21 @@ class _$AnimeDao extends AnimeDao {
       List<RelationLicensorAndAnimeEntity> listRelationLicensorAndAnimeEntity) {
     return _relationLicensorAndAnimeEntityInsertionAdapter
         .insertListAndReturnIds(
-            listRelationLicensorAndAnimeEntity, OnConflictStrategy.ignore);
+            listRelationLicensorAndAnimeEntity, OnConflictStrategy.replace);
   }
 
   @override
   Future<List<int>> insertRelationStudioAndAnime(
       List<RelationStudioAndAnimeEntity> listRelationStudioAndAnimeEntity) {
     return _relationStudioAndAnimeEntityInsertionAdapter.insertListAndReturnIds(
-        listRelationStudioAndAnimeEntity, OnConflictStrategy.ignore);
+        listRelationStudioAndAnimeEntity, OnConflictStrategy.replace);
   }
 
   @override
   Future<List<int>> insertRelationGenreAndAnime(
       List<RelationGenreAndAnimeEntity> listRelationGenreAndAnimeEntity) {
     return _relationGenreAndAnimeEntityInsertionAdapter.insertListAndReturnIds(
-        listRelationGenreAndAnimeEntity, OnConflictStrategy.ignore);
+        listRelationGenreAndAnimeEntity, OnConflictStrategy.replace);
   }
 
   @override

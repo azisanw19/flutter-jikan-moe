@@ -10,7 +10,7 @@ class ImageItemResponse {
   ImageItemResponse.fromJson(Map<String, dynamic> json) {
     imageUrl = json['image_url'];
     smallImageUrl = json['small_image_url'];
-    mediumImageUrl = json['mediuem_image_url'];
+    mediumImageUrl = json['medium_image_url'];
     largeImageUrl = json['large_image_url'];
     maximumImageUrl = json['maximum_image_url'];
   }

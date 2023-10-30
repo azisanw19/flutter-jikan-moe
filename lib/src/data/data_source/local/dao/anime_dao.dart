@@ -14,32 +14,32 @@ import '../../../../utils/constants/table_database_anime.dart';
 @dao // data access object
 abstract class AnimeDao {
   // insert data
-  @Insert(onConflict: OnConflictStrategy.ignore)
+  @Insert(onConflict: OnConflictStrategy.replace)
   Future<List<int>> insertAnime(List<AnimeEntity> listAnimeEntity); // return id
 
-  @Insert(onConflict: OnConflictStrategy.ignore)
+  @Insert(onConflict: OnConflictStrategy.replace)
   Future<List<int>> insertStudio(List<StudioEntity> listStudioEntity);
 
-  @Insert(onConflict: OnConflictStrategy.ignore)
+  @Insert(onConflict: OnConflictStrategy.replace)
   Future<List<int>> insertGenre(List<GenreEntity> listGenreEntity);
 
-  @Insert(onConflict: OnConflictStrategy.ignore)
+  @Insert(onConflict: OnConflictStrategy.replace)
   Future<List<int>> insertRelationTitleSynonym(
       List<RelationTitleSynonymAndAnime> listRelationTitleSynonymAndAnime);
 
-  @Insert(onConflict: OnConflictStrategy.ignore)
+  @Insert(onConflict: OnConflictStrategy.replace)
   Future<List<int>> insertRelationProducerAndAnime(
       List<RelationProducerAndAnimeEntity> listRelationProducerAndAnimeEntity);
 
-  @Insert(onConflict: OnConflictStrategy.ignore)
+  @Insert(onConflict: OnConflictStrategy.replace)
   Future<List<int>> insertRelationLicensorAndAnime(
       List<RelationLicensorAndAnimeEntity> listRelationLicensorAndAnimeEntity);
 
-  @Insert(onConflict: OnConflictStrategy.ignore)
+  @Insert(onConflict: OnConflictStrategy.replace)
   Future<List<int>> insertRelationStudioAndAnime(
       List<RelationStudioAndAnimeEntity> listRelationStudioAndAnimeEntity);
 
-  @Insert(onConflict: OnConflictStrategy.ignore)
+  @Insert(onConflict: OnConflictStrategy.replace)
   Future<List<int>> insertRelationGenreAndAnime(
       List<RelationGenreAndAnimeEntity> listRelationGenreAndAnimeEntity);
 

@@ -64,10 +64,10 @@ class HomeScreen extends StatelessWidget {
             itemCount: dataStateListAnimeData.data!.length,
             itemBuilder: (context, index) {
               return ListTile(
-                leading: FlutterLogo(size: 56.0),
+                leading: Image.network(dataStateListAnimeData.data![index].image ?? ''),
                 title: Text(
                     dataStateListAnimeData.data![index].titleEnglish ?? ''),
-                subtitle: Text(dataStateListAnimeData.data![index].popularity
+                subtitle: Text(dataStateListAnimeData.data![index].rating
                         ?.toString() ??
                     ''),
                 trailing: Icon(Icons.more_vert),
