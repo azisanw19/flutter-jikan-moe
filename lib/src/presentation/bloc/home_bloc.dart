@@ -10,12 +10,8 @@ class HomeBloc extends Bloc<HomeState, DataState<List<AnimeData>>> {
   List<AnimeData> listAnimeData = <AnimeData>[];
 
   HomeBloc(this._animeSearchUseCase) : super(DataStateLoading()) {
-    _subscribeStreamAnimeData();
-
     on<GetAnimeState>(_getAnimeData);
   }
-
-  void _subscribeStreamAnimeData() async {}
 
   void _getAnimeData(
       GetAnimeState event, Emitter<DataState<List<AnimeData>>> emit) async {
