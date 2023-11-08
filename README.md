@@ -9,5 +9,5 @@ watchlists, and connect with like-minded fan communities.
 ## **Getting Started**
 
 <a href='https://play.google.com/store/apps/details?id=com.canwar.jikanmoe'>
-    <img src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' alt='Get it on Google Play' />
+    <img src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' alt='Get it on Google Play' height="45px"/>
 </a>
