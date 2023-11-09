@@ -1,6 +1,7 @@
 import 'package:anime_list/src/config/router/app_router.dart';
 import 'package:anime_list/src/config/themes/app_themes.dart';
 import 'package:anime_list/src/data/use_case/anime_search_use_case.dart';
+import 'package:anime_list/src/data/use_case/anime_season_now_use_case.dart';
 import 'package:anime_list/src/domain/repository/anime_repository_local.dart';
 import 'package:anime_list/src/domain/repository/anime_repository_remote.dart';
 import 'package:anime_list/src/locator.dart';
@@ -36,6 +37,10 @@ class MyApp extends StatelessWidget {
             locator<NetworkManager>(),
             locator<AnimeRepositoryRemote>(),
             locator<AnimeRepositoryLocal>()
+          ), AnimeSeasonNowUseCase(
+              locator<NetworkManager>(),
+              locator<AnimeRepositoryRemote>(),
+              locator<AnimeRepositoryLocal>()
           )),
         )
       ],

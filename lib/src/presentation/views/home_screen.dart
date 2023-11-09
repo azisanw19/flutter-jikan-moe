@@ -1,6 +1,6 @@
 import 'package:anime_list/src/domain/data_transfer_object/anime_data.dart';
-import 'package:anime_list/src/presentation/state/home_state.dart';
-import 'package:anime_list/src/utils/resources/data_state.dart';
+import 'package:anime_list/src/presentation/state/home_request_state.dart';
+import 'package:anime_list/src/presentation/state/home_response_state.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,7 +16,8 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     HomeBloc homeBloc = context.read<HomeBloc>();
-    homeBloc.add(GetAnimeState());
+    homeBloc.add(RequestStateGetAnime());
+    homeBloc.add(RequestStateGetAnimeSeasonNow());
 
     double phoneWidth = MediaQuery.of(context).size.width;
 
@@ -27,15 +28,16 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _bodyCompactSize(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        JikanMoeSliverAppBar(
-          title: _titleHome(context, data: 'My Feed'),
-        ),
-        SliverFillRemaining(
-          child: _contentHome(context),
+    return NestedScrollView(
+      headerSliverBuilder: (context, innerBoxIsScrolled) => [
+        SliverOverlapAbsorber(
+          handle: NestedScrollView.sliverOverlapAbsorberHandleFor(context),
+          sliver: JikanMoeSliverAppBar(
+            title: _titleHome(context, data: 'My Feed'),
+          ),
         ),
       ],
+      body: _contentHome(context),
     );
   }
 
@@ -48,44 +50,61 @@ class HomeScreen extends StatelessWidget {
       mainAxisSize: MainAxisSize.max,
       children: [
         /* Anime Recommendation */
+
         _viewAnime(context),
       ],
     );
   }
 
+  Widget _animeSeasonNow(BuildContext context) {
+    return BlocBuilder<HomeBloc, ResponseStateHome>(
+      buildWhen: (previous, current) => current is ResponseStateGetAnimeSeasonNow,
+        builder: (context, responseStateHome) {
+          if (responseStateHome is ResponseStateGetAnimeSeasonNow) {
+            return Container();
+            /* TODO make season now */
+          }
+          else {
+            return Container();
+          }
+        },
+    );
+  }
+
   Widget _viewAnime(BuildContext context) {
-    return BlocBuilder<HomeBloc, DataState<List<AnimeData>>>(
-        builder: (context, dataStateListAnimeData) {
-      if (dataStateListAnimeData is DataStateLoading)
-        return LinearProgressIndicator();
-      else if (dataStateListAnimeData is DataStateSuccess)
-        return Expanded(
-          child: ListView.builder(
-            itemCount: dataStateListAnimeData.data!.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                leading: Image.network(
-                  dataStateListAnimeData.data![index].image ?? '',
-                  errorBuilder: (context, error, stackTrace) => CircleAvatar(
-                    child: Text(
-                      dataStateListAnimeData.data?[index].titleEnglish?[0] ?? 'J',
-                    ),
-                  ),
+    return BlocBuilder<HomeBloc, ResponseStateHome>(
+        buildWhen: (previous, current) => current is ResponseStateGetAnime,
+        builder: (context, responseStateHome) {
+          if (responseStateHome is ResponseStateGetAnime) {
+            List<AnimeData> listAnimeData = responseStateHome.data;
+            return _listAnime(context, listAnimeData);
+          } else {
+            return Container();
+          }
+        });
+  }
+
+  Widget _listAnime(BuildContext context, List<AnimeData> listAnimeData) {
+    return Expanded(
+      child: ListView.builder(
+        itemCount: listAnimeData.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            leading: Image.network(
+              listAnimeData[index].image ?? '',
+              errorBuilder: (context, error, stackTrace) => CircleAvatar(
+                child: Text(
+                  listAnimeData[index].titleEnglish?[0] ?? 'J',
                 ),
-                title: Text(
-                    dataStateListAnimeData.data![index].titleEnglish ?? ''),
-                subtitle: Text(
-                    dataStateListAnimeData.data![index].rating?.toString() ??
-                        ''),
-                trailing: Icon(Icons.more_vert),
-              );
-            },
-          ),
-        );
-      else
-        return Text(
-            dataStateListAnimeData.exception?.toString() ?? 'Something wrong');
-    });
+              ),
+            ),
+            title: Text(listAnimeData[index].titleEnglish ?? ''),
+            subtitle: Text(listAnimeData[index].rating?.toString() ?? ''),
+            trailing: Icon(Icons.more_vert),
+          );
+        },
+      ),
+    );
   }
 
   Widget _itemAnimeData(BuildContext context) {

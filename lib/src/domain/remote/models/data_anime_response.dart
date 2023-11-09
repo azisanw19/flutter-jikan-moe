@@ -65,7 +65,7 @@ class DataAnimeResponse {
     aired = AiredResponse.fromJson(json['aired']);
     duration = json['duration'];
     rating = json['rating'];
-    score = json['score'].toDouble();
+    score = json['score']?.toDouble() ?? 0.0;
     scoredBy = json['scored_by'];
     rank = json['rank'];
     popularity = json['popularity'];

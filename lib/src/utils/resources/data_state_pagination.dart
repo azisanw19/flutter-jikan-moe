@@ -13,7 +13,3 @@ class DataStatePaginationSuccess<T, R> extends DataStatePagination<T, R> {
 class DataStatePaginationError<T, R> extends DataStatePagination<T, R> {
   const DataStatePaginationError(Exception exception) : super(exception: exception);
 }
-
-class DataStatePaginationLoading<T, R> extends DataStatePagination<T, R> {
-  const DataStatePaginationLoading();
-}

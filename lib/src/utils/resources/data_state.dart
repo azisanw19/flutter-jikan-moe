@@ -12,7 +12,3 @@ class DataStateSuccess<T> extends DataState<T> {
 class DataStateError<T> extends DataState<T> {
   const DataStateError(Exception exception) : super(exception: exception);
 }
-
-class DataStateLoading<T> extends DataState<T> {
-  const DataStateLoading();
-}
