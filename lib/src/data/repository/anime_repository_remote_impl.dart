@@ -29,16 +29,33 @@ class AnimeRepositoryRemoteImpl extends BaseRepositoryRemote
       request: () => _animeApiService.getAnimeSearch(),
     );
 
-    if (dataStatePaginationAnimeResponse is DataStateSuccess) {
-      // dataStatePaginationAnimeResponse.data?.dataAnimeResponses!.map(_dataAnimeResponseToAnimeData).toList();
+    return _getStateForReturn(dataStatePaginationAnimeResponse);
+  }
 
-      return DataStatePaginationSuccess(dataStatePaginationAnimeResponse
-              .data!.dataAnimeResponses!
+  @override
+  Future<DataStatePagination<List<AnimeData>, PaginationData>>
+      getAnimeSeasonNow() async {
+    DataState<AnimeResponse> dataStatePaginationAnimeResponse =
+        await getStateOf<AnimeResponse>(
+      request: () => _animeApiService.getAnimeSeasonNow(),
+    );
+
+    return _getStateForReturn(dataStatePaginationAnimeResponse);
+  }
+
+  DataStatePagination<List<AnimeData>, PaginationData> _getStateForReturn(
+      DataState<AnimeResponse> dataStateAnimeResponse) {
+    if (dataStateAnimeResponse is DataStateSuccess) {
+
+      return DataStatePaginationSuccess(
+          dataStateAnimeResponse.data!.dataAnimeResponses!
               .map(_dataAnimeResponseToAnimeData)
-              .toList(), _paginationResponseToPaginationData(dataStatePaginationAnimeResponse.data!.pagination!));
-    } else if (dataStatePaginationAnimeResponse is DataStateError) {
+              .toList(),
+          _paginationResponseToPaginationData(
+              dataStateAnimeResponse.data!.pagination!));
+    } else if (dataStateAnimeResponse is DataStateError) {
       return DataStatePaginationError(
-          dataStatePaginationAnimeResponse.exception!);
+          dataStateAnimeResponse.exception!);
     } else {
       return DataStatePaginationError(RepositoryRemoteException(
           'The Base Repository Remote, Data State Loading error should never occur'));

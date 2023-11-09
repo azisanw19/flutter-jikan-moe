@@ -14,4 +14,7 @@ abstract class JikanMoeApiService {
   @GET('/anime')
   Future<HttpResponse<AnimeResponse>> getAnimeSearch();
 
+  @GET('/seasons/now')
+  Future<HttpResponse<AnimeResponse>> getAnimeSeasonNow();
+
 }
