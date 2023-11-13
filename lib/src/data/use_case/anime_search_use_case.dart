@@ -27,8 +27,7 @@ class AnimeSearchUseCase {
     }
   }
 
-  Future<DataState<List<AnimeData>>>
-      _getDataFromRemote() async {
+  Future<DataState<List<AnimeData>>> _getDataFromRemote() async {
     DataStatePagination<List<AnimeData>, PaginationData>
         dataStatePaginationAnimeDataPaginationData =
         await _getAnimeSearchRemoteRepository();
@@ -43,10 +42,13 @@ class AnimeSearchUseCase {
     }
   }
 
-  Future<DataState<void>> _saveAnimeToDb(List<AnimeData> listAnimeData) => _animeRepositoryLocal.saveAnime(listAnimeData);
-  Future<DataState<List<AnimeData>>> _getAnimeFromDb() => _animeRepositoryLocal.getListAnime();
+  Future<DataState<void>> _saveAnimeToDb(List<AnimeData> listAnimeData) =>
+      _animeRepositoryLocal.saveAnime(listAnimeData);
+
+  Future<DataState<List<AnimeData>>> _getAnimeFromDb() =>
+      _animeRepositoryLocal.getListAnime();
 
   Future<DataStatePagination<List<AnimeData>, PaginationData>>
-  _getAnimeSearchRemoteRepository() =>
-      _animeRepositoryRemote.getAnimeSearch();
+      _getAnimeSearchRemoteRepository() =>
+          _animeRepositoryRemote.getAnimeSearch();
 }

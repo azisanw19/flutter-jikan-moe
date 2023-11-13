@@ -105,13 +105,13 @@ class AnimeRepositoryLocalImpl extends BaseRepositoryLocal
 
   @override
   Future<DataState<List<AnimeData>>> getListAnime() async {
-    DataState<List<AnimeTable>> dataStateListAnime =
-        await _getAnimeTable();
+    DataState<List<AnimeTable>> dataStateListAnime = await _getAnimeTable();
 
     if (dataStateListAnime is DataStateError)
       return DataStateError(dataStateListAnime.exception!);
 
-    List<AnimeData> listAnimeData = dataStateListAnime.data!.map(_animeTableToAnimeData).toList();
+    List<AnimeData> listAnimeData =
+        dataStateListAnime.data!.map(_animeTableToAnimeData).toList();
     return DataStateSuccess(listAnimeData);
   }
 
@@ -230,9 +230,7 @@ class AnimeRepositoryLocalImpl extends BaseRepositoryLocal
       genreEntity.malId, genreEntity.type, genreEntity.name, genreEntity.url);
 
   // DTO anime table to anime data
-  AnimeData _animeTableToAnimeData(
-      AnimeTable animeTable) =>
-      AnimeData(
+  AnimeData _animeTableToAnimeData(AnimeTable animeTable) => AnimeData(
         animeTable.animeEntity.malId,
         animeTable.animeEntity.url,
         animeTable.animeEntity.image,
@@ -262,9 +260,17 @@ class AnimeRepositoryLocalImpl extends BaseRepositoryLocal
         animeTable.animeEntity.broadcastDay,
         animeTable.animeEntity.broadcastTime,
         animeTable.animeEntity.broadcastTimezone,
-        animeTable.listProducerStudio.map((studioEntity) => _studioEntityToStudioData(studioEntity)).toList(),
-        animeTable.listLicensorStudio.map((studioEntity) => _studioEntityToStudioData(studioEntity)).toList(),
-        animeTable.listStudio.map((studioEntity) => _studioEntityToStudioData(studioEntity)).toList(),
-        animeTable.listGenre.map((genreEntity) => _genreEntityToGenreData(genreEntity)).toList(),
+        animeTable.listProducerStudio
+            .map((studioEntity) => _studioEntityToStudioData(studioEntity))
+            .toList(),
+        animeTable.listLicensorStudio
+            .map((studioEntity) => _studioEntityToStudioData(studioEntity))
+            .toList(),
+        animeTable.listStudio
+            .map((studioEntity) => _studioEntityToStudioData(studioEntity))
+            .toList(),
+        animeTable.listGenre
+            .map((genreEntity) => _genreEntityToGenreData(genreEntity))
+            .toList(),
       );
 }
