@@ -5,18 +5,15 @@ import 'package:anime_list/src/data/use_case/anime_season_now_use_case.dart';
 import 'package:anime_list/src/domain/repository/anime_repository_local.dart';
 import 'package:anime_list/src/domain/repository/anime_repository_remote.dart';
 import 'package:anime_list/src/locator.dart';
+import 'package:anime_list/src/presentation/bloc/anime_bloc.dart';
 import 'package:anime_list/src/presentation/bloc/home_bloc.dart';
 import 'package:anime_list/src/utils/constants/strings.dart';
 import 'package:anime_list/src/utils/network/network_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  await SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
   await initializeDependencies();
 
@@ -33,16 +30,22 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (_) => HomeBloc(AnimeSearchUseCase(
-            locator<NetworkManager>(),
-            locator<AnimeRepositoryRemote>(),
-            locator<AnimeRepositoryLocal>()
-          ), AnimeSeasonNowUseCase(
+          create: (_) => AnimeBloc(
+            AnimeSearchUseCase(
               locator<NetworkManager>(),
               locator<AnimeRepositoryRemote>(),
-              locator<AnimeRepositoryLocal>()
-          )),
-        )
+              locator<AnimeRepositoryLocal>(),
+            ),
+            AnimeSeasonNowUseCase(
+              locator<NetworkManager>(),
+              locator<AnimeRepositoryRemote>(),
+              locator<AnimeRepositoryLocal>(),
+            ),
+          ),
+        ),
+        BlocProvider(
+          create: (_) => HomeBloc(),
+        ),
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,

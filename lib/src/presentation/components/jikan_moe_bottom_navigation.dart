@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 class JikanMoeBottomNavigation extends StatefulWidget {
-  final Function(int currentPage)? onDestinationSelected;
+  final Function(int index)? onDestinationSelected;
+  final List<Widget> destinations;
 
   const JikanMoeBottomNavigation({
     super.key,
     this.onDestinationSelected,
+    required this.destinations,
   });
 
   @override
@@ -29,18 +31,7 @@ class _JikanMoeBottomNavigationState extends State<JikanMoeBottomNavigation> {
         }
       },
       selectedIndex: _currentPageIndex,
-      destinations: const <Widget>[
-        NavigationDestination(
-          selectedIcon: Icon(Icons.feed),
-          icon: Icon(Icons.feed_outlined),
-          label: 'My Feed',
-        ),
-        NavigationDestination(
-          icon: Icon(Icons.person_2_outlined),
-          selectedIcon: Icon(Icons.person_2),
-          label: 'Business',
-        ),
-      ],
+      destinations: widget.destinations
     );
   }
 }

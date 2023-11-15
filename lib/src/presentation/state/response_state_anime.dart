@@ -1,21 +1,21 @@
 import 'package:anime_list/src/domain/data_transfer_object/anime_data.dart';
 
-sealed class ResponseStateHome {}
+sealed class ResponseStateAnime {}
 
-class ResponseStateLoading extends ResponseStateHome {
+class ResponseStateLoading extends ResponseStateAnime {
   ResponseStateLoading();
 }
 
-class ResponseStateError extends ResponseStateHome {
+class ResponseStateError extends ResponseStateAnime {
   ResponseStateError();
 }
 
-class ResponseStateGetAnime extends ResponseStateHome {
+class ResponseStateGetAnime extends ResponseStateAnime {
   final List<AnimeData> data;
   ResponseStateGetAnime(this.data);
 }
 
-class ResponseStateGetAnimeSeasonNow extends ResponseStateHome {
+class ResponseStateGetAnimeSeasonNow extends ResponseStateAnime {
   final List<AnimeData> data;
   ResponseStateGetAnimeSeasonNow(this.data);
 }

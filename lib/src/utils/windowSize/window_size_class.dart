@@ -7,7 +7,7 @@ class WindowSizeClass {
 
   WindowSizeClass(this.context);
 
-  WindowClass get getWindowClass {
+  WindowClass get windowClass {
     double width = MediaQuery.of(context).size.width;
     if (width < 600) {
       return WindowClass.Compact;

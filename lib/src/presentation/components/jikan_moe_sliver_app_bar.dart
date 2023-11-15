@@ -11,6 +11,9 @@ class JikanMoeSliverAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
+      pinned: false,
+      snap: true,
+      floating: true,
       title: title,
     );
   }
