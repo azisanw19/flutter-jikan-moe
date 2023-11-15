@@ -23,7 +23,17 @@ class AnimeBloc extends Bloc<RequestStateAnime, ResponseStateAnime> {
     DataState<List<AnimeData>> dataStateListAnimeData =
         await _animeSearchUseCase.getAnimeSearch();
 
-    emit(_dataStateToResponseStateHome(dataStateListAnimeData));
+    ResponseStateAnime responseStateAnime;
+
+    if (dataStateListAnimeData is DataStateSuccess) {
+       responseStateAnime = ResponseStateGetAnime(dataStateListAnimeData.data!);
+    } else if (dataStateListAnimeData is DataStateError) {
+      responseStateAnime = ResponseStateError();
+    } else {
+      responseStateAnime = ResponseStateError();
+    }
+
+    emit(responseStateAnime);
   }
 
   void _getAnimeSeasonNow(RequestStateGetAnimeSeasonNow event,
@@ -31,17 +41,17 @@ class AnimeBloc extends Bloc<RequestStateAnime, ResponseStateAnime> {
     DataState<List<AnimeData>> dataStateListAnimeSeasonNowData =
         await _animeSeasonNowUseCase.getAnimeSeasonNow();
 
-    emit(_dataStateToResponseStateHome(dataStateListAnimeSeasonNowData));
+    ResponseStateAnime responseStateAnime;
+
+    if (dataStateListAnimeSeasonNowData is DataStateSuccess) {
+      responseStateAnime = ResponseStateGetAnimeSeasonNow(dataStateListAnimeSeasonNowData.data!);
+    } else if (dataStateListAnimeSeasonNowData is DataStateError) {
+      responseStateAnime = ResponseStateError();
+    } else {
+      responseStateAnime = ResponseStateError();
+    }
+
+    emit(responseStateAnime);
   }
 
-  ResponseStateAnime _dataStateToResponseStateHome(
-      DataState<List<AnimeData>> dataStateListAnimeData) {
-    if (dataStateListAnimeData is DataStateSuccess) {
-      return ResponseStateGetAnime(dataStateListAnimeData.data!);
-    } else if (dataStateListAnimeData is DataStateError) {
-      return ResponseStateError();
-    } else {
-      return ResponseStateError();
-    }
-  }
 }

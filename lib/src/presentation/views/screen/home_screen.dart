@@ -122,8 +122,6 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-
-
   Widget _bodyWindowClassMedium(BuildContext context) {
     return Row(
       children: [
