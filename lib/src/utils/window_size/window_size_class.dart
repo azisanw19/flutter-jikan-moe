@@ -1,5 +1,5 @@
 import 'package:anime_list/src/utils/error/window_size_class_exception.dart';
-import 'package:anime_list/src/utils/windowSize/window_class.dart';
+import 'package:anime_list/src/utils/window_size/window_class.dart';
 import 'package:flutter/material.dart';
 
 class WindowSizeClass {

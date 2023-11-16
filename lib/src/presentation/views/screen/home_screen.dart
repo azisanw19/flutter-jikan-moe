@@ -4,14 +4,14 @@ import 'package:anime_list/src/presentation/state/request_state_home.dart';
 import 'package:anime_list/src/presentation/state/response_state_home.dart';
 import 'package:anime_list/src/presentation/views/page/anime_page.dart';
 import 'package:anime_list/src/presentation/views/page/manga_page.dart';
-import 'package:anime_list/src/utils/windowSize/window_class.dart';
-import 'package:anime_list/src/utils/windowSize/window_size_class.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_lazy_indexed_stack/flutter_lazy_indexed_stack.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
+import '../../../utils/window_size/window_class.dart';
+import '../../../utils/window_size/window_size_class.dart';
 import '../../components/jikan_moe_bottom_navigation.dart';
 import '../../components/jikan_moe_sliver_app_bar.dart';
 
