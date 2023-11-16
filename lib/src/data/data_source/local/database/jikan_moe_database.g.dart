@@ -100,6 +100,8 @@ class _$JikanMoeDatabase extends JikanMoeDatabase {
             'CREATE TABLE IF NOT EXISTS `table_relation_studio_and_anime` (`mal_id_anime` INTEGER NOT NULL, `mal_id_studio` INTEGER NOT NULL, FOREIGN KEY (`mal_id_anime`) REFERENCES `table_anime` (`mal_id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`mal_id_studio`) REFERENCES `table_studio` (`mal_id`) ON UPDATE NO ACTION ON DELETE NO ACTION, PRIMARY KEY (`mal_id_anime`, `mal_id_studio`))');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `table_relation_genre_and_anime` (`mal_id_anime` INTEGER NOT NULL, `mal_id_genre` INTEGER NOT NULL, FOREIGN KEY (`mal_id_anime`) REFERENCES `table_anime` (`mal_id`) ON UPDATE NO ACTION ON DELETE NO ACTION, FOREIGN KEY (`mal_id_genre`) REFERENCES `table_genre` (`mal_id`) ON UPDATE NO ACTION ON DELETE NO ACTION, PRIMARY KEY (`mal_id_anime`, `mal_id_genre`))');
+        await database.execute(
+            'CREATE TABLE IF NOT EXISTS `table_relation_season_now_and_anime` (`mal_id_relation_season_now_and_anime` INTEGER, `mal_id_anime` INTEGER NOT NULL, FOREIGN KEY (`mal_id_anime`) REFERENCES `table_anime` (`mal_id`) ON UPDATE NO ACTION ON DELETE NO ACTION, PRIMARY KEY (`mal_id_relation_season_now_and_anime`))');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -203,6 +205,13 @@ class _$AnimeDao extends AnimeDao {
             (RelationGenreAndAnimeEntity item) => <String, Object?>{
                   'mal_id_anime': item.malIdAnime,
                   'mal_id_genre': item.malIdGenre
+                }),
+        _relationSeasonNowAndAnimeEntityInsertionAdapter = InsertionAdapter(
+            database,
+            'table_relation_season_now_and_anime',
+            (RelationSeasonNowAndAnimeEntity item) => <String, Object?>{
+                  'mal_id_relation_season_now_and_anime': item.malId,
+                  'mal_id_anime': item.malIdAnime
                 });
 
   final sqflite.DatabaseExecutor database;
@@ -231,6 +240,16 @@ class _$AnimeDao extends AnimeDao {
 
   final InsertionAdapter<RelationGenreAndAnimeEntity>
       _relationGenreAndAnimeEntityInsertionAdapter;
+
+  final InsertionAdapter<RelationSeasonNowAndAnimeEntity>
+      _relationSeasonNowAndAnimeEntityInsertionAdapter;
+
+  @override
+  Future<int?> clearAnimeSeasonNow() async {
+    return _queryAdapter.query(
+        'DELETE FROM table_relation_season_now_and_anime',
+        mapper: (Map<String, Object?> row) => row.values.first as int);
+  }
 
   @override
   Future<List<AnimeEntity>?> getAnime() async {
@@ -342,6 +361,49 @@ class _$AnimeDao extends AnimeDao {
   }
 
   @override
+  Future<List<RelationSeasonNowAndAnimeEntity>?> getIdAnimeSeasonNow() async {
+    return _queryAdapter.queryList(
+        'SELECT * FROM table_relation_season_now_and_anime',
+        mapper: (Map<String, Object?> row) =>
+            RelationSeasonNowAndAnimeEntity(row['mal_id_anime'] as int));
+  }
+
+  @override
+  Future<AnimeEntity?> getAnimeFromId(int malIdAnime) async {
+    return _queryAdapter.query('SELECT * FROM table_anime WHERE mal_id = ?1',
+        mapper: (Map<String, Object?> row) => AnimeEntity(
+            row['mal_id'] as int,
+            row['url'] as String?,
+            row['jpg_image_url'] as String?,
+            row['trailer_youtube_id'] as String?,
+            row['trailer_image_medium_image_url'] as String?,
+            row['title'] as String?,
+            row['title_english'] as String?,
+            row['title_japanese'] as String?,
+            row['type'] == null ? null : TypeAnime.values[row['type'] as int],
+            row['source'] as String?,
+            row['episodes'] as int?,
+            row['status'] as String?,
+            row['airing'] == null ? null : (row['airing'] as int) != 0,
+            row['aired_form'] as String?,
+            row['aired_to'] as String?,
+            row['duration'] as String?,
+            row['rating'] as String?,
+            row['score'] as double?,
+            row['scored_by'] as int?,
+            row['rank'] as int?,
+            row['popularity'] as int?,
+            row['favorites'] as int?,
+            row['synopsis'] as String?,
+            row['background'] as String?,
+            row['season'] as String?,
+            row['broadcast_day'] as String?,
+            row['broadcast_time'] as String?,
+            row['broadcast_timezone'] as String?),
+        arguments: [malIdAnime]);
+  }
+
+  @override
   Future<List<int>> insertAnime(List<AnimeEntity> listAnimeEntity) {
     return _animeEntityInsertionAdapter.insertListAndReturnIds(
         listAnimeEntity, OnConflictStrategy.replace);
@@ -397,6 +459,15 @@ class _$AnimeDao extends AnimeDao {
   }
 
   @override
+  Future<List<int>> insertAnimeSeasonNow(
+      List<RelationSeasonNowAndAnimeEntity>
+          listRelationSeasonNowAndAnimeEntity) {
+    return _relationSeasonNowAndAnimeEntityInsertionAdapter
+        .insertListAndReturnIds(
+            listRelationSeasonNowAndAnimeEntity, OnConflictStrategy.replace);
+  }
+
+  @override
   Future<void> insertAnimeTransaction(
     List<AnimeEntity> listAnimeEntity,
     List<StudioEntity> listStudioEntity,
@@ -436,6 +507,64 @@ class _$AnimeDao extends AnimeDao {
   }
 
   @override
+  Future<void> insertAnimeAndSeasonNowTransaction(
+    List<AnimeEntity> listAnimeEntity,
+    List<StudioEntity> listStudioEntity,
+    List<GenreEntity> listGenreEntity,
+    List<RelationTitleSynonymAndAnime> listRelationTitleSynonymAndAnime,
+    List<RelationProducerAndAnimeEntity> listRelationProducerAndAnimeEntity,
+    List<RelationLicensorAndAnimeEntity> listRelationLicensorAndAnimeEntity,
+    List<RelationStudioAndAnimeEntity> listRelationStudioAndAnimeEntity,
+    List<RelationGenreAndAnimeEntity> listRelationGenreAndAnimeEntity,
+    List<RelationSeasonNowAndAnimeEntity> listRelationSeasonNowAndAnimeEntity,
+  ) async {
+    if (database is sqflite.Transaction) {
+      await super.insertAnimeAndSeasonNowTransaction(
+          listAnimeEntity,
+          listStudioEntity,
+          listGenreEntity,
+          listRelationTitleSynonymAndAnime,
+          listRelationProducerAndAnimeEntity,
+          listRelationLicensorAndAnimeEntity,
+          listRelationStudioAndAnimeEntity,
+          listRelationGenreAndAnimeEntity,
+          listRelationSeasonNowAndAnimeEntity);
+    } else {
+      await (database as sqflite.Database)
+          .transaction<void>((transaction) async {
+        final transactionDatabase = _$JikanMoeDatabase(changeListener)
+          ..database = transaction;
+        await transactionDatabase.animeDao.insertAnimeAndSeasonNowTransaction(
+            listAnimeEntity,
+            listStudioEntity,
+            listGenreEntity,
+            listRelationTitleSynonymAndAnime,
+            listRelationProducerAndAnimeEntity,
+            listRelationLicensorAndAnimeEntity,
+            listRelationStudioAndAnimeEntity,
+            listRelationGenreAndAnimeEntity,
+            listRelationSeasonNowAndAnimeEntity);
+      });
+    }
+  }
+
+  @override
+  Future<AnimeTable> getAllAnimeEntityToAnimeTable(
+      AnimeEntity animeEntity) async {
+    if (database is sqflite.Transaction) {
+      return super.getAllAnimeEntityToAnimeTable(animeEntity);
+    } else {
+      return (database as sqflite.Database)
+          .transaction<AnimeTable>((transaction) async {
+        final transactionDatabase = _$JikanMoeDatabase(changeListener)
+          ..database = transaction;
+        return transactionDatabase.animeDao
+            .getAllAnimeEntityToAnimeTable(animeEntity);
+      });
+    }
+  }
+
+  @override
   Future<List<AnimeTable>> getAnimeTable() async {
     if (database is sqflite.Transaction) {
       return super.getAnimeTable();
@@ -445,6 +574,20 @@ class _$AnimeDao extends AnimeDao {
         final transactionDatabase = _$JikanMoeDatabase(changeListener)
           ..database = transaction;
         return transactionDatabase.animeDao.getAnimeTable();
+      });
+    }
+  }
+
+  @override
+  Future<List<AnimeTable>> getAnimeTableSeasonNow() async {
+    if (database is sqflite.Transaction) {
+      return super.getAnimeTableSeasonNow();
+    } else {
+      return (database as sqflite.Database)
+          .transaction<List<AnimeTable>>((transaction) async {
+        final transactionDatabase = _$JikanMoeDatabase(changeListener)
+          ..database = transaction;
+        return transactionDatabase.animeDao.getAnimeTableSeasonNow();
       });
     }
   }

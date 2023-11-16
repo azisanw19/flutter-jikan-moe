@@ -1,5 +1,3 @@
-import 'package:anime_list/src/utils/error/use_case_exception.dart';
-
 import '../../domain/data_transfer_object/anime_data.dart';
 import '../../domain/data_transfer_object/pagination_data.dart';
 import '../../domain/repository/anime_repository_local.dart';
@@ -25,8 +23,7 @@ class AnimeSeasonNowUseCase {
     if (isOnline) {
       return _getDataFromRemote();
     } else {
-      return DataStateError(UseCaseException('Unimplemented exception'));
-      // return _getAnimeFromDb();
+      return _getAnimeFromDb();
     }
   }
 
@@ -36,29 +33,20 @@ class AnimeSeasonNowUseCase {
         await _getAnimeSearchRemoteRepository();
 
     if (dataStatePaginationAnimeDataPaginationData
-        is DataStatePaginationSuccess) {
-      return DataStateSuccess(dataStatePaginationAnimeDataPaginationData.data!);
-    } else {
-      return DataStateError(
-          dataStatePaginationAnimeDataPaginationData.exception!);
-    }
-
-    /*TODO save to db*/
-    /*if (dataStatePaginationAnimeDataPaginationData
     is DataStatePaginationSuccess) {
       // save to database
       await _saveAnimeToDb(dataStatePaginationAnimeDataPaginationData.data!);
       return _getAnimeFromDb();
     } else {
       return _getAnimeFromDb();
-    }*/
+    }
   }
 
   Future<DataState<void>> _saveAnimeToDb(List<AnimeData> listAnimeData) =>
-      _animeRepositoryLocal.saveAnime(listAnimeData);
+      _animeRepositoryLocal.saveAnimeThisSeason(listAnimeData);
 
   Future<DataState<List<AnimeData>>> _getAnimeFromDb() =>
-      _animeRepositoryLocal.getListAnime();
+      _animeRepositoryLocal.getListAnimeSeasonNow();
 
   Future<DataStatePagination<List<AnimeData>, PaginationData>>
       _getAnimeSearchRemoteRepository() =>

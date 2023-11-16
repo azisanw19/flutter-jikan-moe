@@ -13,6 +13,7 @@ import 'package:anime_list/src/domain/local/models/anime/studio_entity.dart';
 import 'package:anime_list/src/domain/repository/anime_repository_local.dart';
 import 'package:anime_list/src/utils/resources/data_state.dart';
 
+import '../../domain/local/models/anime/relation_season_now_and_anime_entity.dart';
 import '../../domain/local/models/anime/relation_title_synonym_and_anime.dart';
 import '../data_source/local/dao/anime_dao.dart';
 
@@ -21,14 +22,6 @@ class AnimeRepositoryLocalImpl extends BaseRepositoryLocal
   final AnimeDao _animeDao;
 
   AnimeRepositoryLocalImpl(this._animeDao);
-
-  @override
-  Future<DataState<int?>> clearAnimeRows() {
-    Future<DataState<int?>> futureDataStateNumberOfEffectedRow =
-        getStateOf(request: () => _animeDao.clearAnimeRows());
-
-    return futureDataStateNumberOfEffectedRow;
-  }
 
   @override
   Future<DataState<void>> saveAnime(List<AnimeData> listAnimeData) async {
@@ -115,6 +108,99 @@ class AnimeRepositoryLocalImpl extends BaseRepositoryLocal
     return DataStateSuccess(listAnimeData);
   }
 
+  @override
+  Future<DataState<void>> saveAnimeThisSeason(
+      List<AnimeData> listAnimeData) async {
+    List<AnimeEntity> listAnimeEntity = <AnimeEntity>[];
+    List<StudioEntity> listStudioEntity = <StudioEntity>[];
+    List<GenreEntity> listGenreEntity = <GenreEntity>[];
+    List<RelationTitleSynonymAndAnime> listRelationTitleSynonymAndAnime =
+        <RelationTitleSynonymAndAnime>[];
+    List<RelationProducerAndAnimeEntity> listRelationProducerAndAnimeEntity =
+        <RelationProducerAndAnimeEntity>[];
+    List<RelationLicensorAndAnimeEntity> listRelationLicensorAndAnimeEntity =
+        <RelationLicensorAndAnimeEntity>[];
+    List<RelationStudioAndAnimeEntity> listRelationStudioAndAnimeEntity =
+        <RelationStudioAndAnimeEntity>[];
+    List<RelationGenreAndAnimeEntity> listRelationGenreAndAnimeEntity =
+        <RelationGenreAndAnimeEntity>[];
+    List<RelationSeasonNowAndAnimeEntity> listRelationSeasonNowAndAnimeEntity =
+        <RelationSeasonNowAndAnimeEntity>[];
+
+    listAnimeData.forEach((animeData) {
+      listAnimeEntity.add(_animeDataToAnimeEntity(animeData));
+
+      if (animeData.producers != null)
+        listStudioEntity
+            .addAll(_extractStudioDataToStudioEntity(animeData.producers!));
+      if (animeData.licensors != null)
+        listStudioEntity
+            .addAll(_extractStudioDataToStudioEntity(animeData.licensors!));
+      if (animeData.studios != null)
+        listStudioEntity
+            .addAll(_extractStudioDataToStudioEntity(animeData.studios!));
+      if (animeData.genres != null)
+        listGenreEntity
+            .addAll(_extractGenreDataToGenreEntity(animeData.genres!));
+
+      if (animeData.titleSynonyms != null)
+        listRelationTitleSynonymAndAnime.addAll(animeData.titleSynonyms!.map(
+            (titleSynonym) =>
+                _titleSynonymAndMalIdAnimeToRelationTitleSynonymAndAnimeEntity(
+                    animeData.malId!, titleSynonym)));
+
+      if (animeData.producers != null)
+        listRelationProducerAndAnimeEntity.addAll(animeData.producers!.map(
+            (studioData) =>
+                _malIdStudioEntityAndMalIdAnimeToRelationProducerAndAnimeEntity(
+                    studioData.malId!, animeData.malId!)));
+
+      if (animeData.licensors != null)
+        listRelationLicensorAndAnimeEntity.addAll(animeData.licensors!.map(
+            (studioData) => _malIdStudioAndMalIdAnimeToRelationLicensorAndAnime(
+                studioData.malId!, animeData.malId!)));
+
+      if (animeData.studios != null)
+        listRelationStudioAndAnimeEntity.addAll(animeData.studios!.map(
+            (studioData) =>
+                _malIdStudioAndMalIdAnimeToRelationStudioAndAnimeEntity(
+                    studioData.malId!, animeData.malId!)));
+
+      if (animeData.genres != null)
+        listRelationGenreAndAnimeEntity.addAll(animeData.genres!.map(
+            (genreData) =>
+                _malIdGenreAndMalIdAnimeToRelationGenreAndAnimeEntity(
+                    genreData.malId!, animeData.malId!)));
+
+      if (animeData.malId != null)
+        listRelationSeasonNowAndAnimeEntity
+            .add(RelationSeasonNowAndAnimeEntity(animeData.malId!));
+    });
+
+    return await _insertAnimeSeasonNowTransaction(
+        listAnimeEntity,
+        listStudioEntity,
+        listGenreEntity,
+        listRelationTitleSynonymAndAnime,
+        listRelationProducerAndAnimeEntity,
+        listRelationLicensorAndAnimeEntity,
+        listRelationStudioAndAnimeEntity,
+        listRelationGenreAndAnimeEntity,
+        listRelationSeasonNowAndAnimeEntity);
+  }
+
+  @override
+  Future<DataState<List<AnimeData>>> getListAnimeSeasonNow() async {
+    DataState<List<AnimeTable>> dataStateListAnime = await _getAnimeTableSeasonNow();
+
+    if (dataStateListAnime is DataStateError)
+      return DataStateError(dataStateListAnime.exception!);
+
+    List<AnimeData> listAnimeData =
+    dataStateListAnime.data!.map(_animeTableToAnimeData).toList();
+    return DataStateSuccess(listAnimeData);
+  }
+
   Iterable<StudioEntity> _extractStudioDataToStudioEntity(
           List<StudioData> listStudioData) =>
       listStudioData.map((studioData) => _studioDataToStudioEntity(studioData));
@@ -145,8 +231,36 @@ class AnimeRepositoryLocalImpl extends BaseRepositoryLocal
               listRelationStudioAndAnimeEntity,
               listRelationGenreAndAnimeEntity));
 
+  Future<DataState<void>> _insertAnimeSeasonNowTransaction(
+          List<AnimeEntity> listAnimeEntity,
+          List<StudioEntity> listStudioEntity,
+          List<GenreEntity> listGenreEntity,
+          List<RelationTitleSynonymAndAnime> listRelationTitleSynonymAndAnime,
+          List<RelationProducerAndAnimeEntity>
+              listRelationProducerAndAnimeEntity,
+          List<RelationLicensorAndAnimeEntity>
+              listRelationLicensorAndAnimeEntity,
+          List<RelationStudioAndAnimeEntity> listRelationStudioAndAnimeEntity,
+          List<RelationGenreAndAnimeEntity> listRelationGenreAndAnimeEntity,
+          List<RelationSeasonNowAndAnimeEntity>
+              listRelationSeasonNowAndAnimeEntity) =>
+      getStateOf(
+          request: () => _animeDao.insertAnimeAndSeasonNowTransaction(
+              listAnimeEntity,
+              listStudioEntity,
+              listGenreEntity,
+              listRelationTitleSynonymAndAnime,
+              listRelationProducerAndAnimeEntity,
+              listRelationLicensorAndAnimeEntity,
+              listRelationStudioAndAnimeEntity,
+              listRelationGenreAndAnimeEntity,
+              listRelationSeasonNowAndAnimeEntity));
+
   Future<DataState<List<AnimeTable>>> _getAnimeTable() =>
       getStateOf(request: () => _animeDao.getAnimeTable());
+
+  Future<DataState<List<AnimeTable>>> _getAnimeTableSeasonNow() =>
+      getStateOf(request: () => _animeDao.getAnimeTableSeasonNow());
 
   // DTO to anime entity
   AnimeEntity _animeDataToAnimeEntity(AnimeData animeData) => AnimeEntity(

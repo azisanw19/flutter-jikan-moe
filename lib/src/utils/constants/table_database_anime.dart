@@ -66,8 +66,12 @@ const String tableRelationStudioAndAnime = 'table_relation_studio_and_anime';
 const String malIdAnimeRelationStudioAndAnime = 'mal_id_anime';
 const String malIdStudioRelationStudioAndAnime = 'mal_id_studio';
 
-
 // Table RelationGenreAndAnime
 const String tableRelationGenreAndAnime = 'table_relation_genre_and_anime';
 const String malIdAnimeRelationGenreAndAnime = 'mal_id_anime';
 const String malIdGenreRelationGenreAndAnime = 'mal_id_genre';
+
+// Table RelationSeasonNowAndAnime
+const String tableRelationSeasonNowAndAnime = 'table_relation_season_now_and_anime';
+const String malIdRelationSeasonNowAndAnime = 'mal_id_relation_season_now_and_anime';
+const String malIdAnimeRelationSeasonNowAndAnime = 'mal_id_anime';

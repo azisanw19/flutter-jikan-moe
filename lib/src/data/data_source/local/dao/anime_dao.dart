@@ -7,6 +7,7 @@ import 'package:floor/floor.dart';
 import '../../../../domain/local/models/anime/anime_entity.dart';
 import '../../../../domain/local/models/anime/genre_entity.dart';
 import '../../../../domain/local/models/anime/relation_producer_and_anime_entity.dart';
+import '../../../../domain/local/models/anime/relation_season_now_and_anime_entity.dart';
 import '../../../../domain/local/models/anime/relation_title_synonym_and_anime.dart';
 import '../../../../domain/local/models/anime/studio_entity.dart';
 import '../../../../utils/constants/table_database_anime.dart';
@@ -63,6 +64,38 @@ abstract class AnimeDao {
     await insertRelationGenreAndAnime(listRelationGenreAndAnimeEntity);
   }
 
+  @Insert(onConflict: OnConflictStrategy.replace)
+  Future<List<int>> insertAnimeSeasonNow(List<RelationSeasonNowAndAnimeEntity> listRelationSeasonNowAndAnimeEntity);
+
+  @Query('DELETE FROM $tableRelationSeasonNowAndAnime')
+  Future<int?> clearAnimeSeasonNow();
+
+  @transaction
+  Future<void> insertAnimeAndSeasonNowTransaction(
+      List<AnimeEntity> listAnimeEntity,
+      List<StudioEntity> listStudioEntity,
+      List<GenreEntity> listGenreEntity,
+      List<RelationTitleSynonymAndAnime> listRelationTitleSynonymAndAnime,
+      List<RelationProducerAndAnimeEntity> listRelationProducerAndAnimeEntity,
+      List<RelationLicensorAndAnimeEntity> listRelationLicensorAndAnimeEntity,
+      List<RelationStudioAndAnimeEntity> listRelationStudioAndAnimeEntity,
+      List<RelationGenreAndAnimeEntity> listRelationGenreAndAnimeEntity,
+      List<RelationSeasonNowAndAnimeEntity> listRelationSeasonNowAndAnimeEntity) async {
+    await insertAnimeTransaction(
+        listAnimeEntity,
+        listStudioEntity,
+        listGenreEntity,
+        listRelationTitleSynonymAndAnime,
+        listRelationProducerAndAnimeEntity,
+        listRelationLicensorAndAnimeEntity,
+        listRelationStudioAndAnimeEntity,
+        listRelationGenreAndAnimeEntity);
+
+    await clearAnimeSeasonNow();
+
+    await insertAnimeSeasonNow(listRelationSeasonNowAndAnimeEntity);
+  }
+
   @Query('SELECT * FROM $tableAnime')
   Future<List<AnimeEntity>?> getAnime();
 
@@ -101,83 +134,118 @@ abstract class AnimeDao {
   Future<int?> clearAnimeRows();
 
   @transaction
+  Future<AnimeTable> getAllAnimeEntityToAnimeTable(AnimeEntity animeEntity) async {
+    // relation title synonym
+    List<RelationTitleSynonymAndAnime> listRelationTitleSynonymAndAnime =
+        await getRelationTitleSynonymAndAnime(animeEntity.malId) ??
+            <RelationTitleSynonymAndAnime>[];
+
+    List<String> listTitleSynonym = listRelationTitleSynonymAndAnime
+        .map((relationTitleSynonymAndAnime) =>
+    relationTitleSynonymAndAnime.titleSynonym)
+        .toList();
+
+    // relation producer and anime
+    List<StudioEntity> listProducerStudio = <StudioEntity>[];
+    List<RelationProducerAndAnimeEntity> listRelationProducerAndAnimeEntity =
+        await getRelationProducerAndAnime(animeEntity.malId) ??
+            <RelationProducerAndAnimeEntity>[];
+
+    listRelationProducerAndAnimeEntity
+        .forEach((relationProducerAndAnimeEntity) async {
+      StudioEntity? studioEntity =
+      await getStudioFromId(relationProducerAndAnimeEntity.malIdStudio);
+      if (studioEntity != null) listProducerStudio.add(studioEntity);
+    });
+
+    // relation licensor and anime
+    List<StudioEntity> listLicensorStudio = <StudioEntity>[];
+    List<RelationLicensorAndAnimeEntity> listRelationLicensorAndAnimeEntity =
+        await getRelationLicensorAndAnime(animeEntity.malId) ??
+            <RelationLicensorAndAnimeEntity>[];
+
+    listRelationLicensorAndAnimeEntity
+        .forEach((relationLicensorAndAnimeEntity) async {
+      StudioEntity? studioEntity =
+      await getStudioFromId(relationLicensorAndAnimeEntity.malIdStudio);
+
+      if (studioEntity != null) listLicensorStudio.add(studioEntity);
+    });
+
+    // relation studio and anime
+    List<StudioEntity> listStudio = <StudioEntity>[];
+    List<RelationStudioAndAnimeEntity> listRelationStudioAndAnimeEntity =
+        await getRelationStudioAndAnime(animeEntity.malId) ??
+            <RelationStudioAndAnimeEntity>[];
+
+    listRelationStudioAndAnimeEntity
+        .forEach((relationStudioAndAnimeEntity) async {
+      StudioEntity? studioEntity =
+      await getStudioFromId(relationStudioAndAnimeEntity.malIdStudio);
+
+      if (studioEntity != null) listStudio.add(studioEntity);
+    });
+
+    // relation genre and anime
+    List<GenreEntity> listGenre = <GenreEntity>[];
+    List<RelationGenreAndAnimeEntity> listRelationGenreAndAnimeEntity =
+        await getRelationGenreAndAnime(animeEntity.malId) ??
+            <RelationGenreAndAnimeEntity>[];
+
+    listRelationGenreAndAnimeEntity
+        .forEach((relationGenreAndAnimeEntity) async {
+      GenreEntity? genreEntity =
+      await getGenreFromId(relationGenreAndAnimeEntity.malIdGenre);
+
+      if (genreEntity != null) listGenre.add(genreEntity);
+    });
+
+    AnimeTable animeTable = AnimeTable(animeEntity, listTitleSynonym,
+        listProducerStudio, listLicensorStudio, listStudio, listGenre);
+
+    return animeTable;
+  }
+
+  @transaction
   Future<List<AnimeTable>> getAnimeTable() async {
     List<AnimeTable> listAnimeTable = <AnimeTable>[];
     List<AnimeEntity> listAnimeEntity = await getAnime() ?? <AnimeEntity>[];
 
-
     await Future.forEach(listAnimeEntity, (animeEntity) async {
-      // relation title synonym
-      List<RelationTitleSynonymAndAnime> listRelationTitleSynonymAndAnime =
-          await getRelationTitleSynonymAndAnime(animeEntity.malId) ??
-          <RelationTitleSynonymAndAnime>[];
-
-      List<String> listTitleSynonym = listRelationTitleSynonymAndAnime
-          .map((relationTitleSynonymAndAnime) =>
-      relationTitleSynonymAndAnime.titleSynonym)
-          .toList();
-
-      // relation producer and anime
-      List<StudioEntity> listProducerStudio = <StudioEntity>[];
-      List<RelationProducerAndAnimeEntity> listRelationProducerAndAnimeEntity =
-          await getRelationProducerAndAnime(animeEntity.malId) ??
-          <RelationProducerAndAnimeEntity>[];
-
-      listRelationProducerAndAnimeEntity
-          .forEach((relationProducerAndAnimeEntity) async {
-        StudioEntity? studioEntity =
-        await getStudioFromId(relationProducerAndAnimeEntity.malIdStudio);
-        if (studioEntity != null) listProducerStudio.add(studioEntity);
-      });
-
-      // relation licensor and anime
-      List<StudioEntity> listLicensorStudio = <StudioEntity>[];
-      List<RelationLicensorAndAnimeEntity> listRelationLicensorAndAnimeEntity =
-          await getRelationLicensorAndAnime(animeEntity.malId) ??
-          <RelationLicensorAndAnimeEntity>[];
-
-      listRelationLicensorAndAnimeEntity
-          .forEach((relationLicensorAndAnimeEntity) async {
-        StudioEntity? studioEntity =
-        await getStudioFromId(relationLicensorAndAnimeEntity.malIdStudio);
-
-        if (studioEntity != null) listLicensorStudio.add(studioEntity);
-      });
-
-      // relation studio and anime
-      List<StudioEntity> listStudio = <StudioEntity>[];
-      List<RelationStudioAndAnimeEntity> listRelationStudioAndAnimeEntity =
-          await getRelationStudioAndAnime(animeEntity.malId) ??
-          <RelationStudioAndAnimeEntity>[];
-
-      listRelationStudioAndAnimeEntity
-          .forEach((relationStudioAndAnimeEntity) async {
-        StudioEntity? studioEntity =
-        await getStudioFromId(relationStudioAndAnimeEntity.malIdStudio);
-
-        if (studioEntity != null) listStudio.add(studioEntity);
-      });
-
-      // relation genre and anime
-      List<GenreEntity> listGenre = <GenreEntity>[];
-      List<RelationGenreAndAnimeEntity> listRelationGenreAndAnimeEntity =
-          await getRelationGenreAndAnime(animeEntity.malId) ??
-          <RelationGenreAndAnimeEntity>[];
-
-      listRelationGenreAndAnimeEntity
-          .forEach((relationGenreAndAnimeEntity) async {
-        GenreEntity? genreEntity =
-        await getGenreFromId(relationGenreAndAnimeEntity.malIdGenre);
-
-        if (genreEntity != null) listGenre.add(genreEntity);
-      });
-
-      AnimeTable animeTable = AnimeTable(animeEntity, listTitleSynonym,
-          listProducerStudio, listLicensorStudio, listStudio, listGenre);
+      AnimeTable animeTable = await getAllAnimeEntityToAnimeTable(animeEntity);
 
       listAnimeTable.add(animeTable);
     });
 
     return listAnimeTable;
   }
+
+  @Query('SELECT * FROM $tableRelationSeasonNowAndAnime')
+  Future<List<RelationSeasonNowAndAnimeEntity>?> getIdAnimeSeasonNow();
+
+  @Query('SELECT * FROM $tableAnime WHERE $malIdAnime = :malIdAnime')
+  Future<AnimeEntity?> getAnimeFromId(int malIdAnime);
+
+
+  @transaction
+  Future<List<AnimeTable>> getAnimeTableSeasonNow() async {
+    List<AnimeTable> listAnimeTable = <AnimeTable>[];
+    List<RelationSeasonNowAndAnimeEntity> listRelationSeasonNowAndAnimeEntity = await getIdAnimeSeasonNow() ?? <RelationSeasonNowAndAnimeEntity>[];
+
+    await Future.forEach(listRelationSeasonNowAndAnimeEntity, (relationSeasonNowAndAnimeEntity) async {
+      AnimeEntity? animeEntity = await getAnimeFromId(relationSeasonNowAndAnimeEntity.malIdAnime);
+
+      if (animeEntity != null) {
+        AnimeTable animeTable = await getAllAnimeEntityToAnimeTable(animeEntity);
+        listAnimeTable.add(animeTable);
+      }
+
+    });
+
+    return listAnimeTable;
+  }
+
+
+
+
 }
