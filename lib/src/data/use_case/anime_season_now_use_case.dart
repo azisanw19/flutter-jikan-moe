@@ -1,3 +1,5 @@
+import 'package:anime_list/src/utils/constants/int.dart';
+
 import '../../domain/data_transfer_object/anime_data.dart';
 import '../../domain/data_transfer_object/pagination_data.dart';
 import '../../domain/repository/anime_repository_local.dart';
@@ -17,38 +19,44 @@ class AnimeSeasonNowUseCase {
     this._animeRepositoryLocal,
   );
 
-  Future<DataState<List<AnimeData>>> getAnimeSeasonNow() async {
+  Future<DataState<List<AnimeData>>> getAnimeSeasonNow(
+      int page, int limit) async {
     bool isOnline = await _networkManager.isOnline;
 
     if (isOnline) {
-      return _getDataFromRemote();
+      return _getDataFromRemote(page, limit);
     } else {
-      return _getAnimeFromDb();
+      return _getAnimeFromDb(page, limit);
     }
   }
 
-  Future<DataState<List<AnimeData>>> _getDataFromRemote() async {
+  Future<DataState<List<AnimeData>>> _getDataFromRemote(
+      int page, int limit) async {
     DataStatePagination<List<AnimeData>, PaginationData>
         dataStatePaginationAnimeDataPaginationData =
-        await _getAnimeSearchRemoteRepository();
+        await _getAnimeSearchRemoteRepository(page, limit);
 
     if (dataStatePaginationAnimeDataPaginationData
-    is DataStatePaginationSuccess) {
+        is DataStatePaginationSuccess) {
       // save to database
+      if (page == firstPageAnimeSeasonNow) await _deleteAnimeThisSeason();
       await _saveAnimeToDb(dataStatePaginationAnimeDataPaginationData.data!);
-      return _getAnimeFromDb();
+      return _getAnimeFromDb(page, limit);
     } else {
-      return _getAnimeFromDb();
+      return _getAnimeFromDb(page, limit);
     }
   }
 
   Future<DataState<void>> _saveAnimeToDb(List<AnimeData> listAnimeData) =>
       _animeRepositoryLocal.saveAnimeThisSeason(listAnimeData);
 
-  Future<DataState<List<AnimeData>>> _getAnimeFromDb() =>
-      _animeRepositoryLocal.getListAnimeSeasonNow();
+  Future<DataState<List<AnimeData>>> _getAnimeFromDb(int page, int limit) =>
+      _animeRepositoryLocal.getListAnimeSeasonNow(limit, limit * (page - 1));
 
   Future<DataStatePagination<List<AnimeData>, PaginationData>>
-      _getAnimeSearchRemoteRepository() =>
-          _animeRepositoryRemote.getAnimeSeasonNow();
+      _getAnimeSearchRemoteRepository(int page, int limit) =>
+          _animeRepositoryRemote.getAnimeSeasonNow(page, limit);
+
+  Future<DataState<void>> _deleteAnimeThisSeason() =>
+      _animeRepositoryLocal.deleteAnimeThisSeason();
 }

@@ -190,8 +190,8 @@ class AnimeRepositoryLocalImpl extends BaseRepositoryLocal
   }
 
   @override
-  Future<DataState<List<AnimeData>>> getListAnimeSeasonNow() async {
-    DataState<List<AnimeTable>> dataStateListAnime = await _getAnimeTableSeasonNow();
+  Future<DataState<List<AnimeData>>> getListAnimeSeasonNow(int limit, int offset) async {
+    DataState<List<AnimeTable>> dataStateListAnime = await _getAnimeTableSeasonNow(limit, offset);
 
     if (dataStateListAnime is DataStateError)
       return DataStateError(dataStateListAnime.exception!);
@@ -200,6 +200,10 @@ class AnimeRepositoryLocalImpl extends BaseRepositoryLocal
     dataStateListAnime.data!.map(_animeTableToAnimeData).toList();
     return DataStateSuccess(listAnimeData);
   }
+
+  @override
+  Future<DataState<void>> deleteAnimeThisSeason() =>
+      _clearAnimeThisSeason();
 
   Iterable<StudioEntity> _extractStudioDataToStudioEntity(
           List<StudioData> listStudioData) =>
@@ -259,8 +263,11 @@ class AnimeRepositoryLocalImpl extends BaseRepositoryLocal
   Future<DataState<List<AnimeTable>>> _getAnimeTable() =>
       getStateOf(request: () => _animeDao.getAnimeTable());
 
-  Future<DataState<List<AnimeTable>>> _getAnimeTableSeasonNow() =>
-      getStateOf(request: () => _animeDao.getAnimeTableSeasonNow());
+  Future<DataState<List<AnimeTable>>> _getAnimeTableSeasonNow(int limit, int offset) =>
+      getStateOf(request: () => _animeDao.getAnimeTableSeasonNow(limit, offset));
+
+  Future<DataState<void>> _clearAnimeThisSeason() =>
+      getStateOf(request: () => _animeDao.clearAnimeSeasonNow());
 
   // DTO to anime entity
   AnimeEntity _animeDataToAnimeEntity(AnimeData animeData) => AnimeEntity(

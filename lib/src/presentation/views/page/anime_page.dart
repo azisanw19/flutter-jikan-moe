@@ -1,3 +1,5 @@
+import 'package:anime_list/src/presentation/components/jikan_moe_grid_view_pagination.dart';
+import 'package:anime_list/src/utils/constants/int.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -6,12 +8,16 @@ import '../../bloc/anime_bloc.dart';
 import '../../state/request_state_anime.dart';
 import '../../state/response_state_anime.dart';
 
+//ignore: must_be_immutable
 class AnimePage extends StatelessWidget {
+
+  late AnimeBloc _animeBloc;
+
   @override
   Widget build(BuildContext context) {
-    AnimeBloc homeBloc = context.read<AnimeBloc>();
-    homeBloc.add(RequestStateGetAnime());
-    homeBloc.add(RequestStateGetAnimeSeasonNow());
+    _animeBloc = context.read<AnimeBloc>();
+    _animeBloc.add(RequestStateGetAnime());
+    _animeBloc.add(RequestStateGetAnimeSeasonNow(firstPageAnimeSeasonNow));
 
     return _contentHome(context);
   }
@@ -67,15 +73,15 @@ class AnimePage extends StatelessWidget {
 
   Widget _animeSeasonNowView(
       BuildContext context, List<AnimeData> listAnimeData) {
-    return GridView.builder(
+    return JikanMoeGridViewPagination(
       scrollDirection: Axis.horizontal,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
         childAspectRatio: MediaQuery.of(context).size.width /
             (MediaQuery.of(context).size.height / 3),
       ),
-      itemCount: listAnimeData.length,
       shrinkWrap: true,
+      itemCount: listAnimeData.length,
       itemBuilder: (context, index) {
         return _itemSeasonNow(
           context,
@@ -85,6 +91,9 @@ class AnimePage extends StatelessWidget {
               '',
           subtitle: listAnimeData[index].titleJapanese ?? '',
         );
+      },
+      onPageChanged: (page) {
+        _animeBloc.add(RequestStateGetAnimeSeasonNow(page));
       },
     );
   }

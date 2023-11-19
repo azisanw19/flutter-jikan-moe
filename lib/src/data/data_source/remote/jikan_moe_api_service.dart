@@ -4,7 +4,6 @@ import 'package:retrofit/retrofit.dart';
 
 import '../../../domain/remote/models/anime_response.dart';
 
-
 part 'jikan_moe_api_service.g.dart';
 
 @RestApi(baseUrl: baseUrl, parser: Parser.JsonSerializable)
@@ -15,6 +14,8 @@ abstract class JikanMoeApiService {
   Future<HttpResponse<AnimeResponse>> getAnimeSearch();
 
   @GET('/seasons/now')
-  Future<HttpResponse<AnimeResponse>> getAnimeSeasonNow();
-
+  Future<HttpResponse<AnimeResponse>> getAnimeSeasonNow(
+    @Query('page') int page,
+    @Query('limit') int limit,
+  );
 }

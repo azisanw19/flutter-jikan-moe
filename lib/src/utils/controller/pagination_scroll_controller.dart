@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 
 /// A controller that is used to control the pagination of a list.
-class PaginationScrollController {
-  late ScrollController _scrollController;
-
+class PaginationScrollController extends ScrollController {
   /// The minimum number of pixels scrolled before a scroll event is sent.
   final double scrollThresholdPercentage;
 
@@ -18,29 +16,34 @@ class PaginationScrollController {
 
   int get currentPage => _currentPage;
 
+  double _previousMaxScroll = 0.0;
+
   /// Creates a new [PaginationScrollController].
   PaginationScrollController({
     this.scrollThresholdPercentage = 0.8,
     this.firstPage = 1,
     required this.onPageChanged,
-  }) {
+  }) : super() {
     _currentPage = firstPage;
 
-    _scrollController = ScrollController();
-    _scrollController.addListener(_onScroll);
+    this.addListener(_onScroll);
   }
 
   /// dispose the scroll controller
+  @override
   void dispose() {
-    _scrollController.dispose();
+    this.removeListener(_onScroll);
+    this.dispose();
+    super.dispose();
   }
 
   /// detect when the scroll is at the bottom of the page
   void _onScroll() {
     double maxScroll =
-        _scrollController.position.maxScrollExtent * scrollThresholdPercentage;
+        this.position.maxScrollExtent * scrollThresholdPercentage;
 
-    if (_scrollController.position.pixels >= maxScroll) {
+    if (this.position.pixels >= maxScroll && maxScroll > _previousMaxScroll) {
+      _previousMaxScroll = maxScroll;
       _currentPage++;
       onPageChanged(_currentPage);
     }

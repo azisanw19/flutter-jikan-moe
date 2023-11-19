@@ -34,10 +34,10 @@ class AnimeRepositoryRemoteImpl extends BaseRepositoryRemote
 
   @override
   Future<DataStatePagination<List<AnimeData>, PaginationData>>
-      getAnimeSeasonNow() async {
+      getAnimeSeasonNow(int page, int limit) async {
     DataState<AnimeResponse> dataStatePaginationAnimeResponse =
         await getStateOf<AnimeResponse>(
-      request: () => _animeApiService.getAnimeSeasonNow(),
+      request: () => _animeApiService.getAnimeSeasonNow(page, limit),
     );
 
     return _getStateForReturn(dataStatePaginationAnimeResponse);

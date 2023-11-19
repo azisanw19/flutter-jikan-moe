@@ -4,7 +4,9 @@ import 'package:anime_list/src/utils/resources/data_state_pagination.dart';
 
 abstract class AnimeRepositoryRemote {
   Future<DataStatePagination<List<AnimeData>, PaginationData>> getAnimeSearch();
-  Future<DataStatePagination<List<AnimeData>, PaginationData>> getAnimeSeasonNow();
 
-
+  Future<DataStatePagination<List<AnimeData>, PaginationData>>
+      getAnimeSeasonNow(
+    int page, int limit
+  );
 }

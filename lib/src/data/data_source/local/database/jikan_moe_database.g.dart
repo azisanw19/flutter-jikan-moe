@@ -361,11 +361,15 @@ class _$AnimeDao extends AnimeDao {
   }
 
   @override
-  Future<List<RelationSeasonNowAndAnimeEntity>?> getIdAnimeSeasonNow() async {
+  Future<List<RelationSeasonNowAndAnimeEntity>?> getIdAnimeSeasonNow(
+    int limit,
+    int offset,
+  ) async {
     return _queryAdapter.queryList(
-        'SELECT * FROM table_relation_season_now_and_anime',
+        'SELECT * FROM table_relation_season_now_and_anime LIMIT ?1 OFFSET ?2',
         mapper: (Map<String, Object?> row) =>
-            RelationSeasonNowAndAnimeEntity(row['mal_id_anime'] as int));
+            RelationSeasonNowAndAnimeEntity(row['mal_id_anime'] as int),
+        arguments: [limit, offset]);
   }
 
   @override
@@ -579,15 +583,19 @@ class _$AnimeDao extends AnimeDao {
   }
 
   @override
-  Future<List<AnimeTable>> getAnimeTableSeasonNow() async {
+  Future<List<AnimeTable>> getAnimeTableSeasonNow(
+    int limit,
+    int offset,
+  ) async {
     if (database is sqflite.Transaction) {
-      return super.getAnimeTableSeasonNow();
+      return super.getAnimeTableSeasonNow(limit, offset);
     } else {
       return (database as sqflite.Database)
           .transaction<List<AnimeTable>>((transaction) async {
         final transactionDatabase = _$JikanMoeDatabase(changeListener)
           ..database = transaction;
-        return transactionDatabase.animeDao.getAnimeTableSeasonNow();
+        return transactionDatabase.animeDao
+            .getAnimeTableSeasonNow(limit, offset);
       });
     }
   }
