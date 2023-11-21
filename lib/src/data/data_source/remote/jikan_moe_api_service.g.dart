@@ -34,7 +34,7 @@ class _JikanMoeApiService implements JikanMoeApiService {
     )
             .compose(
               _dio.options,
-              '/anime',
+              '/anime?sfw',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -64,7 +64,7 @@ class _JikanMoeApiService implements JikanMoeApiService {
     )
             .compose(
               _dio.options,
-              '/seasons/now',
+              '/seasons/now?sfw',
               queryParameters: queryParameters,
               data: _data,
             )

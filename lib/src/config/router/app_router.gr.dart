@@ -15,6 +15,16 @@ abstract class _$AppRouter extends RootStackRouter {
 
   @override
   final Map<String, PageFactory> pagesMap = {
+    DetailAnimeRoute.name: (routeData) {
+      final args = routeData.argsAs<DetailAnimeRouteArgs>();
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: DetailAnimeScreen(
+          key: args.key,
+          malId: args.malId,
+        ),
+      );
+    },
     HomeRoute.name: (routeData) {
       final args =
           routeData.argsAs<HomeRouteArgs>(orElse: () => const HomeRouteArgs());
@@ -22,8 +32,46 @@ abstract class _$AppRouter extends RootStackRouter {
         routeData: routeData,
         child: HomeScreen(key: args.key),
       );
-    }
+    },
   };
+}
+
+/// generated route for
+/// [DetailAnimeScreen]
+class DetailAnimeRoute extends PageRouteInfo<DetailAnimeRouteArgs> {
+  DetailAnimeRoute({
+    Key? key,
+    required int malId,
+    List<PageRouteInfo>? children,
+  }) : super(
+          DetailAnimeRoute.name,
+          args: DetailAnimeRouteArgs(
+            key: key,
+            malId: malId,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'DetailAnimeRoute';
+
+  static const PageInfo<DetailAnimeRouteArgs> page =
+      PageInfo<DetailAnimeRouteArgs>(name);
+}
+
+class DetailAnimeRouteArgs {
+  const DetailAnimeRouteArgs({
+    this.key,
+    required this.malId,
+  });
+
+  final Key? key;
+
+  final int malId;
+
+  @override
+  String toString() {
+    return 'DetailAnimeRouteArgs{key: $key, malId: $malId}';
+  }
 }
 
 /// generated route for

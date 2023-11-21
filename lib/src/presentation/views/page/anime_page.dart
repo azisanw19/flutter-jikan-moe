@@ -1,5 +1,7 @@
+import 'package:anime_list/src/config/router/app_router.dart';
 import 'package:anime_list/src/presentation/components/jikan_moe_grid_view_pagination.dart';
 import 'package:anime_list/src/utils/constants/int.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -83,13 +85,18 @@ class AnimePage extends StatelessWidget {
       shrinkWrap: true,
       itemCount: listAnimeData.length,
       itemBuilder: (context, index) {
-        return _itemSeasonNow(
-          context,
-          src: listAnimeData[index].image ?? '',
-          title: listAnimeData[index].titleDefault ??
-              listAnimeData[index].titleEnglish ??
-              '',
-          subtitle: listAnimeData[index].titleJapanese ?? '',
+        return InkWell(
+          onTap: () {
+            context.router.push(DetailAnimeRoute(malId: listAnimeData[index].malId ?? 0));
+          },
+          child: _itemSeasonNow(
+            context,
+            src: listAnimeData[index].image ?? '',
+            title: listAnimeData[index].titleDefault ??
+                listAnimeData[index].titleEnglish ??
+                '',
+            subtitle: listAnimeData[index].titleJapanese ?? '',
+          ),
         );
       },
       onPageChanged: (page) {
