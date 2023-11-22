@@ -1,4 +1,3 @@
-import 'package:anime_list/src/config/router/app_router.dart';
 import 'package:anime_list/src/presentation/components/jikan_moe_grid_view_pagination.dart';
 import 'package:anime_list/src/utils/constants/int.dart';
 import 'package:auto_route/auto_route.dart';
@@ -87,7 +86,7 @@ class AnimePage extends StatelessWidget {
       itemBuilder: (context, index) {
         return InkWell(
           onTap: () {
-            context.router.push(DetailAnimeRoute(malId: listAnimeData[index].malId ?? 0));
+            context.router.pushNamed('/detail-anime/${listAnimeData[index].malId}');
           },
           child: _itemSeasonNow(
             context,

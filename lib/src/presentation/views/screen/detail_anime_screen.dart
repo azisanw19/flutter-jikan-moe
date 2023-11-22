@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class DetailAnimeScreen extends StatelessWidget {
   final int malId;
 
-  const DetailAnimeScreen({Key? key, required this.malId}) : super(key: key);
+  const DetailAnimeScreen({Key? key, @PathParam('malId') required this.malId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

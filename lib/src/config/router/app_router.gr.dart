@@ -16,7 +16,10 @@ abstract class _$AppRouter extends RootStackRouter {
   @override
   final Map<String, PageFactory> pagesMap = {
     DetailAnimeRoute.name: (routeData) {
-      final args = routeData.argsAs<DetailAnimeRouteArgs>();
+      final pathParams = routeData.inheritedPathParams;
+      final args = routeData.argsAs<DetailAnimeRouteArgs>(
+          orElse: () =>
+              DetailAnimeRouteArgs(malId: pathParams.getInt('malId')));
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: DetailAnimeScreen(
@@ -49,6 +52,7 @@ class DetailAnimeRoute extends PageRouteInfo<DetailAnimeRouteArgs> {
             key: key,
             malId: malId,
           ),
+          rawPathParams: {'malId': malId},
           initialChildren: children,
         );
 

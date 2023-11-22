@@ -12,7 +12,7 @@ class AppRouter extends _$AppRouter {
   @override
   List<AutoRoute> get routes => [
     AutoRoute(page: HomeRoute.page, initial: true, path: '/'),
-    AutoRoute(page: DetailAnimeRoute.page, path: '/detail-anime/:id'),
+    AutoRoute(page: DetailAnimeRoute.page, path: '/detail-anime/:malId'),
   ];
 }
 
