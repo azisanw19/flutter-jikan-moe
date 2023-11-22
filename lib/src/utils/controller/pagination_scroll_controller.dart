@@ -33,7 +33,6 @@ class PaginationScrollController extends ScrollController {
   @override
   void dispose() {
     this.removeListener(_onScroll);
-    this.dispose();
     super.dispose();
   }
 

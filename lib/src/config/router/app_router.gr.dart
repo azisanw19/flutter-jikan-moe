@@ -15,6 +15,18 @@ abstract class _$AppRouter extends RootStackRouter {
 
   @override
   final Map<String, PageFactory> pagesMap = {
+    AnimeNavigationRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const AnimeNavigationScreen(),
+      );
+    },
+    AnimeRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: AnimePage(),
+      );
+    },
     DetailAnimeRoute.name: (routeData) {
       final pathParams = routeData.inheritedPathParams;
       final args = routeData.argsAs<DetailAnimeRouteArgs>(
@@ -36,7 +48,41 @@ abstract class _$AppRouter extends RootStackRouter {
         child: HomeScreen(key: args.key),
       );
     },
+    MangaRoute.name: (routeData) {
+      return AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: MangaPage(),
+      );
+    },
   };
+}
+
+/// generated route for
+/// [AnimeNavigationScreen]
+class AnimeNavigationRoute extends PageRouteInfo<void> {
+  const AnimeNavigationRoute({List<PageRouteInfo>? children})
+      : super(
+          AnimeNavigationRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'AnimeNavigationRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
+}
+
+/// generated route for
+/// [AnimePage]
+class AnimeRoute extends PageRouteInfo<void> {
+  const AnimeRoute({List<PageRouteInfo>? children})
+      : super(
+          AnimeRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'AnimeRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
 
 /// generated route for
@@ -104,4 +150,18 @@ class HomeRouteArgs {
   String toString() {
     return 'HomeRouteArgs{key: $key}';
   }
+}
+
+/// generated route for
+/// [MangaPage]
+class MangaRoute extends PageRouteInfo<void> {
+  const MangaRoute({List<PageRouteInfo>? children})
+      : super(
+          MangaRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'MangaRoute';
+
+  static const PageInfo<void> page = PageInfo<void>(name);
 }
