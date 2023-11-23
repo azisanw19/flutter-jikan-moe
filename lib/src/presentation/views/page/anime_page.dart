@@ -5,6 +5,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../config/router/app_router.dart';
 import '../../../domain/data_transfer_object/anime_data.dart';
 import '../../../utils/window_size/window_class.dart';
 import '../../../utils/window_size/window_size_class.dart';
@@ -15,10 +16,8 @@ import '../../state/response_state_anime.dart';
 @RoutePage()
 //ignore: must_be_immutable
 class AnimePage extends StatelessWidget {
-
   late AnimeBloc _animeBloc;
   late WindowSizeClass _windowSizeClass;
-
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +27,37 @@ class AnimePage extends StatelessWidget {
     _animeBloc.add(RequestStateGetAnime());
     _animeBloc.add(RequestStateGetAnimeSeasonNow(firstPageAnimeSeasonNow));
 
-    return Scaffold(
-        body: _sliverAppBar(context),
-    );
+    return Scaffold(body: _contentScreen(context));
+  }
+
+  Widget _contentScreen(BuildContext context) {
+    if (_windowSizeClass.windowClass == WindowClass.Compact) {
+      return _sliverAppBar(context);
+    } else if (_windowSizeClass.windowClass == WindowClass.Medium) {
+      return Row(
+        children: [
+          Expanded(
+            child: _sliverAppBar(context),
+          ),
+          Expanded(
+            child: AutoRouter(),
+          ),
+        ],
+      );
+    } else if (_windowSizeClass.windowClass == WindowClass.Expanded) {
+      return Row(
+        children: [
+          Expanded(
+            child: _sliverAppBar(context),
+          ),
+          Expanded(
+            child: AutoRouter(),
+          ),
+        ],
+      );
+    }
+
+    throw 'This should never have happened';
   }
 
   Widget _sliverAppBar(BuildContext context) {
@@ -45,12 +72,12 @@ class AnimePage extends StatelessWidget {
           sliverAppBar,
         ];
       },
-      body: _contentHome(context),
+      body: _contentHomeAnime(context),
     );
   }
 
   /// Content Home
-  Widget _contentHome(BuildContext context) {
+  Widget _contentHomeAnime(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         mainAxisSize: MainAxisSize.max,
@@ -100,7 +127,6 @@ class AnimePage extends StatelessWidget {
 
   Widget _animeSeasonNowView(
       BuildContext context, List<AnimeData> listAnimeData) {
-
     return JikanMoeGridViewPagination(
       scrollDirection: Axis.horizontal,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -112,7 +138,24 @@ class AnimePage extends StatelessWidget {
       itemBuilder: (context, index) {
         return InkWell(
           onTap: () {
-            context.router.pushNamed('/anime/detail-anime/${listAnimeData[index].malId}');
+            if (_windowSizeClass.windowClass == WindowClass.Compact) {
+              context.router.push(
+                DetailAnimeRoute(
+                  malId: listAnimeData[index].malId!,
+                ),
+              );
+              return;
+            }
+
+            if (_windowSizeClass.windowClass == WindowClass.Medium ||
+                _windowSizeClass.windowClass == WindowClass.Expanded) {
+              context.router.push(
+                DetailAnimeRoute(
+                  malId: listAnimeData[index].malId!,
+                ),
+              );
+              return;
+            }
           },
           child: _itemSeasonNow(
             context,
@@ -139,7 +182,7 @@ class AnimePage extends StatelessWidget {
           (MediaQuery.of(context).size.width / 3);
     } else if (_windowSizeClass.windowClass == WindowClass.Expanded) {
       return MediaQuery.of(context).size.height /
-    (MediaQuery.of(context).size.width / 3);
+          (MediaQuery.of(context).size.width / 3);
     }
 
     throw 'This should never have happened';
