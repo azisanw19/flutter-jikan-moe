@@ -110,20 +110,17 @@ class AnimePage extends StatelessWidget {
       shrinkWrap: true,
       itemCount: listAnimeData.length,
       itemBuilder: (context, index) {
-        return SizedBox(
-          height: 100,
-          child: InkWell(
-            onTap: () {
-              context.router.pushNamed('/anime/detail-anime/${listAnimeData[index].malId}');
-            },
-            child: _itemSeasonNow(
-              context,
-              src: listAnimeData[index].image ?? '',
-              title: listAnimeData[index].titleDefault ??
-                  listAnimeData[index].titleEnglish ??
-                  '',
-              subtitle: listAnimeData[index].titleJapanese ?? '',
-            ),
+        return InkWell(
+          onTap: () {
+            context.router.pushNamed('/anime/detail-anime/${listAnimeData[index].malId}');
+          },
+          child: _itemSeasonNow(
+            context,
+            src: listAnimeData[index].image ?? '',
+            title: listAnimeData[index].titleDefault ??
+                listAnimeData[index].titleEnglish ??
+                '',
+            subtitle: listAnimeData[index].titleJapanese ?? '',
           ),
         );
       },
