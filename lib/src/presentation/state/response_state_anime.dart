@@ -1,4 +1,4 @@
-import 'package:anime_list/src/domain/data_transfer_object/anime_data.dart';
+import '../../domain/local/models/anime_data.dart';
 
 sealed class ResponseStateAnime {}
 

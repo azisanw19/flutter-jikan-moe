@@ -1,11 +1,11 @@
 import 'package:anime_list/src/data/use_case/anime_search_use_case.dart';
 import 'package:anime_list/src/data/use_case/anime_season_now_use_case.dart';
-import 'package:anime_list/src/domain/data_transfer_object/anime_data.dart';
 import 'package:anime_list/src/presentation/state/response_state_anime.dart';
 import 'package:anime_list/src/utils/constants/int.dart';
 import 'package:anime_list/src/utils/resources/data_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../domain/local/models/anime_data.dart';
 import '../../utils/controller/pagination_scroll_controller.dart';
 import '../state/request_state_anime.dart';
 

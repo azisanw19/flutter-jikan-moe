@@ -1,7 +1,8 @@
-import 'package:anime_list/src/domain/local/models/anime/anime_entity.dart';
-import 'package:anime_list/src/domain/local/models/anime/genre_entity.dart';
 import 'package:anime_list/src/utils/constants/table_database_anime.dart';
 import 'package:floor/floor.dart';
+
+import 'anime_entity.dart';
+import 'genre_entity.dart';
 
 @Entity(tableName: tableRelationGenreAndAnime, primaryKeys: [
   malIdAnimeRelationGenreAndAnime,

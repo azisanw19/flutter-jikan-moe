@@ -1,13 +1,13 @@
-import 'package:anime_list/src/domain/data_transfer_object/genre_data.dart';
-import 'package:anime_list/src/domain/data_transfer_object/studio_data.dart';
 import 'package:anime_list/src/domain/remote/models/data_anime_response.dart';
 import 'package:anime_list/src/domain/remote/models/other_item_response.dart';
 import 'package:anime_list/src/domain/remote/models/pagination_response.dart';
 import 'package:anime_list/src/utils/converter/type_anime_converter.dart';
 import 'package:anime_list/src/utils/resources/data_state_pagination.dart';
 
-import '../../domain/data_transfer_object/anime_data.dart';
-import '../../domain/data_transfer_object/pagination_data.dart';
+import '../../domain/local/models/anime_data.dart';
+import '../../domain/local/models/genre_data.dart';
+import '../../domain/local/models/pagination_data.dart';
+import '../../domain/local/models/studio_data.dart';
 import '../../domain/remote/models/anime_response.dart';
 import '../../utils/error/repository_remote_exception.dart';
 import '../data_source/remote/jikan_moe_api_service.dart';

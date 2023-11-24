@@ -1,6 +1,6 @@
-import 'package:anime_list/src/domain/data_transfer_object/studio_data.dart';
+import 'package:anime_list/src/domain/local/models/studio_data.dart';
 
-import '../../utils/constants/type_anime.dart';
+import '../../../utils/constants/type_anime.dart';
 import 'genre_data.dart';
 
 class AnimeData {

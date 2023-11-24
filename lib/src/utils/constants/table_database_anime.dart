@@ -1,5 +1,5 @@
 // Database version
-const int databaseVersion = 2;
+const int databaseVersion = 3;
 
 // Table Anime
 const String tableAnime = 'table_anime';

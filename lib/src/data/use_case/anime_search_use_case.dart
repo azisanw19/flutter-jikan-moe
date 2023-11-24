@@ -1,13 +1,14 @@
 import 'dart:async';
 
-import 'package:anime_list/src/domain/data_transfer_object/anime_data.dart';
 import 'package:anime_list/src/domain/repository/anime_repository_local.dart';
 import 'package:anime_list/src/domain/repository/anime_repository_remote.dart';
 import 'package:anime_list/src/utils/network/network_manager.dart';
 import 'package:anime_list/src/utils/resources/data_state.dart';
 import 'package:anime_list/src/utils/resources/data_state_pagination.dart';
 
-import '../../domain/data_transfer_object/pagination_data.dart';
+import '../../domain/local/models/anime_data.dart';
+import '../../domain/local/models/pagination_data.dart';
+
 
 class AnimeSearchUseCase {
   final NetworkManager _networkManager;

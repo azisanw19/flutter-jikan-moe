@@ -1,7 +1,8 @@
-import 'package:anime_list/src/domain/local/models/anime/anime_entity.dart';
-import 'package:anime_list/src/domain/local/models/anime/studio_entity.dart';
+import 'package:anime_list/src/domain/local/entity/anime/studio_entity.dart';
 import 'package:anime_list/src/utils/constants/table_database_anime.dart';
 import 'package:floor/floor.dart';
+
+import 'anime_entity.dart';
 
 @Entity(tableName: tableRelationStudioAndAnime, primaryKeys: [
   malIdAnimeRelationStudioAndAnime,
