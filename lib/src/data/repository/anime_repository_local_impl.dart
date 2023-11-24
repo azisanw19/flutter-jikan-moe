@@ -61,31 +61,27 @@ class AnimeRepositoryLocalImpl extends BaseRepositoryLocal
       if (animeData.titleSynonyms != null)
         listRelationTitleSynonymAndAnime.addAll(animeData.titleSynonyms!.map(
             (titleSynonym) =>
-                RelationTitleSynonymAndAnime(
-                    animeData.malId!, titleSynonym)));
+                RelationTitleSynonymAndAnime(animeData.malId!, titleSynonym)));
 
       if (animeData.producers != null)
         listRelationProducerAndAnimeEntity.addAll(animeData.producers!.map(
-            (studioData) =>
-                RelationProducerAndAnimeEntity(
-                    studioData.malId!, animeData.malId!)));
+            (studioData) => RelationProducerAndAnimeEntity(
+                animeData.malId!, studioData.malId!)));
 
       if (animeData.licensors != null)
         listRelationLicensorAndAnimeEntity.addAll(animeData.licensors!.map(
             (studioData) => RelationLicensorAndAnimeEntity(
-                studioData.malId!, animeData.malId!)));
+                animeData.malId!, studioData.malId!)));
 
       if (animeData.studios != null)
         listRelationStudioAndAnimeEntity.addAll(animeData.studios!.map(
-            (studioData) =>
-                RelationStudioAndAnimeEntity(
-                    studioData.malId!, animeData.malId!)));
+            (studioData) => RelationStudioAndAnimeEntity(
+                animeData.malId!, studioData.malId!)));
 
       if (animeData.genres != null)
         listRelationGenreAndAnimeEntity.addAll(animeData.genres!.map(
-            (genreData) =>
-                RelationGenreAndAnimeEntity(
-                    genreData.malId!, animeData.malId!)));
+            (genreData) => RelationGenreAndAnimeEntity(
+                animeData.malId!, genreData.malId!)));
     });
 
     return await _insertAnimeTransaction(
@@ -150,31 +146,27 @@ class AnimeRepositoryLocalImpl extends BaseRepositoryLocal
       if (animeData.titleSynonyms != null)
         listRelationTitleSynonymAndAnime.addAll(animeData.titleSynonyms!.map(
             (titleSynonym) =>
-                RelationTitleSynonymAndAnime(
-                    animeData.malId!, titleSynonym)));
+                RelationTitleSynonymAndAnime(animeData.malId!, titleSynonym)));
 
       if (animeData.producers != null)
         listRelationProducerAndAnimeEntity.addAll(animeData.producers!.map(
-            (studioData) =>
-                RelationProducerAndAnimeEntity(
-                    studioData.malId!, animeData.malId!)));
+            (studioData) => RelationProducerAndAnimeEntity(
+                animeData.malId!, studioData.malId!)));
 
       if (animeData.licensors != null)
         listRelationLicensorAndAnimeEntity.addAll(animeData.licensors!.map(
             (studioData) => RelationLicensorAndAnimeEntity(
-                studioData.malId!, animeData.malId!)));
+                animeData.malId!, studioData.malId!)));
 
       if (animeData.studios != null)
         listRelationStudioAndAnimeEntity.addAll(animeData.studios!.map(
-            (studioData) =>
-                RelationStudioAndAnimeEntity(
-                    studioData.malId!, animeData.malId!)));
+            (studioData) => RelationStudioAndAnimeEntity(
+                animeData.malId!, studioData.malId!)));
 
       if (animeData.genres != null)
         listRelationGenreAndAnimeEntity.addAll(animeData.genres!.map(
-            (genreData) =>
-                RelationGenreAndAnimeEntity(
-                    genreData.malId!, animeData.malId!)));
+            (genreData) => RelationGenreAndAnimeEntity(
+                animeData.malId!, genreData.malId!)));
 
       if (animeData.malId != null)
         listRelationSeasonNowAndAnimeEntity
