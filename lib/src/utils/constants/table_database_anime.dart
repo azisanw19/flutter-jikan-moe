@@ -1,3 +1,6 @@
+// Database version
+const int databaseVersion = 2;
+
 // Table Anime
 const String tableAnime = 'table_anime';
 const String malIdAnime = 'mal_id';

@@ -16,11 +16,12 @@ import '../../../../domain/local/models/anime/anime_table.dart';
 import '../../../../domain/local/models/anime/relation_genre_and_anime_entity.dart';
 import '../../../../domain/local/models/anime/relation_producer_and_anime_entity.dart';
 import '../../../../domain/local/models/anime/studio_entity.dart';
+import '../../../../utils/constants/table_database_anime.dart';
 import '../../../../utils/constants/type_anime.dart';
 
 part 'jikan_moe_database.g.dart';
 
-@Database(version: 1, entities: [
+@Database(version: databaseVersion, entities: [
   // Anime Entity
   AnimeEntity,
   GenreEntity,
