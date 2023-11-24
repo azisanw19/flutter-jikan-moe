@@ -1,3 +1,6 @@
+## **0.1.2-alpha**
+- Fix bug update database version
+
 ## **0.1.1-alpha**
 - Anime This Season with pagination
 - Adaptive anime page for portrait and landscape
