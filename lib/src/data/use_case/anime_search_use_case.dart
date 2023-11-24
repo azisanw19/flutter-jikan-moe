@@ -6,8 +6,8 @@ import 'package:anime_list/src/utils/network/network_manager.dart';
 import 'package:anime_list/src/utils/resources/data_state.dart';
 import 'package:anime_list/src/utils/resources/data_state_pagination.dart';
 
-import '../../domain/local/models/anime_data.dart';
-import '../../domain/local/models/pagination_data.dart';
+import '../../domain/local/models/anime/anime_data.dart';
+import '../../domain/local/models/anime/pagination_data.dart';
 
 
 class AnimeSearchUseCase {

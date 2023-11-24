@@ -1,7 +1,7 @@
 import 'package:anime_list/src/utils/constants/int.dart';
 
-import '../../domain/local/models/anime_data.dart';
-import '../../domain/local/models/pagination_data.dart';
+import '../../domain/local/models/anime/anime_data.dart';
+import '../../domain/local/models/anime/pagination_data.dart';
 import '../../domain/repository/anime_repository_local.dart';
 import '../../domain/repository/anime_repository_remote.dart';
 import '../../utils/network/network_manager.dart';

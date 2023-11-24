@@ -1,4 +1,4 @@
-import '../../domain/local/models/anime_data.dart';
+import '../../domain/local/models/anime/anime_data.dart';
 
 sealed class ResponseStateAnime {}
 

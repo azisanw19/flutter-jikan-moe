@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../config/router/app_router.dart';
-import '../../../domain/local/models/anime_data.dart';
+import '../../../domain/local/models/anime/anime_data.dart';
 import '../../../utils/window_size/window_class.dart';
 import '../../../utils/window_size/window_size_class.dart';
 import '../../bloc/anime_bloc.dart';

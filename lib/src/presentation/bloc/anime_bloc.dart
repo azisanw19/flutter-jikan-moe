@@ -5,7 +5,7 @@ import 'package:anime_list/src/utils/constants/int.dart';
 import 'package:anime_list/src/utils/resources/data_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../domain/local/models/anime_data.dart';
+import '../../domain/local/models/anime/anime_data.dart';
 import '../../utils/controller/pagination_scroll_controller.dart';
 import '../state/request_state_anime.dart';
 

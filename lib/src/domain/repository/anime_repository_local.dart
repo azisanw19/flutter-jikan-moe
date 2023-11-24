@@ -1,6 +1,6 @@
 import 'package:anime_list/src/utils/resources/data_state.dart';
 
-import '../local/models/anime_data.dart';
+import '../local/models/anime/anime_data.dart';
 
 
 abstract class AnimeRepositoryLocal {
