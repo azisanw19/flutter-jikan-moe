@@ -11,4 +11,6 @@ abstract class AnimeRepositoryLocal {
   Future<DataState<void>> saveAnimeThisSeason(List<AnimeData> listAnimeData);
   Future<DataState<List<AnimeData>>> getListAnimeSeasonNow(int limit, int offset);
   Future<DataState<void>> deleteAnimeThisSeason();
+
+  Future<DataState<AnimeData>> getDetailAnime(int malId);
 }

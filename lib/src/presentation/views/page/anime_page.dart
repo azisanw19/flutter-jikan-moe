@@ -138,24 +138,11 @@ class AnimePage extends StatelessWidget {
       itemBuilder: (context, index) {
         return InkWell(
           onTap: () {
-            if (_windowSizeClass.windowClass == WindowClass.Compact) {
-              context.router.push(
-                DetailAnimeRoute(
-                  malId: listAnimeData[index].malId!,
-                ),
-              );
-              return;
-            }
-
-            if (_windowSizeClass.windowClass == WindowClass.Medium ||
-                _windowSizeClass.windowClass == WindowClass.Expanded) {
-              context.router.push(
-                DetailAnimeRoute(
-                  malId: listAnimeData[index].malId!,
-                ),
-              );
-              return;
-            }
+            context.router.push(
+              DetailAnimeRoute(
+                malIdAnime: listAnimeData[index].malId!,
+              ),
+            );
           },
           child: _itemSeasonNow(
             context,

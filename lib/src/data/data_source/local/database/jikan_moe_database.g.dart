@@ -599,4 +599,18 @@ class _$AnimeDao extends AnimeDao {
       });
     }
   }
+
+  @override
+  Future<AnimeTable> getAnimeTableFromId(int malIdAnime) async {
+    if (database is sqflite.Transaction) {
+      return super.getAnimeTableFromId(malIdAnime);
+    } else {
+      return (database as sqflite.Database)
+          .transaction<AnimeTable>((transaction) async {
+        final transactionDatabase = _$JikanMoeDatabase(changeListener)
+          ..database = transaction;
+        return transactionDatabase.animeDao.getAnimeTableFromId(malIdAnime);
+      });
+    }
+  }
 }

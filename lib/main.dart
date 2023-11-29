@@ -6,6 +6,7 @@ import 'package:anime_list/src/domain/repository/anime_repository_local.dart';
 import 'package:anime_list/src/domain/repository/anime_repository_remote.dart';
 import 'package:anime_list/src/locator.dart';
 import 'package:anime_list/src/presentation/bloc/anime_bloc.dart';
+import 'package:anime_list/src/presentation/bloc/detail_anime_bloc.dart';
 import 'package:anime_list/src/utils/constants/strings.dart';
 import 'package:anime_list/src/utils/network/network_manager.dart';
 import 'package:flutter/material.dart';
@@ -41,6 +42,11 @@ class MyApp extends StatelessWidget {
               locator<AnimeRepositoryLocal>(),
             ),
           ),
+        ),
+        BlocProvider(
+            create: (_) => DetailAnimeBloc(
+                locator<AnimeRepositoryLocal>(),
+            ),
         ),
       ],
       child: MaterialApp.router(

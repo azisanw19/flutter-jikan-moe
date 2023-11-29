@@ -30,13 +30,13 @@ abstract class _$AppRouter extends RootStackRouter {
     DetailAnimeRoute.name: (routeData) {
       final pathParams = routeData.inheritedPathParams;
       final args = routeData.argsAs<DetailAnimeRouteArgs>(
-          orElse: () =>
-              DetailAnimeRouteArgs(malId: pathParams.getInt('malId')));
+          orElse: () => DetailAnimeRouteArgs(
+              malIdAnime: pathParams.getInt('malIdAnime')));
       return AutoRoutePage<dynamic>(
         routeData: routeData,
         child: DetailAnimeScreen(
           key: args.key,
-          malId: args.malId,
+          malIdAnime: args.malIdAnime,
         ),
       );
     },
@@ -96,15 +96,15 @@ class AnimeRoute extends PageRouteInfo<void> {
 class DetailAnimeRoute extends PageRouteInfo<DetailAnimeRouteArgs> {
   DetailAnimeRoute({
     Key? key,
-    required int malId,
+    required int malIdAnime,
     List<PageRouteInfo>? children,
   }) : super(
           DetailAnimeRoute.name,
           args: DetailAnimeRouteArgs(
             key: key,
-            malId: malId,
+            malIdAnime: malIdAnime,
           ),
-          rawPathParams: {'malId': malId},
+          rawPathParams: {'malIdAnime': malIdAnime},
           initialChildren: children,
         );
 
@@ -117,16 +117,16 @@ class DetailAnimeRoute extends PageRouteInfo<DetailAnimeRouteArgs> {
 class DetailAnimeRouteArgs {
   const DetailAnimeRouteArgs({
     this.key,
-    required this.malId,
+    required this.malIdAnime,
   });
 
   final Key? key;
 
-  final int malId;
+  final int malIdAnime;
 
   @override
   String toString() {
-    return 'DetailAnimeRouteArgs{key: $key, malId: $malId}';
+    return 'DetailAnimeRouteArgs{key: $key, malIdAnime: $malIdAnime}';
   }
 }
 

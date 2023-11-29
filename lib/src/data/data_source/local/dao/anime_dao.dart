@@ -1,3 +1,4 @@
+import 'package:anime_list/src/utils/error/database_exception.dart';
 import 'package:floor/floor.dart';
 
 import '../../../../domain/local/entity/anime/anime_entity.dart';
@@ -250,5 +251,16 @@ abstract class AnimeDao {
     });
 
     return listAnimeTable;
+  }
+
+  @transaction
+  Future<AnimeTable> getAnimeTableFromId(int malIdAnime) async {
+    AnimeEntity? animeEntity = await getAnimeFromId(malIdAnime);
+
+    if (animeEntity != null) {
+      return getAllAnimeEntityToAnimeTable(animeEntity);
+    }
+
+    throw DatabaseException("malIdAnime: $malIdAnime not found");
   }
 }
