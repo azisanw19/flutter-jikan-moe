@@ -1,7 +1,6 @@
 import 'package:anime_list/src/presentation/components/jikan_moe_navigation_rail.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 import '../../../config/router/app_router.dart';
 import '../../../utils/window_size/window_class.dart';
@@ -14,6 +13,8 @@ class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
   late WindowSizeClass _windowSizeClass;
+  List<HomeNavigationItem> homeNavigationItems =
+      HomeNavigationItem.values.toList();
 
   @override
   Widget build(BuildContext context) {
@@ -40,20 +41,16 @@ class HomeScreen extends StatelessWidget {
     TabsRouter tabsRouter = context.tabsRouter;
     if (_windowSizeClass.windowClass == WindowClass.Compact) {
       Widget jikanMoeBottomNavigation = JikanMoeBottomNavigation(
-        destinations: <Widget>[
-          NavigationDestination(
-            selectedIcon: Icon(MdiIcons.movieOpen),
-            icon: Icon(MdiIcons.movieOpenOutline),
-            label: 'Anime',
-          ),
-          NavigationDestination(
-            icon: Icon(MdiIcons.bookOpenPageVariant),
-            selectedIcon: Icon(MdiIcons.bookOpenPageVariantOutline),
-            label: 'Manga',
-          ),
-        ],
-        onDestinationSelected: (index) =>
-            tabsRouter.setActiveIndex(index),
+        destinations: homeNavigationItems
+            .map(
+              (item) => NavigationDestination(
+                selectedIcon: Icon(item.selectedIcon),
+                icon: Icon(item.icon),
+                label: item.label,
+              ),
+            )
+            .toList(),
+        onDestinationSelected: (index) => tabsRouter.setActiveIndex(index),
       );
 
       return jikanMoeBottomNavigation;
@@ -67,7 +64,6 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _bodyWindowSizeClass(BuildContext context, Widget child) {
-
     if (_windowSizeClass.windowClass == WindowClass.Compact) {
       return child;
     } else if (_windowSizeClass.windowClass == WindowClass.Medium) {
@@ -106,18 +102,36 @@ class HomeScreen extends StatelessWidget {
     return JikanMoeNavigationRail(
       extended: extended,
       onDestinationSelected: (index) => tabsRouter.setActiveIndex(index),
-      destinations: [
-        NavigationRailDestination(
-          icon: Icon(MdiIcons.movieOpen),
-          selectedIcon: Icon(MdiIcons.movieOpenOutline),
-          label: Text('Anime'),
-        ),
-        NavigationRailDestination(
-          icon: Icon(MdiIcons.bookOpenPageVariant),
-          selectedIcon: Icon(MdiIcons.bookOpenPageVariantOutline),
-          label: Text('Manga'),
-        ),
-      ],
+      destinations: homeNavigationItems
+          .map(
+            (item) => NavigationRailDestination(
+              icon: Icon(item.icon),
+              selectedIcon: Icon(item.selectedIcon),
+              label: Text(item.label),
+            ),
+          )
+          .toList(),
     );
   }
+}
+
+enum HomeNavigationItem {
+  Anime(
+      label: 'Anime',
+      icon: Icons.movie_filter_outlined,
+      selectedIcon: Icons.movie_filter),
+  Manga(
+      label: "Manga",
+      icon: Icons.menu_book_outlined,
+      selectedIcon: Icons.menu_book);
+
+  final String label;
+  final IconData icon;
+  final IconData selectedIcon;
+
+  const HomeNavigationItem({
+    required this.label,
+    required this.icon,
+    required this.selectedIcon,
+  });
 }
