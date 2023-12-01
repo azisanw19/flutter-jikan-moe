@@ -10,8 +10,8 @@ import '../../../domain/local/models/anime/anime_data.dart';
 import '../../../utils/window_size/window_class.dart';
 import '../../../utils/window_size/window_size_class.dart';
 import '../../bloc/anime_bloc.dart';
-import '../../state/request_state_anime.dart';
-import '../../state/response_state_anime.dart';
+import '../../state/event_anime.dart';
+import '../../state/state_anime.dart';
 
 @RoutePage()
 //ignore: must_be_immutable
@@ -24,8 +24,8 @@ class AnimePage extends StatelessWidget {
     _windowSizeClass = WindowSizeClass(context);
 
     _animeBloc = context.read<AnimeBloc>();
-    _animeBloc.add(RequestStateGetAnime());
-    _animeBloc.add(RequestStateGetAnimeSeasonNow(firstPageAnimeSeasonNow));
+    _animeBloc.add(EventAnimeGet());
+    _animeBloc.add(EventAnimeGetSeasonNow(firstPageAnimeSeasonNow));
 
     return Scaffold(body: _contentScreen(context));
   }
@@ -109,11 +109,11 @@ class AnimePage extends StatelessWidget {
 
   /// Anime Season Now
   Widget _animeSeasonNow(BuildContext context) {
-    return BlocBuilder<AnimeBloc, ResponseStateAnime>(
+    return BlocBuilder<AnimeBloc, StateAnime>(
       buildWhen: (previous, current) =>
-          current is ResponseStateGetAnimeSeasonNow,
+          current is StateAnimeDataSeasonNow,
       builder: (context, responseStateAnime) {
-        if (responseStateAnime is ResponseStateGetAnimeSeasonNow) {
+        if (responseStateAnime is StateAnimeDataSeasonNow) {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: _animeSeasonNowView(context, responseStateAnime.data),
@@ -155,7 +155,7 @@ class AnimePage extends StatelessWidget {
         );
       },
       onPageChanged: (page) {
-        _animeBloc.add(RequestStateGetAnimeSeasonNow(page));
+        _animeBloc.add(EventAnimeGetSeasonNow(page));
       },
     );
   }
@@ -213,10 +213,10 @@ class AnimePage extends StatelessWidget {
 
   /// View Anime
   Widget _viewAnime(BuildContext context) {
-    return BlocBuilder<AnimeBloc, ResponseStateAnime>(
-        buildWhen: (previous, current) => current is ResponseStateGetAnime,
+    return BlocBuilder<AnimeBloc, StateAnime>(
+        buildWhen: (previous, current) => current is StateAnimeData,
         builder: (context, responseStateHome) {
-          if (responseStateHome is ResponseStateGetAnime) {
+          if (responseStateHome is StateAnimeData) {
             List<AnimeData> listAnimeData = responseStateHome.data;
             return _listAnime(context, listAnimeData);
           } else {

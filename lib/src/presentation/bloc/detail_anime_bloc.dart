@@ -3,31 +3,31 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/local/models/anime/anime_data.dart';
 import '../../domain/repository/anime_repository_local.dart';
-import '../state/request_state_detail_anime.dart';
-import '../state/response_state_detail_anime.dart';
+import '../state/event_detail_anime.dart';
+import '../state/state_detail_anime.dart';
 
 class DetailAnimeBloc
-    extends Bloc<RequestStateDetailAnime, ResponseStateDetailAnime> {
+    extends Bloc<EventDetailAnime, StateDetailAnime> {
   final AnimeRepositoryLocal _animeRepositoryLocal;
 
   DetailAnimeBloc(this._animeRepositoryLocal)
-      : super(ResponseStateLoading()) {
-    on<RequestStateGetDetailAnime>(_getDetailAnimeData);
+      : super(StateDetailAnimeLoading()) {
+    on<EventDetailAnimeGet>(_getDetailAnimeData);
   }
 
-  void _getDetailAnimeData(RequestStateGetDetailAnime event,
-      Emitter<ResponseStateDetailAnime> emit) async {
+  void _getDetailAnimeData(EventDetailAnimeGet event,
+      Emitter<StateDetailAnime> emit) async {
     DataState<AnimeData> dataStateAnimeData = await _animeRepositoryLocal
         .getDetailAnime(event.malId);
 
-    ResponseStateDetailAnime responseStateGetDetailAnime;
+    StateDetailAnime responseStateGetDetailAnime;
 
     if (dataStateAnimeData is DataStateSuccess) {
-      responseStateGetDetailAnime = ResponseStateGetDetailAnime(dataStateAnimeData.data!);
+      responseStateGetDetailAnime = StateDetailAnimeData(dataStateAnimeData.data!);
     } else if (dataStateAnimeData is DataStateError) {
-      responseStateGetDetailAnime = ResponseStateError();
+      responseStateGetDetailAnime = StateDetailAnimeError();
     } else {
-      responseStateGetDetailAnime = ResponseStateError();
+      responseStateGetDetailAnime = StateDetailAnimeError();
     }
 
     emit(responseStateGetDetailAnime);

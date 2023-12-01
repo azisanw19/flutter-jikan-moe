@@ -15,6 +15,7 @@ class JikanMoeSliverAppBar extends StatelessWidget {
       snap: true,
       floating: true,
       title: title,
+      centerTitle: true,
     );
   }
 
