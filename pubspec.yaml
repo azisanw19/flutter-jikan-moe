@@ -35,6 +35,10 @@ dependencies:
   # database
   floor: ^1.4.2
 
+  # firebase
+  firebase_core: ^2.4.1
+  firebase_crashlytics: ^3.0.11
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

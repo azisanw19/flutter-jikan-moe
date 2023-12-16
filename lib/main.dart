@@ -7,6 +7,7 @@ import 'package:anime_list/src/domain/repository/anime_repository_remote.dart';
 import 'package:anime_list/src/locator.dart';
 import 'package:anime_list/src/presentation/bloc/anime_bloc.dart';
 import 'package:anime_list/src/presentation/bloc/detail_anime_bloc.dart';
+import 'package:anime_list/src/service/firebase/jikan_moe_firebase.dart';
 import 'package:anime_list/src/utils/constants/strings.dart';
 import 'package:anime_list/src/utils/network/network_manager.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,10 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await initializeDependencies();
+
+  JikanMoeFirebase jikanMoeFirebase = locator<JikanMoeFirebase>();
+  await jikanMoeFirebase.initializeApp();
+  jikanMoeFirebase.recordFatalError();
 
   runApp(
     const MyApp(),

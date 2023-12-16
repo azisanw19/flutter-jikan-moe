@@ -3,6 +3,7 @@ import 'package:anime_list/src/data/repository/anime_repository_local_impl.dart'
 import 'package:anime_list/src/data/repository/anime_repository_remote_impl.dart';
 import 'package:anime_list/src/domain/repository/anime_repository_local.dart';
 import 'package:anime_list/src/domain/repository/anime_repository_remote.dart';
+import 'package:anime_list/src/service/firebase/jikan_moe_firebase.dart';
 import 'package:anime_list/src/utils/network/connectivity_manager.dart';
 import 'package:anime_list/src/utils/network/network_manager.dart';
 import 'package:awesome_dio_interceptor/awesome_dio_interceptor.dart';
@@ -20,22 +21,18 @@ Future<void> initializeDependencies() async {
   locator.registerSingleton<Dio>(dio);
 
   locator.registerSingleton<JikanMoeApiService>(
-    JikanMoeApiService(locator<Dio>())
-  );
+      JikanMoeApiService(locator<Dio>()));
 
   locator.registerSingleton<AnimeRepositoryRemote>(
-    AnimeRepositoryRemoteImpl(locator<JikanMoeApiService>())
-  );
+      AnimeRepositoryRemoteImpl(locator<JikanMoeApiService>()));
 
   locator.registerSingleton<JikanMoeDatabase>(
-    await $FloorJikanMoeDatabase.databaseBuilder('jikan-moe.db').build()
-  );
+      await $FloorJikanMoeDatabase.databaseBuilder('jikan-moe.db').build());
 
   locator.registerSingleton<AnimeRepositoryLocal>(
-    AnimeRepositoryLocalImpl(locator<JikanMoeDatabase>().animeDao)
-  );
+      AnimeRepositoryLocalImpl(locator<JikanMoeDatabase>().animeDao));
 
-  locator.registerSingleton<NetworkManager>(
-      ConnectivityManager()
-  );
+  locator.registerSingleton<NetworkManager>(ConnectivityManager());
+
+  locator.registerFactory<JikanMoeFirebase>(() => JikanMoeFirebase());
 }
