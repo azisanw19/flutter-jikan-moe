@@ -5,9 +5,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../utils/window_size/window_class.dart';
-import '../../../utils/window_size/window_size_class.dart';
-
 @RoutePage()
 //ignore: must_be_immutable
 class DetailAnimeScreen extends StatelessWidget {
@@ -18,35 +15,34 @@ class DetailAnimeScreen extends StatelessWidget {
       : super(key: key);
 
   late DetailAnimeBloc _detailAnimeBloc;
-  late WindowSizeClass _windowSizeClass;
 
   @override
   Widget build(BuildContext context) {
-    _windowSizeClass = WindowSizeClass(context);
-
     _detailAnimeBloc = context.read<DetailAnimeBloc>();
     _detailAnimeBloc.add(EventDetailAnimeGet(malIdAnime));
 
     return Scaffold(
-      body: _mainBody(context),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return _mainBody(context, constraints.maxWidth);
+        },
+      ),
     );
   }
 
-  Widget _mainBody(BuildContext context) {
-    double divider = 1;
-    if (_windowSizeClass.windowClass == WindowClass.Compact) {
-      divider = 1;
-    } else if (_windowSizeClass.windowClass == WindowClass.Medium) {
-      divider = 2;
-    } else if (_windowSizeClass.windowClass == WindowClass.Expanded) {
-      divider = 2;
-    }
-
-    double widthImage = MediaQuery.of(context).size.width / divider;
+  Widget _mainBody(BuildContext context, double maxWidth) {
+    double widthImage = maxWidth;
     double heightImage = (widthImage / 225) * 319;
 
     Widget _flexibleSpaceBar = FlexibleSpaceBar(
       background: BlocBuilder<DetailAnimeBloc, StateDetailAnime>(
+        buildWhen: (previous, current) {
+          if (current is StateDetailAnimeData) {
+            return true;
+          } else {
+            return false;
+          }
+        },
         builder: (context, state) {
           if (state is StateDetailAnimeData) {
             return Image.network(
@@ -60,6 +56,25 @@ class DetailAnimeScreen extends StatelessWidget {
       ),
     );
 
+    Widget _title = BlocBuilder<DetailAnimeBloc, StateDetailAnime>(
+      buildWhen: (previous, current) {
+        if (current is StateDetailAnimeData) {
+          return true;
+        } else {
+          return false;
+        }
+      },
+      builder: (context, state) {
+        if (state is StateDetailAnimeData) {
+          return Text(
+            state.data.titleEnglish ?? "",
+          );
+        } else {
+          return Container();
+        }
+      },
+    );
+
     return NestedScrollView(
       floatHeaderSlivers: true,
       headerSliverBuilder: (context, innerBoxIsScrolled) {
@@ -69,7 +84,7 @@ class DetailAnimeScreen extends StatelessWidget {
             pinned: false,
             snap: true,
             floating: true,
-            title: Text("Detail Anime"),
+            title: _title,
             centerTitle: true,
             flexibleSpace: _flexibleSpaceBar,
           ),
@@ -80,6 +95,9 @@ class DetailAnimeScreen extends StatelessWidget {
   }
 
   Widget _body(BuildContext context) {
+
+
+
     return Column(
       children: [
 

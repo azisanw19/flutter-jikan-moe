@@ -9,6 +9,10 @@ class WindowSizeClass {
 
   WindowClass get windowClass {
     double width = MediaQuery.of(context).size.width;
+    return windowSizeClass(width);
+  }
+
+  WindowClass windowSizeClass(double width) {
     if (width < 600) {
       return WindowClass.Compact;
     }
@@ -18,7 +22,7 @@ class WindowSizeClass {
     else if (width >= 840) {
       return WindowClass.Expanded;
     }
-    
+
     throw WindowSizeClassException('This Should Never Happened');
   }
 }
