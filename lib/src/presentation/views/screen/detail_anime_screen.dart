@@ -1,9 +1,10 @@
-import 'package:anime_list/src/presentation/bloc/detail_anime_bloc.dart';
-import 'package:anime_list/src/presentation/state/event_detail_anime.dart';
-import 'package:anime_list/src/presentation/state/state_detail_anime.dart';
+import 'package:anime_list/src/presentation/bloc/anime_bloc.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../state/event_anime.dart';
+import '../../state/state_anime.dart';
 
 @RoutePage()
 //ignore: must_be_immutable
@@ -14,11 +15,11 @@ class DetailAnimeScreen extends StatelessWidget {
       {Key? key, @PathParam('malIdAnime') required this.malIdAnime})
       : super(key: key);
 
-  late DetailAnimeBloc _detailAnimeBloc;
+  late AnimeBloc _detailAnimeBloc;
 
   @override
   Widget build(BuildContext context) {
-    _detailAnimeBloc = context.read<DetailAnimeBloc>();
+    _detailAnimeBloc = context.read<AnimeBloc>();
     _detailAnimeBloc.add(EventDetailAnimeGet(malIdAnime));
 
     return Scaffold(
@@ -35,7 +36,7 @@ class DetailAnimeScreen extends StatelessWidget {
     double heightImage = (widthImage / 225) * 319;
 
     Widget _flexibleSpaceBar = FlexibleSpaceBar(
-      background: BlocBuilder<DetailAnimeBloc, StateDetailAnime>(
+      background: BlocBuilder<AnimeBloc, StateAnime>(
         buildWhen: (previous, current) {
           if (current is StateDetailAnimeData) {
             return true;
@@ -56,7 +57,7 @@ class DetailAnimeScreen extends StatelessWidget {
       ),
     );
 
-    Widget _title = BlocBuilder<DetailAnimeBloc, StateDetailAnime>(
+    Widget _title = BlocBuilder<AnimeBloc, StateAnime>(
       buildWhen: (previous, current) {
         if (current is StateDetailAnimeData) {
           return true;

@@ -7,3 +7,9 @@ class EventAnimeGetSeasonNow extends EventAnime {
 
   EventAnimeGetSeasonNow(this.page);
 }
+
+class EventDetailAnimeGet extends EventAnime {
+  final int malId;
+
+  EventDetailAnimeGet(this.malId);
+}

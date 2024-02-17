@@ -19,3 +19,8 @@ class StateAnimeDataSeasonNow extends StateAnime {
   final List<AnimeData> data;
   StateAnimeDataSeasonNow(this.data);
 }
+
+class StateDetailAnimeData extends StateAnime {
+  final AnimeData data;
+  StateDetailAnimeData(this.data);
+}
